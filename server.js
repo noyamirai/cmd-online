@@ -1,11 +1,10 @@
-/* eslint-disable quotes */
 /* eslint-disable no-undef */
 const express = require(`express`);
 const app = express();
 const port = process.env.PORT || 3000;
 
 const db = require(`./config/db`);
-const schemas = require(`./models/schemas`);
+// const schemas = require(`./models/schemas`);
 
 app.set(`view engine`, `ejs`);
 
