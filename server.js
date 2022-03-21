@@ -3,9 +3,6 @@ const express = require(`express`);
 const app = express();
 const port = process.env.PORT || 3000;
 
-const rootPath = require(`path`);
-global.appRoot = rootPath.resolve(__dirname);
-
 const db = require(`./config/db`);
 
 const schemas = require('./models/schemas');
@@ -44,6 +41,49 @@ app.get(`/:username/courses`, (req, res) => {
                 baseURL: baseURL,
                 userData: userData,
                 courseData: courseData
+            });
+        });
+    });
+});
+
+app.get(`/:username/courses/:course/classes`, (req, res) => {
+    const baseURL = req.path;
+
+    CRUD.findDocByQuery(schemas.Course, `linkRef`, req.params.course).then((paramCourse) => {
+
+        CRUD.findDocByQuery(schemas.User, `username`, req.params.username).then((user) => {
+
+            schemas.TeacherCourse.find({
+                'userId': user.id
+            }, (err, allTeacherCourses) => {
+                if (err) Promise.reject(err);
+
+                allTeacherCourses.forEach(teacherCourse => {
+                    if (teacherCourse.course == paramCourse.id) {
+
+                        schemas.Class.find({
+                            '_id': {
+                                $in: teacherCourse.classes
+                            }
+                        }, (err, classData) => {
+                            if (err) Promise.reject(err);
+
+                            console.log(classData);
+                            res.render(`classes-overview`, {
+                                layout: `default`,
+                                root: req.baseUrl,
+                                prevURL: `/${req.params.username}/courses`,
+                                baseURL: baseURL,
+                                userData: user,
+                                courseData: paramCourse,
+                                bannerTitle: paramCourse.title,
+                                bannerSubtitle: `Klassenoverzicht`,
+                                classData: classData
+                            });
+
+                        }).lean();
+                    }
+                });
             });
         });
     });
