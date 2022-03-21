@@ -4,8 +4,6 @@ const router = express.Router();
 router.get('/', (req, res) =>{
     const baseURL = req.path;
 
-    console.log(baseURL);
-
     res.render('index', { baseURL: baseURL});
 });
 
