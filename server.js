@@ -34,7 +34,6 @@ app.get(`/:username/courses`, (req, res) => {
             });
 
             res.render(`courses-overview`, {
-                layout: `default`,
                 profile_pic: userData.profile_pic,
                 userName: `${userData.name.first} ${userData.name.last}`,
                 root: req.baseUrl,
@@ -68,9 +67,7 @@ app.get(`/:username/courses/:course/classes`, (req, res) => {
                         }, (err, classData) => {
                             if (err) Promise.reject(err);
 
-                            console.log(classData);
                             res.render(`classes-overview`, {
-                                layout: `default`,
                                 root: req.baseUrl,
                                 prevURL: `/${req.params.username}/courses`,
                                 baseURL: baseURL,
@@ -84,6 +81,46 @@ app.get(`/:username/courses/:course/classes`, (req, res) => {
                         }).lean();
                     }
                 });
+            });
+        });
+    });
+});
+
+app.get(`/:username/courses/:course/classes/:class`, (req, res) => {
+    const baseURL = req.path;
+
+    // get course object
+    CRUD.findDocByQuery(schemas.Course, `linkRef`, req.params.course).then((courseData) => {
+
+        // get class object
+        CRUD.findDocByQuery(schemas.Class, `linkRef`, req.params.class).then((classObject) => {
+
+            // insert user info based on id      
+            schemas.Class.findById(classObject.id).lean().populate({
+                path: `students`,
+                populate: {
+                    path: `user`
+                }
+            }).exec((err, classData) => {
+                if (err) Promise.reject(err);
+
+                console.log(classData);
+
+                res.render(`class-details`, {
+                    layout: `default-yellow`,
+                    baseURL: baseURL,
+                    root: req.baseUrl,
+                    prevURL: `/${req.params.username}/courses/${req.params.course}/classes`,
+                    formURL: `${baseURL}/teams/team-generation`,
+                    userData: classData.students,
+                    bannerTitle: classData.title,
+                    bannerSubtitle: `${classData.students.length} studenten`,
+                    courseData: courseData,
+                    linkRef: classObject.linkRef,
+                    classTeams: classObject.teams,
+                    className: `overflow form`
+                });
+
             });
         });
     });
