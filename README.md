@@ -5,7 +5,7 @@ CMD Team Creator is a browser based matching application, build with HTML/CSS/JS
 
 With help of this application, teachers do not have to spend time and energy on creating teams and worrying whether or not skill levels of students will match. In addition, students no longer have to worry about their upcoming project team, knowing their team will be fair and balanced.
 
-<!-- ![Team creator forms](./public/images/readme/team_creator-preview.jpg) -->
+![Team creator forms](./public/images/readme/team_creator-preview.jpg)
 
 (Even though the web application has mostly been build from a teacher's point of view, in the future I would like this app to become sort of like a community app for the entirety of CMD.)
 
