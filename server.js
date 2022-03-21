@@ -107,7 +107,6 @@ app.get(`/:username/courses/:course/classes/:class`, (req, res) => {
                 console.log(classData);
 
                 res.render(`class-details`, {
-                    layout: `default-yellow`,
                     baseURL: baseURL,
                     root: req.baseUrl,
                     prevURL: `/${req.params.username}/courses/${req.params.course}/classes`,
@@ -123,6 +122,23 @@ app.get(`/:username/courses/:course/classes/:class`, (req, res) => {
 
             });
         });
+    });
+});
+
+app.get(`/:username/courses/:course/classes/:class/home`, (req, res) => {
+    const baseURL = req.path;
+
+    CRUD.findDocByQuery(schemas.Class, `linkRef`, req.params.class).then((classObject) => {
+        // insert user info based on id  
+        res.render(`class-home`, {
+            baseURL: baseURL,
+            root: req.baseUrl,
+            prevURL: `/${req.params.username}/courses/${req.params.course}/classes`,
+            bannerTitle: classObject.title,
+            bannerSubtitle: `${classObject.students.length} studenten`,
+            linkRef: classObject.linkRef
+        });
+
     });
 });
 
