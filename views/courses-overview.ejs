@@ -8,14 +8,14 @@
         <ul class="grid grid--list">
             <% courseData.forEach((item) => { %>
                 <li>
-                    <a class="box-shadow" href="<%= baseURL %>/<%= item.course.linkRef %>/classes">
+                    <a class="box-shadow" href="<%= item.course.linkRef %>/classes">
                         <p><%= item.acronym %></p>
                         <div>
                             <h3><%= item.course.title %></h3>
                             <p><%= item.classes.length %> klassen</p>
                         </div>
 
-                        <img class="icon" src="<%= root %>/public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
                     </a>
                 </li>
             <% }) %>
@@ -23,4 +23,4 @@
     </main>
 </body>
 
-<script src="<%= root %>/public/js/color-generator.js"></script>
+<script src="../public/js/color-generator.js"></script>
