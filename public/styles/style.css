@@ -71,6 +71,38 @@ body {
   width: 100%;
 }
 
+/* REGISTER PAGE */
+
+.register_page {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.register_page > button {
+  position: unset;
+}
+
+.register {
+  margin-top: 5%;
+  display: inline-block;
+  justify-content: center;
+}
+
+.register > fieldset {
+  display: grid;
+  justify-content: center;
+}
+
+.register > button {
+  position: unset;
+}
+
+.register > input[type="radio"] {
+  position: unset;
+}
+
+
 img {
   max-width: 100%;
   font-style: italic;

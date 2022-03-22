@@ -140,11 +140,11 @@ const userSchema = new mongoose.Schema({
     }],
     type: {
         type: String,
-        required: [true, `Why no user type?`]
+        required: [false, `Why no user type?`]
     },
     is_admin: {
         type: String,
-        required: [true, `Why no admin rights specified?`]
+        required: [false, `Why no admin rights specified?`]
     }
 }, {
     collection: `users`
