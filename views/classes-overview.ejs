@@ -8,7 +8,7 @@
         <ol class="grid grid--overview">
             <% classData.forEach(item => { %>
                 <li>
-                    <a class="box-shadow" href="<%= baseURL %>/<%= item.linkRef %><% if (item.teams.length) { %>/home<% } %>">
+                    <a class="box-shadow" href="<%= item.linkRef %><% if (item.teams.length) { %>/home<% } %>">
                         <div>
                             <h3><%= item.title %></h3>
                             <p><%= item.students.length %> studenten</p>
@@ -20,9 +20,9 @@
         </ol>
 
         <div class="btn--container">
-            <a class="btn--small btn--small-arrow" href="<%= prevURL %>"><img src="<%= root %>/public/images/icons/arrow-icon.svg" alt="Back icon"></a>
+            <a class="btn--small btn--small-arrow" href="<%= prevURL %>"><img src="../../public/images/icons/arrow-icon.svg" alt="Back icon"></a>
         </div>
     </main>
 </body>
 
-<script src="<%= root %>/public/js/color-generator.js"></script>
+<script src="../../public/js/color-generator.js"></script>
