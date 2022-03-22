@@ -1,6 +1,11 @@
 /* eslint-disable no-undef */
+require('dotenv').config()
 const express = require(`express`);
 const app = express();
+
+const session = require('express-session');
+const passport = require('passport');
+
 const port = process.env.PORT || 3000;
 
 // const session = require('express-session');
@@ -16,18 +21,20 @@ app.use('/public', express.static(__dirname + '/public/'));
 
 db.connectDb();
 
+require('./config/verifyUser')(passport);
+
 //EXPRESS MIDDLEWARE
 app.use(express.urlencoded({ extended: false }));
-// app.use(session({
-//     secret: EXPsession,
-//     resave: false,
-//     saveUninitialized: false
-//   })
-// );
+app.use(session({
+    secret: EXPsession,
+    resave: false,
+    saveUninitialized: false
+  })
+);
 
-//PASSPORT MIDDLEWARE
-// app.use(passport.initialize());
-// app.use(passport.session());
+// PASSPORT MIDDLEWARE
+app.use(passport.initialize());
+app.use(passport.session());
 
 // ROUTES
 app.use('/', require('./routes/home'));

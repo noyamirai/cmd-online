@@ -5,11 +5,11 @@ const argon2 = require ('argon2');
 const passport = require('passport');
 
 //RENDER PAGES
-router.get('/login', (req, res)=> {
-    res.render('login')
-});
+router.get('/login', (req, res)=> {res.render('login')});
 router.get('/register', (req, res)=> res.render('register'));
 
+
+//REGISTER HANDLER
 router.post('/register', (req, res) =>{
     const { name, username, email, password, password2, type} = req.body
     let errors = [];
@@ -80,5 +80,15 @@ router.post('/register', (req, res) =>{
     }
 
 })
+
+//LOGIN HANDLER
+router.post('/login', (req, res, next)=> {
+    let errors = [];
+    passport.authenticate('local', {
+        successRedirect: '/',
+        failureRedirect: '/users/login', 
+    })(req, res, next)
+    errors.push({msg: 'email not found'}) 
+});
 
 module.exports= router;

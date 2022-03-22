@@ -1,12 +1,12 @@
 <%- include ('./partials/head') -%>
-<body>
-        <form action="/users/login" method="POST">
+<body class="register_page">
+        <form action="/users/login" class="register" method="POST">
             <fieldset>
                 <legend>Login</legend>
                 <input type='username' id='username' name="username" placeholder='Username'>
                 <input type='password' id='password' name="password" placeholder='Password'>
-                <button type="submit">Login</button>
-            </fieldset>         
+            </fieldset>    
+            <button type="submit">Login</button>     
         </form>
         <a href='./register'><button id='switch'>Create Account </button></a>
 </body>
