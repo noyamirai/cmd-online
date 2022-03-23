@@ -1,9 +1,6 @@
 /* eslint-disable no-undef */
-<<<<<<< HEAD
+
 require('dotenv').config();
-=======
-require('dotenv').config()
->>>>>>> 12a8803fa6747635c565c9b63b9d9bece8597425
 const express = require(`express`);
 const app = express();
 
@@ -30,11 +27,7 @@ app.use(session({
     secret: EXPsession,
     resave: false,
     saveUninitialized: false
-<<<<<<< HEAD
 })
-=======
-  })
->>>>>>> 12a8803fa6747635c565c9b63b9d9bece8597425
 );
 
 // PASSPORT MIDDLEWARE
@@ -43,10 +36,7 @@ app.use(passport.session());
 
 // ROUTES
 app.use('/', require('./routes/home'));
-<<<<<<< HEAD
 app.use('/profile', require('./routes/profile'));
-=======
->>>>>>> 12a8803fa6747635c565c9b63b9d9bece8597425
 app.use('/users', require('./routes/users'));
 app.use('/:username', require('./routes/overviews'));
 
