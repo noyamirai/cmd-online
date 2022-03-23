@@ -1,0 +1,41 @@
+<form action="<%= formURL %> " method="post">
+    <fieldset>
+        <legend>Hoe groot mogen de teams zijn?</legend>
+        
+        <div>
+            <input type="radio" id="teamSize-2" name="teamSize" value="2" checked="true">
+            <label for="teamSize-2"><span>Twee</span><span>studenten</span></label>
+        </div>
+
+        <div>
+            <input type="radio" id="teamSize-3" name="teamSize" value="3">
+            <label for="teamSize-3"><span>Drie</span><span>studenten</span></label>
+        </div>
+
+        <div>
+            <input type="radio" id="teamSize-4" name="teamSize" value="4">
+            <label for="teamSize-4"><span>Vier</span><span>studenten</span></label>
+        </div>
+    </fieldset>
+
+    <!-- <fieldset>
+        <legend>Waarvoor worden de teams gemaakt?</legend>
+
+        <div class="toggle-container" id="toggle-container">
+            <div id="toggle-yes">
+                <input type="radio" id="teamType-p" name="teamType" value="project" checked="true">
+                <label for="teamType-p"><span>Project</span></label>
+            </div>
+            
+            <div id="toggle-no">
+                <input type="radio" id="teamType-g" name="teamType" value="group">
+                <label for="teamType-g"><span>Groepsopdracht</span></label>
+            </div>
+        </div>
+    </fieldset> -->
+
+    <div>
+        <button type="submit">Start</button>
+        <button id="close-form">Annuleren</button>
+    </div>
+</form>
