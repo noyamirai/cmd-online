@@ -11,7 +11,7 @@ router.get('/register', (req, res) => res.render('register'));
 
 //REGISTER HANDLER
 router.post('/register', (req, res) => {
-    const { name, username, email, password, password2, type } = req.body
+    const { name, username, email, password, password2, type } = req.body;
     let errors = [];
 
     //CHECK FIELDS
@@ -21,12 +21,12 @@ router.post('/register', (req, res) => {
 
     //CHECK PASSWORDS
     if (password != password2) {
-        errors.push({ msg: 'Please make sure your passwords match' })
+        errors.push({ msg: 'Please make sure your passwords match' });
     }
 
     //CHECK PASSWORD LENGTH
     if (password.length < 6) {
-        errors.push({ msg: 'Your password needs to be at least 8 characters long' })
+        errors.push({ msg: 'Your password needs to be at least 8 characters long' });
     }
     //RENDER PAGE WITH DATA
     if (errors.length > 0) {
@@ -38,7 +38,7 @@ router.post('/register', (req, res) => {
             password,
             password2,
             type
-        })
+        });
     } else {
         User.findOne({ email: email })
             .then(async user => {
@@ -53,7 +53,7 @@ router.post('/register', (req, res) => {
                         password,
                         password2,
                         type
-                    })
+                    });
                 } else {
                     const newUser = new User({
                         name,
@@ -88,7 +88,7 @@ router.post('/login', (req, res, next) => {
         successRedirect: '/',
         failureRedirect: '/users/login',
     })(req, res, next)
-    errors.push({ msg: 'email not found' })
+    errors.push({ msg: 'email not found' });
 });
 
 module.exports = router;
