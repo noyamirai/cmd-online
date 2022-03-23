@@ -1,7 +1,8 @@
 const express = require('express');
+const {ensureAuthenticated} = require('../config/authenticate');
 const router = express.Router();
 
-router.get('/', (req, res) =>{
+router.get('/', ensureAuthenticated,(req, res) =>{
     const baseURL = req.path;
 
     res.render('index', { baseURL: baseURL});

@@ -7,9 +7,6 @@ const session = require('express-session');
 const passport = require('passport');
 
 const port = process.env.PORT || 3000;
-
-// const session = require('express-session');
-const passport = require('passport');
 const EXPsession = process.env.SecretSESSION;
 
 const db = require(`./config/db`);

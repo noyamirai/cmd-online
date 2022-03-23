@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-
+const {ensureAuthenticated} = require('../config/authenticate');
 const schemas = require('../models/schemas');
 const CRUD = require(`../controller/crud-operations`);
 
 const acronymGen = require(`../public/js/acronym-generator`);
 
-router.get(`/courses`, (req, res) => {
+router.get(`/courses`, ensureAuthenticated, (req, res) => {
     CRUD.findDocByQuery(schemas.User, `username`, req.params.username).then((userData) => {
         schemas.TeacherCourse.find({
             'userId': userData.id
@@ -26,7 +26,7 @@ router.get(`/courses`, (req, res) => {
     });
 });
 
-router.get(`/:course/classes`, (req, res) => {
+router.get(`/:course/classes`, ensureAuthenticated,(req, res) => {
    
     CRUD.findDocByQuery(schemas.Course, `linkRef`, req.params.course).then((paramCourse) => {
 
@@ -65,7 +65,7 @@ router.get(`/:course/classes`, (req, res) => {
 /**
  * TODO: confirm whether or not user sees "/:class/home" when a class has teams already
  */
-router.get(`/:course/:class`, (req, res) => {
+router.get(`/:course/:class`, ensureAuthenticated,(req, res) => {
     // get class object
     CRUD.findDocByQuery(schemas.Class, `linkRef`, req.params.class).then((classObject) => {
 
