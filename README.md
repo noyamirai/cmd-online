@@ -16,7 +16,7 @@ Now that we are all on the same page, it is time to connect a database to your p
 
 ~~~
 DB_USER= your database user
-DB_NAME= teamcreator-db
+DB_NAME= cmd-online-db
 DB_PASS= your database password
 ~~~
 
