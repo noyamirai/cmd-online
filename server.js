@@ -35,10 +35,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // ROUTES
-app.use('/', require('./routes/home'));
+//app.use('/', require('./routes/home'));
 app.use('/profile', require('./routes/profile'));
-app.use('/users', require('./routes/users'));
-app.use('/:username', require('./routes/overviews'));
+//app.use('/users', require('./routes/users'));
+//app.use('/:username', require('./routes/overviews'));
 
 app.get(`*`, (req, res) => {
     res.status(404).send(`Page not found!`);
