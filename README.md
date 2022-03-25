@@ -16,8 +16,9 @@ Now that we are all on the same page, it is time to connect a database to your p
 
 ~~~
 DB_USER= your database user
-DB_NAME= teamcreator-db
+DB_NAME= cmd-online-db
 DB_PASS= your database password
+SecretSESSION= your session password
 ~~~
 
 As of now, we do not have a base JSON file with dummy data you could import into your database, but we're working on it :wink:. That's why we have a dev database. To gain access to this database, please get in touch with the creator.
