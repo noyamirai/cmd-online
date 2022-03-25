@@ -1,17 +1,20 @@
 <%- include ('./partials/head') -%>
 <body >
     <header></header>
-    <main>
-        <form action="/users/login"  class="register"method="POST">
+    <main class="register">
+        <form action="/users/login" method="POST">
             <fieldset>
                 <legend>Inloggen</legend>
                 <label for="username">Gebruikersnaam</label>
-                <input type='username' id='username' name="username" placeholder='gebruikersnaam'>
+                <input type='username' class="input input--normal" id='username' name="username" placeholder='gebruikersnaam'>
                 <label for="password">Wachtwoord</label>
-                <input type='password' id='password' name="password" placeholder='*************'>
+                <input type='password'class="input input--normal"  id='password' name="password" placeholder='*************'>
             </fieldset>    
-            <button type="submit">Inloggen</button>     
+
+            <div class="btn--container btn--container__column">
+                <button type="submit">Inloggen</button>     
+                <a href='./register'>Account aanmaken</a>
+            </div>
         </form>
-        <a href='./register'>Account aanmaken</a>
     </main>
 </body>
