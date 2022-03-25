@@ -71,34 +71,46 @@ body {
   width: 100%;
 }
 
-/* REGISTER PAGE */
-
-.register_page {
-  display: flex;
-  flex-wrap: wrap;
+/* REGISTER & LOGIN PAGE */
+.register form {
   justify-content: center;
 }
 
-.register_page > button {
+.register form > fieldset {
+  display: block;
+  justify-content: center;
+  width: 100%;
+}
+
+fieldset > label {
+  display: block;
+  font-weight: 700;
+}
+
+.input {
+  padding: 14px;
+  border: var(--border-settings);
+  border-radius: var(--border-radius);
+}
+
+  .input--normal {
+    width: 100%;
+  }
+
+label + .input {
+  margin-top: 12px;
+}
+
+.input + label {
+  margin-top: var(--default-padding);
+}
+
+.register form > button {
   position: unset;
+  margin-top: 15px;
 }
 
-.register {
-  margin-top: 5%;
-  display: inline-block;
-  justify-content: center;
-}
-
-.register > fieldset {
-  display: grid;
-  justify-content: center;
-}
-
-.register > button {
-  position: unset;
-}
-
-.register > input[type="radio"] {
+.register form > input[type="radio"] {
   position: unset;
 }
 
@@ -124,13 +136,18 @@ h1 {
 }
 
 /* Heading 2 */
-h2 {
+h2, legend {
   font-size: 20px; font-size: 2.0rem;
 
   padding-bottom: 14px;
   margin-bottom: 20px;
 
   border-bottom: 3px solid var(--grey-color);
+}
+
+fieldset legend {
+  width: 100%;
+  font-weight: 700;
 }
 
 /* Heading 3 */
@@ -422,6 +439,10 @@ main {
 
   /* min-height: calc(100vh - 180px);
   min-height: -webkit-fill-available; */
+}
+
+.register  {
+  padding-bottom: var(--default-padding);
 }
 
 .grid {
@@ -785,17 +806,6 @@ body.loading {
     margin-top: var(--default-padding);
   }
 
-    fieldset legend {
-      width: 100%;
-      font-size: 20px; font-size: 2.0rem;
-
-      padding-bottom: 14px;
-      margin-bottom: 20px;
-      font-weight: 700;
-      
-      border-bottom: 3px solid var(--grey-color);
-    }
-
     /* radio button containers */
     fieldset div {
       position: relative;
@@ -1041,6 +1051,27 @@ button:hover, .btn:hover, .btn--small:hover {
 
   z-index: 50;
 }
+
+.register .btn--container {
+  height: auto;
+}
+
+  .register .btn--container button + * {
+      margin-top: 16px;
+  }
+
+  .register .btn--container a, .register a {
+    display: block;
+    width: 100%;
+
+    text-align: center;
+    text-decoration: underline;
+    color:  var(--grey-text-color);
+  }
+
+  .register form + a {
+    margin-top: 16px;
+  }
 
 .overflow--teams .btn--container {
   height: 120px;

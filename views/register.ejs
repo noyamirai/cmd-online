@@ -1,29 +1,48 @@
 <%- include ('./partials/head') -%>
-<body class="register_page">
-            <form action='/users/register' class="register" method='POST'>
+<body>
+    <header></header>
+    <main class="register">
+            <form action='/users/register'  method='POST'>
                 <fieldset>
-                    <legend>Register</legend>
-                    <%- include ('./partials/messages')-%>                   
-                    <input type='name' id='name' name='name' class='form-control' placeholder='Enter Name'                        
+                    <legend>Registreren</legend>
+                    <%- include ('./partials/messages')-%>
+                    <label for="name">Naam</label>                   
+                    <input type='name'  class="input input--normal"id='name' name='name' class='form-control' placeholder='naam'                        
                         value='<%= typeof name != 'undefined' ? name : '' %>' />
-                        <input type='username' id='username' name='username' class='form-control' placeholder='Enter Username'                        
-                        value='<%= typeof username != 'undefined' ? username : '' %>' /> 
-                    <input type='email' id='email' name='email' class='form-control' placeholder='Enter Email'
+                        <label for="username">Gebruikersnaam</label>    
+                        <input type='username' class="input input--normal" id='username' name='username' class='form-control' placeholder='gebruikersnaam'                        
+                        value='<%= typeof username != 'undefined' ? username : '' %>' />
+                        <label for="email">Email</label>     
+                    <input type='email' class="input input--normal" id='email' name='email' class='form-control' placeholder='email'
                         value='<%= typeof email != 'undefined' ? email : '' %>' />
-                    <input type='password' id='password' name='password' class='form-control'
-                        placeholder='Create Password' value='<%= typeof password != 'undefined' ? password : '' %>' />
-                    <input type='password' id='password2' name='password2' class='form-control'
-                        placeholder='Confirm Password' value='<%= typeof password2 != 'undefined' ? password2 : '' %>' />
+                        <label for="password">Wachtwoord</label>    
+                    <input type='password' class="input input--normal" id='password' name='password' class='form-control'
+                        placeholder='*************' value='<%= typeof password != 'undefined' ? password : '' %>' />
+                        <label for="password2">Herhaal wachtwoord</label>    
+                    <input type='password' class="input input--normal" id='password2' name='password2' class='form-control'
+                        placeholder='*************' value='<%= typeof password2 != 'undefined' ? password2 : '' %>' />
                 </fieldset>
+
                 <fieldset>
-                    <legend>What is your occupation?</legend>
-                    <input type="radio" name="type" id="student" value="student">
-                    <label for="student">Student</label>
-                    <input type="radio" name="type" id="teacher" value="teacher">
-                    <label for="teacher">Teacher</label>
-                </fieldset>                
+                    <legend>Wat ben jij?</legend>
+            
+                    <div class="toggle-container" id="toggle-container">
+                        <div id="toggle-yes">
+                            <input type="radio" id="student" name="type" value="student" checked="true">
+                            <label for="student"><span>Student</span></label>
+                        </div>
+                        
+                        <div id="toggle-no">
+                            <input type="radio" id="teacher" name="type" value="teacher">
+                            <label for="teacher"><span>Teacher</span></label>
+                        </div>
+                    </div>
+                </fieldset>
+                
                 <button type='submit'>Register</button>
             </form>
-            <!-- <button id="moreLess">More genres</button> -->
-            <a href='./login'><button id='switch'>Log in</button></a>
+            <a href='./login'>Inloggen</a>
+        </main>
 </body>
+
+<script async src="../public/js/toggle-script.js"></script>
