@@ -71,31 +71,39 @@ body {
   width: 100%;
 }
 
-/* REGISTER PAGE */
+/* REGISTER & LOGIN PAGE */
 
-.register_page {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.register_page > button {
-  position: unset;
+main > a {
+  text-decoration: underline;
+  color:  var(--grey-text-color);
 }
 
 .register {
-  margin-top: 5%;
-  display: inline-block;
   justify-content: center;
 }
 
 .register > fieldset {
-  display: grid;
+  display: block;
   justify-content: center;
+  width: 100%;
+}
+
+fieldset > label {
+  font-weight: 700;
+}
+
+input[type='username'], input[type='password'], input[type='name'],  input[type='email'] {
+  padding: 14px;
+  width: 100%;
+  border: var(--border-settings);
+  border-radius: var(--border-radius);
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .register > button {
   position: unset;
+  margin-top: 15px;
 }
 
 .register > input[type="radio"] {
