@@ -1,0 +1,304 @@
+/* =============================================================================
+  #GENERAL
+============================================================================= */
+fieldset {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+fieldset + fieldset {
+    margin-top: var(--default-padding);
+}
+
+    fieldset > label {
+        display: block;
+        font-weight: 700;
+    }
+
+    /* radio button containers */
+    fieldset div {
+        position: relative;
+        width: 33.33%;
+
+        border: var(--border-settings);
+        border-radius: var(--border-radius);
+
+        background-color: var(--white-color);
+    }
+
+        fieldset div > label {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+
+            padding: 12px;
+
+            background-color: transparent;
+
+            cursor: pointer;
+
+            transition: all 100ms ease-in-out;
+        }
+
+            fieldset div > label > span:first-of-type {
+                font-weight: 700;
+            }
+
+            fieldset div > label > span:last-of-type {
+                font-size: 14px;
+                font-size: 1.4rem;
+                color: var(--grey-text-color);
+                margin-top: -4px;
+            }
+
+    fieldset div + div {
+        margin-left: 8px;
+    }
+
+.input {
+    padding: 14px;
+    border: var(--border-settings);
+    border-radius: var(--border-radius);
+}
+
+    .input--normal {
+        width: 100%;
+    }
+
+label + .input {
+    margin-top: 12px;
+}
+
+.input + label {
+    margin-top: var(--default-padding);
+}
+
+/* =============================================================================
+  #REGISTRATION AND LOGIN
+============================================================================= */
+.register form {
+    justify-content: center;
+}
+
+    .register form > fieldset {
+        display: block;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .register form > button {
+        position: unset;
+        margin-top: 15px;
+    }
+
+        .register form > input[type="radio"] {
+            position: unset;
+        }
+
+    .register .btn--container {
+        border: none;
+        height: auto;
+    }
+
+        .register .btn--container button + * {
+            margin-top: 16px;
+        }
+
+        .register .btn--container a, .register a {
+            display: block;
+            width: 100%;
+
+            text-align: center;
+            text-decoration: underline;
+            color: var(--grey-text-color);
+        }
+
+        .register form + a {
+            margin-top: 16px;
+        }
+/* =============================================================================
+  #POP-UP FORM
+============================================================================= */
+.form-trigger {
+    z-index: 80;
+}
+
+.form form {
+    position: fixed;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    transform: translateY(100%);
+
+    padding: 50px var(--default-padding) 138px var(--default-padding);
+
+    background-color: var(--white-color);
+
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    z-index: 100;
+
+    transition: transform 300ms ease-in-out;
+}
+
+.form form::before {
+    content: "";
+
+    position: absolute;
+    top: 16px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 65px;
+    height: 4px;
+
+    border-radius: 4px;
+
+    background-color: var(--grey-color);
+}
+
+    .form form > div {
+        position: fixed;
+        left: var(--default-padding);
+        right: var(--default-padding);
+
+        display: flex;
+        flex-direction: column;
+
+        bottom: 10px;
+    }
+
+        .form form > div > button {
+            position: relative;
+            top: auto;
+            bottom: auto;
+            left: auto;
+            right: auto;
+        }
+
+        .form form > div > button:last-of-type, 
+        .form--overview form > div > a {
+            background-color: var(--white-color);
+            color: var(--grey-text-color);
+            text-decoration: underline;
+        }
+
+.form--overview form {
+    position: initial;
+
+    left: auto;
+    right: auto;
+    bottom: auto;
+
+    padding: 0;
+
+    transform: translateY(0);
+
+    border-radius: 0;
+}
+
+.form--overview form::before {
+    display: none;
+}
+
+    .form--overview form > div {
+        position: relative;
+
+        left: auto;
+        right: auto;
+        bottom: auto;
+
+        margin-top: 30px;
+    }
+
+        .form--overview form > div > a {
+            margin-top: 12px;
+        }
+
+        .form--overview form > div > button:first-of-type {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            text-decoration: none;
+            width: 100%;
+        }
+
+.form form.form-active {
+    transform: translateY(0);
+}
+
+/* =============================================================================
+  #TOGGLE BUTTON (RADIO)
+============================================================================= */
+.toggle-container {
+    display: flex;
+    flex-direction: row;
+
+    width: 100%;
+
+    background-color: transparent;
+}
+
+    .toggle::before {
+        content: "";
+
+        position: absolute;
+        top: 0;
+
+        transform: translateX(0);
+
+        height: 100%;
+        width: 50%;
+
+        background-color: var(--secondary-color);
+
+        transition: 250ms ease-in-out;
+        z-index: 10;
+    }
+
+    .toggled::before {
+        transform: translateX(100%);
+    }
+
+    .toggle-container > div {
+        display: flex;
+        justify-content: center;
+
+        width: 50%;
+
+        border: none;
+
+        cursor: pointer;
+        transition: color 50ms ease-in-out;
+    }
+
+        .toggle-container > div > label {
+            position: relative;
+            width: 100%;
+            justify-content: center;
+            text-align: center;
+        }
+
+            .toggle-container > div > label > span:first-of-type {
+                z-index: 15;
+                color: var(--secondary-color);
+                font-size: 16px;
+                font-size: 1.6rem;
+                margin-top: 0;
+            }
+
+            .toggle-container input[type="radio"]:checked + label {
+                background-color: var(--secondary-color);
+            }
+
+            .toggle-container > div + div {
+                margin-left: 0;
+            }
+
+.toggle--active {
+    background-color: red;
+}
