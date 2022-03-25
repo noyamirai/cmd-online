@@ -1,0 +1,134 @@
+/* =============================================================================
+  #BUTTON
+============================================================================= */
+button, .btn {
+    position: fixed;
+
+    bottom: var(--default-padding);
+    left: var(--default-padding);
+    right: var(--default-padding);
+
+    display: inline-block;
+    padding: 14px;
+
+    width: 100%;
+    min-height: 50px;
+
+    color: var(--white-color);
+    font-size: 16px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-decoration: none;
+    text-align: center;
+
+    cursor: pointer;
+
+    background-color: var(--secondary-color);
+    border-radius: var(--border-radius);
+    border: none;
+
+    transition: all 150ms ease-in-out;
+}
+
+button:hover, .btn:hover, .btn--small:hover { transform: scale(1.02); }
+
+    /* Back button */
+    .btn--small {
+        position: fixed;
+
+        bottom: var(--default-padding);
+        left: var(--default-padding);
+
+        display: flex;
+        width: 50px;
+        height: 50px;
+
+        border: var(--border-settings);
+        border-radius: var(--border-radius);
+
+        background-color: var(--white-color);
+        cursor: pointer;
+        z-index: 100;
+        transition: all 150ms ease-in-out;
+    }
+
+        .btn--small img {
+            height: 18px;
+            width: auto;
+
+            margin: auto;
+        }
+
+        .btn--small-arrow img {
+            /* flip it */
+            transform: scaleX(-1);
+        }
+
+    .btn--subtle {
+        font-size: 14px;
+        font-size: 1.4rem;
+        color: var(--grey-text-color);
+        text-decoration: underline;
+    }
+
+.btn--container {
+    position: fixed;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    padding: 12px var(--default-padding);
+    height: 80px;
+
+    border-top: var(--border-settings);
+    background-color: var(--white-color);
+
+    z-index: 50;
+}
+
+.overflow--teams .btn--container { height: 120px; }
+.overflow--teams .btn--container__column { justify-content: space-around; }
+
+.yellow-bg .btn--container { background-color: var(--primary-color); }
+
+    .btn--container > * {
+        position: relative;
+
+        top: auto;
+        left: auto;
+        bottom: auto;
+        right: auto;
+    }
+
+    .btn--container .btn { width: 100%; }
+
+    .btn--container a { min-width: 50px; }
+
+    .btn--container a + .btn, 
+    .btn--container a + button { margin-left: 10px; }
+
+.btn--container__center {
+    position: absolute;
+
+    top: 50%;
+    left: 0;
+    right: 0;
+    bottom: auto;
+
+    transform: translateY(calc(-50% - 30px));
+}
+
+.btn--container__column {
+    flex-direction: column;
+    align-items: center;
+}
+
+    .btn--container__column a {
+        width: 100%;
+        text-align: center;
+    }
