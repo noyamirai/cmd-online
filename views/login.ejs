@@ -1,5 +1,6 @@
 <%- include ('./partials/head') -%>
-<body >
+
+<body>
     <header></header>
     <main class="register">
         <form action="/users/login" method="POST">
@@ -8,11 +9,11 @@
                 <label for="username">Gebruikersnaam</label>
                 <input type='username' class="input input--normal" id='username' name="username" placeholder='gebruikersnaam'>
                 <label for="password">Wachtwoord</label>
-                <input type='password'class="input input--normal"  id='password' name="password" placeholder='*************'>
-            </fieldset>    
+                <input type='password' class="input input--normal" id='password' name="password" placeholder='*************'>
+            </fieldset>
 
             <div class="btn--container btn--container__column">
-                <button type="submit">Inloggen</button>     
+                <button type="submit">Inloggen</button>
                 <a href='./register'>Account aanmaken</a>
             </div>
         </form>
