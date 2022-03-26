@@ -15,6 +15,7 @@ html { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: 
   --border-settings: 3px solid #0A0A0A;
 
   --default-padding: 24px;
+  --default-big-padding: 40px;
 
   --image-opacity: 15%;
 
@@ -128,6 +129,10 @@ main {
   margin: 0 var(--default-padding);
 }
 
+  main section + section {
+    margin-top: var(--default-big-padding);
+  }
+
 .register  {
   padding-bottom: var(--default-padding);
 }
@@ -140,14 +145,6 @@ main {
   gap: 20px;
   grid-auto-rows: min-content;
 }
-
-  /* arrow icon */
-  .grid .icon {
-    height: 16px;
-    width: auto;
-
-    margin: 0 0 0 auto;
-  }
 
   .grid li {
       position: relative;
@@ -214,6 +211,41 @@ main {
       background-color: var(--secondary-color);
     }
 
+
+/* =============================================================================
+  #DASHBOARD GRID LIST
+============================================================================= */
+.dashboard .grid--list li a {
+  padding: 20px 16px;
+}
+
+.dashboard .box-shadow::after {
+  display: none;
+}
+
+  .dashboard .grid--list li a > div {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+
+    .dashboard .grid--list li a > div p {
+      margin-left: 9px;
+      padding: 4px 8px;
+
+      border-radius: 20px;
+
+      color: white;
+      font-weight: 600;
+    }
+
+    .dashboard .grid--list li:first-of-type a > div p {
+      background-color: var(--cmd-color-blue);
+    }
+
+    .dashboard .grid--list li:first-of-type a > div p {
+      background-color: var(--cmd-color-orange);
+    }
 /* =============================================================================
   #GRID OVERVIEW
 ============================================================================= */
