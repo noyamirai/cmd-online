@@ -21,6 +21,21 @@ const courseSchema = new mongoose.Schema({
     linkRef: {
         type: String,
         required: [true, `Why no ref?`]
+    },
+    in_blok: [{
+        type: Number,
+        enum : [1, 2, 3, 4],
+        required: [true, 'Why no blok?']
+    }],
+    in_year: {
+        type: Number,
+        enum : [1, 2, 3, 4],
+        required: [true, 'Why no year?']
+    },
+    type: {
+        type: String,
+        enum : ['normal', 'project', 'elective'],
+        default: 'normal'
     }
 }, {
     collection: `courses`
@@ -54,6 +69,11 @@ const classSchema = new mongoose.Schema({
     linkRef: {
         type: String,
         required: [true, `Why no ref?`]
+    },
+    in_year: {
+        type: Number,
+        enum : [1, 2, 3, 4],
+        required: [true, 'Why no school year?']
     }
 }, {
     collection: `classes`
@@ -248,6 +268,32 @@ const teacherCourse = new mongoose.Schema({
     }
 });
 
+const schoolYear = new mongoose.Schema({
+    year: {
+        type: String,
+        required: [true, 'Why no school year?']
+    },
+    slug: {
+        type: Number,
+        enum : [1, 2, 3, 4],
+        required: [true, 'Why no year slug?']
+    },
+    courses: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `Course`
+    }],
+    classes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `Class`
+    }]
+}, {
+    collection: `school_year`
+}, {
+    toJSON: {
+        virtuals: true
+    }
+});
+
 const Course = mongoose.model(`Course`, courseSchema, `courses`);
 
 const User = mongoose.model(`User`, userSchema, `users`);
@@ -259,6 +305,8 @@ const Team = mongoose.model(`Team`, teamSchema, `teams`);
 const cmdSkill = mongoose.model(`cmdSkill`, cmdSkillSchema, `cmd_skills`);
 const TeacherCourse = mongoose.model(`TeacherCourse`, teacherCourse, `teacher_course`);
 
+const SchoolYear = mongoose.model('SchoolYear', schoolYear, 'school_year');
+
 module.exports = {
     Course,
     User,
@@ -267,5 +315,6 @@ module.exports = {
     Class,
     Team,
     TeacherCourse,
-    cmdSkill
+    cmdSkill,
+    SchoolYear
 };
