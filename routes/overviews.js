@@ -87,7 +87,7 @@ router.get(`/:course/:class`, ensureAuthenticated,(req, res) => {
                 bannerSubtitle: `${classData.students.length} studenten`,
                 linkRef: classObject.linkRef,
                 classTeams: classObject.teams,
-                className: `overflow form`
+                className: `overflow form--popup`
             });
         });
     });

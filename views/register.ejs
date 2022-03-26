@@ -2,42 +2,58 @@
 
 <body>
     <header></header>
-    <main class="register">
+    <main class="form--overview">
         <form action='/users/register' method='POST'>
             <fieldset>
                 <legend>Registreren</legend>
                 <%- include ('./partials/messages')-%>
-                <label for="name">Naam</label>
-                <input type='name' class="input input--normal" id='name' name='name' class='form-control' placeholder='naam' value='<%= typeof name != 'undefined' ? name : '' %>' />
-                <label for="username">Gebruikersnaam</label>
-                <input type='username' class="input input--normal" id='username' name='username' class='form-control' placeholder='gebruikersnaam' value='<%= typeof username != 'undefined' ? username : '' %>' />
-                <label for="email">Email</label>
-                <input type='email' class="input input--normal" id='email' name='email' class='form-control' placeholder='email' value='<%= typeof email != 'undefined' ? email : '' %>' />
-                <label for="password">Wachtwoord</label>
-                <input type='password' class="input input--normal" id='password' name='password' class='form-control' placeholder='*************' value='<%= typeof password != 'undefined' ? password : '' %>' />
-                <label for="password2">Herhaal wachtwoord</label>
-                <input type='password' class="input input--normal" id='password2' name='password2' class='form-control' placeholder='*************' value='<%= typeof password2 != 'undefined' ? password2 : '' %>' />
+
+                <div>
+                    <label for="name">Naam</label>
+                    <input type='name' class="input input--normal" id='name' name='name' class='form-control' placeholder='naam' value='<%= typeof name != 'undefined' ? name : '' %>' />
+                </div>
+                
+                <div>
+                    <label for="username">Gebruikersnaam</label>
+                    <input type='username' class="input input--normal" id='username' name='username' class='form-control' placeholder='gebruikersnaam' value='<%= typeof username != 'undefined' ? username : '' %>' />
+                </div>
+                
+                <div>
+                    <label for="email">Email</label>
+                    <input type='email' class="input input--normal" id='email' name='email' class='form-control' placeholder='email' value='<%= typeof email != 'undefined' ? email : '' %>' />
+                </div>
+
+                <div>
+                    <label for="password">Wachtwoord</label>
+                    <input type='password' class="input input--normal" id='password' name='password' class='form-control' placeholder='*************' value='<%= typeof password != 'undefined' ? password : '' %>' />
+                </div>
+
+                <div>
+                    <label for="password2">Herhaal wachtwoord</label>
+                    <input type='password' class="input input--normal" id='password2' name='password2' class='form-control' placeholder='*************' value='<%= typeof password2 != 'undefined' ? password2 : '' %>' />
+                </div>
+                
             </fieldset>
 
             <fieldset>
                 <legend>Wat ben jij?</legend>
 
                 <div class="toggle-container" id="toggle-container">
-                    <div id="toggle-yes">
-                        <input type="radio" id="student" name="type" value="student" checked="true">
+                    <div id="toggle-yes" class="toggle--active">
+                        <input class="input input--custom" type="radio" id="student" name="type" value="student" checked="true">
                         <label for="student"><span>Student</span></label>
                     </div>
 
                     <div id="toggle-no">
-                        <input type="radio" id="teacher" name="type" value="teacher">
-                        <label for="teacher"><span>Teacher</span></label>
+                        <input class="input input--custom" type="radio" id="teacher" name="type" value="teacher">
+                        <label for="teacher"><span>Docent</span></label>
                     </div>
                 </div>
             </fieldset>
 
-            <button type='submit'>Register</button>
+            <button type='submit'>Registreren</button>
         </form>
-        <a href='./login'>Inloggen</a>
+        <a href='./login'>Ik heb al een account</a>
     </main>
 </body>
 
