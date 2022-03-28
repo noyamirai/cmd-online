@@ -34,6 +34,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // ROUTES
+app.use('/profile', require('./routes/profile'));
 app.use('/', require('./routes/dashboard'));
 app.use('/users', require('./routes/users'));
 app.use('/:username', require('./routes/overviews'));
