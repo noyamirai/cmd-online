@@ -48,10 +48,20 @@
             <ul class="grid grid--list">
                 <% if (userData.classes == null) { %>
                     <li>
-                        <a class="box-shadow" href="#">
+                        <a class="box-shadow" href="/profile/<%= userData.user.username %>">
                             <div>
                                 <h3>Voeg je klas toe</h3>
                                 <p>Profiel setup</p>
+                            </div>
+
+                            <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                        </a>
+                    </li>
+                    <li>
+                        <a class="box-shadow" href="#">
+                            <div>
+                                <h3>Wat zijn jouw CMD Skills?</h3>
+                                <p>CMD Skills</p>
                             </div>
 
                             <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">

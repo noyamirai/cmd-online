@@ -20,7 +20,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
             }).exec((err, result) => {
                 if (err) Promise.reject(err);
 
-                console.log(result);
+                // console.log(result);
                 res.render('index', {
                     userData: result,
                     headerClass: 'no-box-shadow'

@@ -413,3 +413,32 @@
 //         slug: 4,
 //     }
 // ]);
+
+// CRUD.createMultipleDocs(schemas.SchoolBloks, [
+//     {
+//         title: 'Blok 1',
+//         linkRef: '1_normal'
+//     },
+//     {
+//         title: 'Blok 2',
+//         linkRef: '2_normal'
+//     },
+//     {
+//         title: 'Blok 3: STAGE',
+//         linkRef: '3_internship'
+//     },
+//     {
+//         title: 'Blok 3: KEUZEBLOK',
+//         linkRef: '3_elective',
+//         courses: ['62386607b31742dbaa43dca9', '62386607b31742dbaa43dca8', '62386607b31742dbaa43dca7']
+//     },
+//     {
+//         title: 'Blok 4: STAGE',
+//         linkRef: '4_internship'
+//     },
+//     {
+//         title: 'Blok 4: KEUZEBLOK',
+//         linkRef: '4_elective',
+//         courses: ['62386607b31742dbaa43dca9', '62386607b31742dbaa43dca8', '62386607b31742dbaa43dca7']
+//     }
+// ]);

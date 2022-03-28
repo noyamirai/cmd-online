@@ -86,6 +86,7 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
 
     .input {
         padding: 14px;
+        font-size: 14px; font-size: 1.4rem;
         border: var(--border-settings);
         border-radius: var(--border-radius);
     }
@@ -101,6 +102,33 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
             top: 0;
             right: 0;
             z-index: 5;
+        }
+
+        .select-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+            .input--select {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+            }
+
+        .select-container::before {
+            content: "";
+            position: absolute;
+
+            top: 50%;
+            right: 16px;
+
+            transform: rotate(90deg) translate(-50%);
+
+            width: 12px;
+            height: 17px;
+
+            background-color: var(--white-color);
+            background-image: url(../images/icons/arrow-icon.svg);
+            background-repeat: no-repeat;
         }
 
 /* =============================================================================

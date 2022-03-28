@@ -235,7 +235,7 @@ main {
 
       border-radius: 20px;
 
-      color: white;
+      color: var(--white-color);
       font-weight: 600;
     }
 
@@ -243,7 +243,7 @@ main {
       background-color: var(--cmd-color-blue);
     }
 
-    .dashboard .grid--list li:first-of-type a > div p {
+    .dashboard .grid--list li:nth-of-type(2) a > div p {
       background-color: var(--cmd-color-orange);
     }
 /* =============================================================================
