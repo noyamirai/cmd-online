@@ -53,7 +53,7 @@ const findDocByQuery = async (schema, attribute, equalTo) => {
             if (err) reject(err);
 
             if (!result.length) {
-                console.log(`doc not found in db`);
+                console.log(`doc not found in db: ${attribute}: ${equalTo} IN SCHEMA ${schema}`);
             } else {
                 result.forEach((doc) => {
                     console.log(`doc found in db`);

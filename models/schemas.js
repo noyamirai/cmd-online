@@ -206,10 +206,16 @@ const userStudent = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: `Team`
     }],
-    classes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `Class`
-    }],
+    classes: {
+        normal: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `Class`
+        }],
+        elective: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `ElectiveClass`
+        }]
+    },
     courses: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: `Course`

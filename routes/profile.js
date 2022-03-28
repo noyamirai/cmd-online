@@ -37,7 +37,7 @@ router.post('/:username/main-class', ensureAuthenticated, (req, res) => {
     savedInfo.school_year = req.body.school_year;
 
     schemas.SchoolYear.findOne({
-        'slug': req.body.school_year
+        'linkRef': req.body.school_year
     }).lean().populate({
         path: `classes courses`,
         select: 'title linkRef'
@@ -60,10 +60,8 @@ router.post('/:username/main-class', ensureAuthenticated, (req, res) => {
 // Third question: Ask for their current blok
 router.post('/:username/current-block', ensureAuthenticated, (req, res) => {
 
-    // update userobject based on type
     CRUD.findDocByQuery(schemas.Class, 'linkRef', req.body.main_class).then((classObject) => {
         savedInfo.main_class = classObject.id;
-        savedInfo.main_class_courses = classObject.courses;
     });
 
     schemas.SchoolBloks.find({}).then((allBloks) => {
@@ -89,6 +87,7 @@ router.post('/:username/elective', ensureAuthenticated, (req, res) => {
     const blockType = inBlok.substring(inBlok.indexOf('_') + 1);
 
     let projectData = [];
+    let mainCourses = [];
 
     schemas.SchoolBloks.findOne({
         'linkRef': inBlok
@@ -97,14 +96,15 @@ router.post('/:username/elective', ensureAuthenticated, (req, res) => {
     }).exec((err, blokData) => {
         if (err) Promise.reject(err);
 
-        blokData.courses.forEach(element => {
-            if (element.type == 'project') {
-                projectData.push(element);
+        blokData.courses.forEach(course => {
+            if (course.type == 'project') {
+                projectData.push(course);
+            } else if(course.type == 'normal') {
+                mainCourses.push(course._id);
             }
         });
 
         if (blockType == 'elective') {
-
             res.render(`profile`, {
                 username: req.params.username,
                 selectData: projectData,
@@ -116,16 +116,38 @@ router.post('/:username/elective', ensureAuthenticated, (req, res) => {
                 formAction: 'elective-class'
             });
         } else {
-            console.log(savedInfo);
-            res.redirect('/');
+
+            savedInfo.main_class_courses = mainCourses;
+
+            CRUD.findDocByQuery(schemas.User, 'username', req.params.username).then((userObject) => {
+
+                let allCourses = [];
+                console.log(savedInfo);
+                savedInfo.main_class_courses.forEach(item => {
+                    allCourses.push(item);
+                });  
+
+                schemas.Student.findOneAndUpdate({
+                    'user': userObject.id
+                }, {
+                    classes: {
+                        elective: savedInfo.main_class
+                    },
+                    courses: allCourses,
+                }).then((student) => {
+                    CRUD.addIdReferenceToDoc(schemas.Course, allCourses, 'students', student.id);
+                    CRUD.addIdReferenceToDoc(schemas.Class, savedInfo.main_class, 'students', student.id);
+
+                    res.redirect('/');
+                });
+
+            });
         }
     });
 });
 
 // Fifth question: Ask for elective class
 router.post('/:username/elective-class', ensureAuthenticated, (req, res) => {
-
-    
     CRUD.findDocByQuery(schemas.Course, 'linkRef', req.body.block_project).then((result) => {
         savedInfo.block_project = result.id;
         savedInfo.block_project_courses = result.accompanying_courses;
@@ -159,24 +181,17 @@ router.post('/:username/extra-elective', ensureAuthenticated, (req, res) => {
 
     const inBlok = savedInfo.in_block;
 
-    let electiveData = [];
-
     schemas.SchoolBloks.findOne({
         'linkRef': inBlok
     }).lean().populate({
-        path: `courses`
+        path: `courses`,
+        match: { 'type': 'elective' }
     }).exec((err, blokData) => {
         if (err) Promise.reject(err);
 
-        blokData.courses.forEach(element => {
-            if (element.type == 'elective') {
-                electiveData.push(element);
-            }
-        });
-
         res.render(`profile`, {
             username: req.params.username,
-            selectData: electiveData,
+            selectData: blokData.courses,
             selectName: 'block_elective',
             legendTitle: 'Welk extra vak heb je?',
             multipleSelects: false,
@@ -199,15 +214,48 @@ router.post('/:username/done', ensureAuthenticated, (req, res) => {
 
         CRUD.findDocByQuery(schemas.User, 'username', req.params.username).then((userObject) => {
 
+            schemas.Student.findOne({ 'user': userObject.id}).then((student) => {
+                if (student.classes != null) {
+            
+                    schemas.ElectiveClass.findOneAndUpdate({
+                        '_id': { $in: student.classes.elective }
+                    },
+                    {
+                        $pull: {
+                            'students': { 
+                                '_id': student.id 
+                            }
+                        }
+                    });
+
+                    schemas.Course.findOneAndUpdate({
+                        '_id': { $in: student.courses }
+                    },
+                    {
+                        $pull: {
+                            'students': { 
+                                '_id': student.id 
+                            }
+                        }
+                    });
+
+                    student.classes = null;
+                    student.courses = null;
+                    
+                }
+            });   
+            
             console.log(savedInfo);
             let allClasses = [];
             let allCourses = [];
 
             allClasses.push(savedInfo.main_class, savedInfo.block_project_class, savedInfo.block_elective_class);
         
-            savedInfo.main_class_courses.forEach(item => {
-                allCourses.push(item);
-            });
+            if (savedInfo.main_class_courses) {
+                savedInfo.main_class_courses.forEach(item => {
+                    allCourses.push(item);
+                });   
+            }
 
             savedInfo.block_project_courses.forEach(item => {
                 allCourses.push(item);
@@ -215,16 +263,25 @@ router.post('/:username/done', ensureAuthenticated, (req, res) => {
         
             allCourses.push(savedInfo.block_project, savedInfo.block_elective);
 
+            // console.log(allCourses);
+            // console.log(allClasses);
+
             schemas.Student.findOneAndUpdate({
                 'user': userObject.id
             }, {
-                classes: allClasses,
+                classes: {
+                    elective: allClasses
+                },
                 courses: allCourses,
-            }).then( console.log('USER UPDATED') );
+            }).then((student) => {
+                CRUD.addIdReferenceToDoc(schemas.Course, allCourses, 'students', student.id);
+                CRUD.addIdReferenceToDoc(schemas.Class, savedInfo.main_class, 'students', student.id);
+                CRUD.addIdReferenceToDoc(schemas.ElectiveClass, [savedInfo.block_elective_class, savedInfo.block_project_class], 'students', student.id);
+
+                res.redirect('/');
+            });
 
         });
-
-        res.redirect('/');
     });
 });
 
