@@ -5,7 +5,7 @@ const app = express();
 
 const session = require('express-session');
 const passport = require('passport');
-
+const compression = require('compression');
 const port = process.env.PORT || 3000;
 const EXPsession = process.env.SecretSESSION;
 
@@ -19,6 +19,11 @@ app.use('/public', express.static(__dirname + '/public/'));
 db.connectDb();
 
 require('./config/verifyUser')(passport);
+
+app.use(compression({
+    level: 6,
+    threshold: 1000
+}));
 
 //EXPRESS MIDDLEWARE
 app.use(express.urlencoded({ extended: false }));
