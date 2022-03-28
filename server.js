@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-
 require('dotenv').config();
 const express = require(`express`);
 const app = express();
@@ -35,8 +34,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // ROUTES
-app.use('/', require('./routes/home'));
 app.use('/profile', require('./routes/profile'));
+app.use('/', require('./routes/dashboard'));
 app.use('/users', require('./routes/users'));
 app.use('/:username', require('./routes/overviews'));
 

@@ -1,7 +1,89 @@
 <%- include ('./partials/head.ejs') -%>
 
 <body>
-    <main>
-        <h1>Pee pee poo poo</h1>
+
+    <header>
+        <figure>
+            <picture class="box-shadow">
+                <img src="https://avatars.githubusercontent.com/u/6113643?v=4" alt="Profiel foto van Student">
+            </picture>
+
+            <figcaption>
+
+                <p><%= userData.user.name %> </p>
+
+                <% if (userData.user.type == "teacher") { %>
+                <span><img src="../../public/images/icons/check-icon.svg" alt="Checkmark icon"></span>
+                <% } %>
+
+            </figcaption>
+        </figure>
+    </header>
+
+    <main class="dashboard">
+        <% if (userData.teams.length) { %>
+            <section>
+                <h2>Jouw teams</h2>
+
+                <ul class="grid grid--overview">
+                    <% userData.teams.forEach(item => { %>
+                        <li>
+                            <a class="box-shadow" href="#">
+                                <div>
+                                    <h3><%= item.title %></h3>
+                                    <p>course</p>
+                                </div>
+                                <p>Bekijk team</p>
+                            </a>
+                        </li>
+                    <% }) %>
+                </ul>
+
+            </section>
+        <% } %>
+
+        <section class="dashboard__overview">
+            <h2>Overzicht</h2>
+
+            <ul class="grid grid--list">
+                <% if (userData.classes == null) { %>
+                    <li>
+                        <a class="box-shadow" href="#">
+                            <div>
+                                <h3>Voeg je klas toe</h3>
+                                <p>Profiel setup</p>
+                            </div>
+
+                            <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                        </a>
+                    </li>
+
+                <% } else { %>
+                    <li>
+                        <a class="box-shadow" href="#">
+                            <div>
+                                <h3>Mijn vakken</h3>
+                                <p>6 vakken</p>
+                            </div>
+
+                            <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                        </a>
+                    </li>
+                    <li>
+                        <a class="box-shadow" href="#">
+                            <div>
+                                <h3>Klassenoverzicht</h3>
+                                <p>211</p>
+                            </div>
+
+                            <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                        </a>
+                    </li>
+                <% } %>
+                
+            </ul>
+        </section>
     </main>
+
+    <script src="../public/js/color-generator.js"></script>
 </body>
