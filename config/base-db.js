@@ -393,3 +393,23 @@
 //         CRUD.createDoc(schemas.Student, { user: userObject.id, cmd_skills: { best: ["622a0cbb6df854b8951e7e55"], want_to_learn: ["622a0cbb6df854b8951e7e55"]}, classes: userObject.classes, courses: userObject.courses })
 //     }
 // });
+
+// CRUD.createMultipleDocs(schemas.SchoolYear, [
+//     {
+//         year: 'Eerste jaar',
+//         slug: 1,
+//     },
+//     {
+//         year: 'Tweede jaar',
+//         slug: 2,
+//         classes: ['623877ace3b297f0608bb406', '623877ace3b297f0608bb407', '623877ace3b297f0608bb408']
+//     },
+//     {
+//         year: 'Derde jaar',
+//         slug: 3,
+//     },
+//     {
+//         year: 'Vierde jaar',
+//         slug: 4,
+//     }
+// ]);

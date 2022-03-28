@@ -1,13 +1,12 @@
 <header>
-    <figure <% if (headerClass) { %>class="<%= headerClass %>"<% } %>>
+    <figure>
         <picture class="box-shadow">
-
             <img src="<%= profile_pic %>" alt="Profiel foto van <%= userName %>">
         </picture>
 
         <figcaption>
             
-                <p><%= userName %></p>
+            <p><%= userName %></p>
             <span><img src="../../public/images/icons/check-icon.svg" alt="Checkmark icon"></span>
         </figcaption>
     </figure>
