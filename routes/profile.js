@@ -3,13 +3,13 @@ const express = require('express');
 const router = express.Router({
     mergeParams: true
 });
-// const CRUD = require(`../controller/crud-operations`);
+const CRUD = require(`../controller/crud-operations`);
 const {
     ensureAuthenticated
 } = require('../config/authenticate');
 const schemas = require('../models/schemas');
 
-let allProfileOptions = [];
+let savedInfo = {};
 
 // First question: Ask for school year
 router.get('/:username', ensureAuthenticated, (req, res) => {
@@ -34,9 +34,7 @@ router.get('/:username', ensureAuthenticated, (req, res) => {
 
 // Second question: Ask for their main class
 router.post('/:username/main-class', ensureAuthenticated, (req, res) => {
-    allProfileOptions.push({
-        school_year: req.body.school_year
-    });
+    savedInfo.school_year = req.body.school_year;
 
     schemas.SchoolYear.findOne({
         'slug': req.body.school_year
@@ -61,8 +59,11 @@ router.post('/:username/main-class', ensureAuthenticated, (req, res) => {
 
 // Third question: Ask for their current blok
 router.post('/:username/current-block', ensureAuthenticated, (req, res) => {
-    allProfileOptions.push({
-        main_class: req.body.main_class
+
+    // update userobject based on type
+    CRUD.findDocByQuery(schemas.Class, 'linkRef', req.body.main_class).then((classObject) => {
+        savedInfo.main_class = classObject.id;
+        savedInfo.main_class_courses = classObject.courses;
     });
 
     schemas.SchoolBloks.find({}).then((allBloks) => {
@@ -75,21 +76,19 @@ router.post('/:username/current-block', ensureAuthenticated, (req, res) => {
             multipleSelects: false,
             bannerTitle: 'CMD Online',
             bannerSubtitle: 'Blok selecteren',
-            formAction: 'final'
+            formAction: 'elective'
         });
     });
 });
 
 // Fourth question: Ask for elective courses if they selected elective bloks (3 or 4)
-router.post('/:username/final', ensureAuthenticated, (req, res) => {
-    allProfileOptions.push({
-        in_block: req.body.in_block
-    });
+router.post('/:username/elective', ensureAuthenticated, (req, res) => {
+    savedInfo.in_block = req.body.in_block;
 
     const inBlok = req.body.in_block;
     const blockType = inBlok.substring(inBlok.indexOf('_') + 1);
+
     let projectData = [];
-    let electiveData = [];
 
     schemas.SchoolBloks.findOne({
         'linkRef': inBlok
@@ -101,53 +100,132 @@ router.post('/:username/final', ensureAuthenticated, (req, res) => {
         blokData.courses.forEach(element => {
             if (element.type == 'project') {
                 projectData.push(element);
-            } else if (element.type == 'elective') {
-                electiveData.push(element);
             }
         });
-
-        const selectData = [{
-            data: projectData,
-            selectName: 'block_project',
-            legendTitle: 'Welk keuzeproject volg je?'
-        },
-        {
-            data: electiveData,
-            selectName: 'block_elective',
-            legendTitle: 'Welk extra vak heb je?'
-        }
-        ];
 
         if (blockType == 'elective') {
 
             res.render(`profile`, {
                 username: req.params.username,
-                selectData: selectData,
-                multipleSelects: true,
+                selectData: projectData,
+                selectName: 'block_project',
+                legendTitle: 'Welk keuzeproject volg je?',
+                multipleSelects: false,
                 bannerTitle: 'CMD Online',
-                bannerSubtitle: 'Keuzevakken selecteren',
-                formAction: 'done'
+                bannerSubtitle: 'Keuzeproject selecteren',
+                formAction: 'elective-class'
             });
         } else {
-            console.log(allProfileOptions);
-            res.send('DONE');
+            console.log(savedInfo);
+            res.redirect('/');
         }
     });
 });
 
-router.post('/:username/done', ensureAuthenticated, (req, res) => {
-    if (req.body.block_project && req.body.block_elective) {
-        allProfileOptions.push({
-            block_project: req.body.block_project,
-        },
-        {
-            block_elective: req.body.block_elective
-        });
-        console.log(allProfileOptions);
-    }
-    
-    res.send('pog ur done!');
+// Fifth question: Ask for elective class
+router.post('/:username/elective-class', ensureAuthenticated, (req, res) => {
 
+    
+    CRUD.findDocByQuery(schemas.Course, 'linkRef', req.body.block_project).then((result) => {
+        savedInfo.block_project = result.id;
+        savedInfo.block_project_courses = result.accompanying_courses;
+    });
+
+    schemas.Course.findOne({
+        'linkRef': req.body.block_project
+    }).lean().populate({
+        path: 'classes.elective'
+    }).exec((err, courseData) => {
+        if (err) Promise.reject(err);
+
+        res.render(`profile`, {
+            username: req.params.username,
+            selectData: courseData.classes.elective,
+            selectName: 'block_project_class',
+            legendTitle: `In welke ${courseData.title} zit je?`,
+            multipleSelects: false,
+            bannerTitle: 'CMD Online',
+            bannerSubtitle: 'Klas selecteren',
+            formAction: 'extra-elective'
+        });
+    });
+});
+
+router.post('/:username/extra-elective', ensureAuthenticated, (req, res) => {
+
+    CRUD.findDocByQuery(schemas.ElectiveClass, 'linkRef', req.body.block_project_class).then((result) => {
+        savedInfo.block_project_class = result.id;
+    });
+
+    const inBlok = savedInfo.in_block;
+
+    let electiveData = [];
+
+    schemas.SchoolBloks.findOne({
+        'linkRef': inBlok
+    }).lean().populate({
+        path: `courses`
+    }).exec((err, blokData) => {
+        if (err) Promise.reject(err);
+
+        blokData.courses.forEach(element => {
+            if (element.type == 'elective') {
+                electiveData.push(element);
+            }
+        });
+
+        res.render(`profile`, {
+            username: req.params.username,
+            selectData: electiveData,
+            selectName: 'block_elective',
+            legendTitle: 'Welk extra vak heb je?',
+            multipleSelects: false,
+            bannerTitle: 'CMD Online',
+            bannerSubtitle: 'Keuzevak selecteren',
+            formAction: 'done'
+        });
+    });
+});
+
+router.post('/:username/done', ensureAuthenticated, (req, res) => {
+
+    CRUD.findDocByQuery(schemas.Course, 'linkRef', req.body.block_elective).then((result) => {
+        savedInfo.block_elective = result.id;
+
+        result.classes.elective.forEach(item => {
+            console.log(item);
+            savedInfo.block_elective_class = item;
+        });
+
+        CRUD.findDocByQuery(schemas.User, 'username', req.params.username).then((userObject) => {
+
+            console.log(savedInfo);
+            let allClasses = [];
+            let allCourses = [];
+
+            allClasses.push(savedInfo.main_class, savedInfo.block_project_class, savedInfo.block_elective_class);
+        
+            savedInfo.main_class_courses.forEach(item => {
+                allCourses.push(item);
+            });
+
+            savedInfo.block_project_courses.forEach(item => {
+                allCourses.push(item);
+            });
+        
+            allCourses.push(savedInfo.block_project, savedInfo.block_elective);
+
+            schemas.Student.findOneAndUpdate({
+                'user': userObject.id
+            }, {
+                classes: allClasses,
+                courses: allCourses,
+            }).then( console.log('USER UPDATED') );
+
+        });
+
+        res.redirect('/');
+    });
 });
 
 module.exports = router;

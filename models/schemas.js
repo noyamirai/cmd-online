@@ -14,7 +14,7 @@ const courseSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: `Teacher`
     }],
-    classes: [{
+    classes: {
         normal: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: `Class`
@@ -23,7 +23,7 @@ const courseSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: `ElectiveClass`
         }]
-    }],
+    },
     linkRef: {
         type: String,
         required: [true, `Why no ref?`]
@@ -39,9 +39,13 @@ const courseSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['normal', 'project', 'elective'],
+        enum: ['normal', 'project', 'project_class', 'elective'],
         default: 'normal'
-    }
+    },
+    accompanying_courses: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `Course`
+    }]
 }, {
     collection: `courses`
 }, {
