@@ -241,21 +241,12 @@ router.post('/:username/done', ensureAuthenticated, (req, res) => {
 
                     student.classes = null;
                     student.courses = null;
-                    
+
                 }
             });   
             
             console.log(savedInfo);
-            let allClasses = [];
             let allCourses = [];
-
-            allClasses.push(savedInfo.main_class, savedInfo.block_project_class, savedInfo.block_elective_class);
-        
-            if (savedInfo.main_class_courses) {
-                savedInfo.main_class_courses.forEach(item => {
-                    allCourses.push(item);
-                });   
-            }
 
             savedInfo.block_project_courses.forEach(item => {
                 allCourses.push(item);
@@ -263,14 +254,12 @@ router.post('/:username/done', ensureAuthenticated, (req, res) => {
         
             allCourses.push(savedInfo.block_project, savedInfo.block_elective);
 
-            // console.log(allCourses);
-            // console.log(allClasses);
-
             schemas.Student.findOneAndUpdate({
                 'user': userObject.id
             }, {
                 classes: {
-                    elective: allClasses
+                    normal: savedInfo.main_class,
+                    elective: [savedInfo.block_elective_class, savedInfo.block_project_class]
                 },
                 courses: allCourses,
             }).then((student) => {
@@ -280,7 +269,6 @@ router.post('/:username/done', ensureAuthenticated, (req, res) => {
 
                 res.redirect('/');
             });
-
         });
     });
 });

@@ -16,11 +16,11 @@ router.get('/', ensureAuthenticated, (req, res) => {
             schemas.Student.findOne({
                 'user': userData.id
             }).lean().populate({
-                path: `user`
+                path: `user classes.normal`
             }).exec((err, result) => {
                 if (err) Promise.reject(err);
 
-                // console.log(result);
+                console.log(result);
                 res.render('index', {
                     userData: result,
                     headerClass: 'no-box-shadow'

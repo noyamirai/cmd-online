@@ -73,7 +73,7 @@
                         <a class="box-shadow" href="#">
                             <div>
                                 <h3>Mijn vakken</h3>
-                                <p>6 vakken</p>
+                                <p><%= userData.courses.length %> vakken</p>
                             </div>
 
                             <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
@@ -83,7 +83,10 @@
                         <a class="box-shadow" href="#">
                             <div>
                                 <h3>Klassenoverzicht</h3>
-                                <p>211</p>
+                                <!-- TO DO: IN SCHEMA TURN THIS INTO OBJECT INSTEAD OF ARRAY? -->
+                                <% userData.classes.normal.forEach(mainClass => { %>
+                                    <p><%= mainClass.title %></p>
+                                <% }) %>
                             </div>
 
                             <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
