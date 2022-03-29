@@ -105,7 +105,7 @@ const addIdReferenceToDoc = async (schemaToFind, docIds, referenceSchemas, refer
             });
         }
 
-    // multiple docs to be updated with multiple ids
+        // multiple docs to be updated with multiple ids
     } else {
         for (let id of docIds) {
             await findDocByQuery(schemaToFind, `_id`, id).then((doc) => {
@@ -119,9 +119,138 @@ const addIdReferenceToDoc = async (schemaToFind, docIds, referenceSchemas, refer
     }
 };
 
+const schemas = require('../models/schemas');
+
+/**
+ *   removeFromClasses
+ *   * Pulls userId from a specific class type depending on user type
+ *
+ *   @param classTypeSchema: in which collection/schema is the document you want to update located? (Model: elective or normal)
+ *   @param classType: what type of class is it? 'elective' or 'normal'
+ *   @param userObject: which user has to be removed from this class? (Object)
+ *   @param userType: what kind of user is this? 'student' or 'teacher'
+ **/
+const removeFromClasses = (classTypeSchema, classType, userObject, userType) => {
+    console.log(userObject.classes[classType]);
+    console.log(userObject._id);
+
+    classTypeSchema.updateMany({
+        '_id': {
+            $in: userObject.classes[classType]
+        }
+    }, {
+        $pullAll: {
+            [userType]: [userObject._id]
+        }
+    }).then(console.log('User removed from classes'));
+};
+
+/**
+ *   removeUserFromClassesAndCourses
+ *   * Updates all classes and courses by pulling userId from their respective reference id field (students or teachers)
+ *
+ *   @param schemaToFind: in which collection/schema is the document you want to update located? (Model: Student or Teacher)
+ *   @param userId: which user has to be removed from this class? (ObjectId)
+ *   @param type: what kind of user is this? 'student' or 'teacher'
+ **/
+const removeUserFromClassesAndCourses = (schemaToFind, userId, type) => {
+    return new Promise((resolve) => {
+        schemaToFind.findOne({
+            'user': userId
+        }).then((user) => {
+
+            if (user.classes != null) {
+                console.log('User appears to be part of classes and courses');
+                console.log(user.classes);
+
+                removeFromClasses(schemas.ElectiveClass, 'elective', user, type);
+                removeFromClasses(schemas.Class, 'normal', user, type);
+
+                schemas.Course.updateMany({
+                    '_id': {
+                        $in: user.courses
+                    }
+                }, {
+                    $pullAll: {
+                        [type]: [user._id]
+                    }
+                });
+                
+                resolve(user);
+
+                console.log('User no longer part of any classes or courses');
+
+            } else {
+                resolve(user);
+                console.log('User was not part of any classes or courses');
+            }
+        });
+    });
+};
+
+/**
+ *   addUserToClassesAndCourses
+ *   * Updates all classes and courses by adding userId to their respective reference id field (students or teachers)
+ *
+ *   @param schemaToFind: in which collection/schema is the document you want to update located? (Model: Student or Teacher)
+ *   @param savedInfo: saved data from form (Object)
+ *   @param userId: which user has to be removed from this class? (ObjectId)
+ **/
+const addUserToClassesAndCourses = (schemaToFind, savedInfo, userId) => {
+    return new Promise((resolve) => {
+        let allCourses = [];
+
+        const inBlok = savedInfo.in_block;
+        const blockType = inBlok.substring(inBlok.indexOf('_') + 1);
+
+        if (blockType == 'normal') {
+
+            savedInfo.main_class_courses.forEach(item => {
+                allCourses.push(item);
+            });
+
+            schemaToFind.findOneAndUpdate({
+                'user': userId
+            }, {
+                classes: {
+                    normal: savedInfo.main_class
+                },
+                courses: allCourses,
+            }, {
+                returnNewDocument: true
+            }).then((object) => {
+                resolve({user: object, courseData: allCourses});
+            });
+
+        } else if (blockType == 'elective') {
+
+            savedInfo.block_project_courses.forEach(item => {
+                allCourses.push(item);
+            });
+
+            allCourses.push(savedInfo.block_project, savedInfo.block_elective);
+            schemaToFind.findOneAndUpdate({
+                'user': userId
+            }, {
+                classes: {
+                    normal: savedInfo.main_class,
+                    elective: [savedInfo.block_elective_class, savedInfo.block_project_class]
+                },
+                courses: allCourses,
+            }, {
+                returnNewDocument: true
+            }).then((object) => {
+                resolve({user: object, courseData: allCourses});
+            });
+        }
+    });
+};
+
 module.exports = {
     createDoc,
     createMultipleDocs,
     findDocByQuery,
-    addIdReferenceToDoc
+    addIdReferenceToDoc,
+    removeUserFromClassesAndCourses,
+    addUserToClassesAndCourses
 };
