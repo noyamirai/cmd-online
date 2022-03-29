@@ -1,6 +1,6 @@
 <%- include ('./partials/head.ejs') -%>
 
-<body>
+<body class="">
     <%- include ('./partials/title-banner.ejs') -%>
 
     <main>
@@ -8,7 +8,10 @@
 
             <%- include ('./partials/select-input.ejs') -%>
 
-            <button type="submit">Volgende vraag</button>
+            <div class="btn--container">
+                <a class="btn--small btn--small-arrow" href="#"><img src="../public/images/icons/arrow-icon.svg" alt="Back icon"></a>
+                <button type="submit">Volgende vraag</button>
+            </div>
         </form>
 
     </main>

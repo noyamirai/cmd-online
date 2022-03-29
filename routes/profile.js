@@ -23,8 +23,8 @@ router.get('/', ensureAuthenticated, (req, res) => {
             selectName: 'school_year',
             selectData: allSchoolYears.sort((a, b) => parseFloat(a.linkRef) - parseFloat(b.linkRef)),
             multipleSelects: false,
-            bannerTitle: 'CMD Online',
-            bannerSubtitle: 'Leerjaar selecteren',
+            bannerTitle: 'Huidige leerjaar',
+            bannerSubtitle: 'Algemeen: 1/3',
             formAction: 'main-class'
         });
     });
@@ -45,12 +45,12 @@ router.post('/main-class', ensureAuthenticated, (req, res) => {
 
         res.render(`profile`, {
             username: req.user.username,
-            legendTitle: 'In welke hoofdklas zit je?',
+            legendTitle: 'In welke klas zit je?',
             selectName: 'main_class',
             selectData: schoolYearData.classes,
             multipleSelects: false,
-            bannerTitle: 'CMD Online',
-            bannerSubtitle: 'Hoofdklas selecteren',
+            bannerTitle: 'Jouw klas',
+            bannerSubtitle: 'Algemeen: 2/3',
             formAction: 'current-block'
         });
     });
@@ -69,12 +69,12 @@ router.post('/current-block', ensureAuthenticated, (req, res) => {
 
         res.render(`profile`, {
             username: req.user.username,
-            legendTitle: 'Wat is je houdige blok?',
+            legendTitle: 'In welk blok zit je?',
             selectName: 'in_block',
             selectData: allBloks,
             multipleSelects: false,
-            bannerTitle: 'CMD Online',
-            bannerSubtitle: 'Blok selecteren',
+            bannerTitle: 'Huidige blok',
+            bannerSubtitle: 'Algemeen 3/3',
             formAction: 'elective'
         });
     });
@@ -115,8 +115,8 @@ router.post('/elective', ensureAuthenticated, (req, res) => {
                 selectName: 'block_project',
                 legendTitle: 'Welk keuzeproject volg je?',
                 multipleSelects: false,
-                bannerTitle: 'CMD Online',
-                bannerSubtitle: 'Keuzeproject selecteren',
+                bannerTitle: 'Jouw keuzeproject',
+                bannerSubtitle: 'Keuzeblok: 1/3',
                 formAction: 'elective-class'
             });
         } else {
@@ -182,8 +182,8 @@ router.post('/elective-class', ensureAuthenticated, (req, res) => {
             selectName: 'block_project_class',
             legendTitle: `In welke ${courseData.title} klas zit je?`,
             multipleSelects: false,
-            bannerTitle: 'CMD Online',
-            bannerSubtitle: 'Klas selecteren',
+            bannerTitle: `Project klas`,
+            bannerSubtitle: 'Keuzeblok 2/3',
             formAction: 'extra-elective'
         });
     });
@@ -214,8 +214,8 @@ router.post('/extra-elective', ensureAuthenticated, (req, res) => {
             selectName: 'block_elective',
             legendTitle: 'Welk extra vak heb je?',
             multipleSelects: false,
-            bannerTitle: 'CMD Online',
-            bannerSubtitle: 'Keuzevak selecteren',
+            bannerTitle: 'Extra keuzevakken',
+            bannerSubtitle: 'Keuzeblok 3/3',
             formAction: 'done'
         });
     });
