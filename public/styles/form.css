@@ -242,6 +242,29 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
 }
 
 /* =============================================================================
+  #FORM SETTINGS
+============================================================================= */
+.form--settings {
+    padding: 50px var(--default-padding) 68px var(--default-padding)!important;
+}
+
+    .form--settings fieldset {
+        flex-direction: column;
+    }
+
+        .form--settings button {
+            position: relative;
+            display: block;
+            top: auto;
+            left: auto;
+            right: auto;
+            bottom: auto;
+        }
+
+        .form--settings button + button {
+            margin-top: var(--default-padding);
+        }
+/* =============================================================================
   #TOGGLE BUTTON (RADIO)
 ============================================================================= */
 .toggle-container {
