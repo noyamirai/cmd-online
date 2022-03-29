@@ -1,9 +1,16 @@
 # :sparkles: CMD Online :sparkles:
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white) ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 
-CMD Team Creator is a browser based matching application, build with HTML/CSS/JS and Node.js to help teachers of CMD create well-balanced project teams based on skills of students. 
+CMD Online, previously known as Project Team Creator, is a browser based matching application, build with HTML/CSS/JS and Node.js. Originally CMD Online was build to help teachers of CMD create well-balanced project teams based on skills of students. As of now, CMD Online strives to become more of a community for students and teachers of CMD.
 
-With help of this application, teachers do not have to spend time and energy on creating teams and worrying whether or not skill levels of students will match. In addition, students no longer have to worry about their upcoming project team, knowing their team will be fair and balanced.
+As stated before CMD Online offers a matching feature that lets teachers generate teams for their classes based on the CMD skills of their students. Teachers no longer have to spend time and energy on creating teams and worrying whether or not skill levels of students will match. In addition, students no longer have to worry about their upcoming project team, knowing their team will be fair and balanced!
+
+CMD Online has recently received an upgrade, it now also offers the following **new** features: 
+ 
+- Create account
+- Login
+- Profile setup
+- CMD skills setup
 
 ![Team creator forms](./public/images/readme/team_creator-preview.jpg)
 
@@ -21,7 +28,7 @@ DB_PASS= your database password
 SecretSESSION= your session password
 ~~~
 
-As of now, we do not have a base JSON file with dummy data you could import into your database, but we're working on it :wink:. That's why we have a dev database. To gain access to this database, please get in touch with the creator.
+The password for `SecretSESSION` can be anything you want. As of now, we do not have a base JSON file with dummy data you could import into your database, but we're working on it :wink:. That's why we have a dev database. To gain access to this database, please get in touch with the creator.
 
 ---
 
@@ -37,7 +44,7 @@ Running the application with nodemon
 npm run start:dev
 ~~~
 
-Both these prompts will give you access via `localhost:3000/roberrrt-s/courses` (yes, we are using one of our teachers as dummy data). And That's it! Have any trouble? Feel free to let us know by submitting an issue. (no e-mail yet :stuck_out_tongue:)
+Both these prompts will give you access to CMD Online via `localhost:3000/`. And That's it! Have any trouble? Feel free to let us know by submitting an issue. (no e-mail yet :stuck_out_tongue:)
 
 ## :eyes: Usage (code examples)
 Listed below are some of the common examples with our very own CRUD operations.

@@ -14,29 +14,38 @@ const courseSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: `Teacher`
     }],
-    classes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `Class`
-    }],
+    classes: {
+        normal: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `Class`
+        }],
+        elective: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `ElectiveClass`
+        }]
+    },
     linkRef: {
         type: String,
         required: [true, `Why no ref?`]
     },
     in_blok: [{
-        type: Number,
-        enum : [1, 2, 3, 4],
-        required: [true, 'Why no blok?']
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `SchoolBloks`
     }],
     in_year: {
         type: Number,
-        enum : [1, 2, 3, 4],
+        enum: [1, 2, 3, 4],
         required: [true, 'Why no year?']
     },
     type: {
         type: String,
-        enum : ['normal', 'project', 'elective'],
+        enum: ['normal', 'project', 'project_class', 'elective'],
         default: 'normal'
-    }
+    },
+    accompanying_courses: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `Course`
+    }]
 }, {
     collection: `courses`
 }, {
@@ -72,7 +81,7 @@ const classSchema = new mongoose.Schema({
     },
     in_year: {
         type: Number,
-        enum : [1, 2, 3, 4],
+        enum: [1, 2, 3, 4],
         required: [true, 'Why no school year?']
     }
 }, {
@@ -197,10 +206,16 @@ const userStudent = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: `Team`
     }],
-    classes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `Class`
-    }],
+    classes: {
+        normal: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `Class`
+        }],
+        elective: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `ElectiveClass`
+        }]
+    },
     courses: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: `Course`
@@ -269,13 +284,13 @@ const teacherCourse = new mongoose.Schema({
 });
 
 const schoolYear = new mongoose.Schema({
-    year: {
+    title: {
         type: String,
         required: [true, 'Why no school year?']
     },
-    slug: {
+    linkRef: {
         type: Number,
-        enum : [1, 2, 3, 4],
+        enum: [1, 2, 3, 4],
         required: [true, 'Why no year slug?']
     },
     courses: [{
@@ -294,6 +309,61 @@ const schoolYear = new mongoose.Schema({
     }
 });
 
+const schoolBloks = new mongoose.Schema({
+    title: {
+        type: String,
+        required: [true, 'Why no school blok?']
+    },
+    linkRef: {
+        type: String,
+        enum: ['1_normal', '2_normal', '3_elective', '3_internship', '4_elective', '4_internship'],
+        required: [true, 'Why no blok linkRef?']
+    },
+    courses: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `Course`
+    }]
+}, {
+    collection: `school_bloks`
+}, {
+    toJSON: {
+        virtuals: true
+    }
+});
+
+const electiveClassSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: [true, `Why no class name?`]
+    },
+    students: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `Student`
+    }],
+    teachers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `Teacher`
+    }],
+    courses: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `Course`
+    }],
+    teams: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `Team`
+    }],
+    linkRef: {
+        type: String,
+        required: [true, `Why no ref?`]
+    }
+}, {
+    collection: `elective_classes`
+}, {
+    toJSON: {
+        virtuals: true
+    }
+});
+
 const Course = mongoose.model(`Course`, courseSchema, `courses`);
 
 const User = mongoose.model(`User`, userSchema, `users`);
@@ -306,6 +376,8 @@ const cmdSkill = mongoose.model(`cmdSkill`, cmdSkillSchema, `cmd_skills`);
 const TeacherCourse = mongoose.model(`TeacherCourse`, teacherCourse, `teacher_course`);
 
 const SchoolYear = mongoose.model('SchoolYear', schoolYear, 'school_year');
+const SchoolBloks = mongoose.model('SchoolBloks', schoolBloks, 'school_bloks');
+const ElectiveClass = mongoose.model('ElectiveClass', electiveClassSchema, 'elective_classes');
 
 module.exports = {
     Course,
@@ -316,5 +388,7 @@ module.exports = {
     Team,
     TeacherCourse,
     cmdSkill,
-    SchoolYear
+    SchoolYear,
+    SchoolBloks,
+    ElectiveClass
 };

@@ -86,12 +86,13 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
 
     .input {
         padding: 14px;
+        font-size: 14px; font-size: 1.4rem;
         border: var(--border-settings);
         border-radius: var(--border-radius);
     }
 
         .input--normal { width: 100%; }
-        label + .input--normal { margin-top: 12px; }
+        label + .input--normal, label + .select-container { margin-top: 12px; }
         .input--normal + label { margin-top: var(--default-padding); }
 
         .input--custom {
@@ -101,6 +102,33 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
             top: 0;
             right: 0;
             z-index: 5;
+        }
+
+        .select-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+            .input--select {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+            }
+
+        .select-container::before {
+            content: "";
+            position: absolute;
+
+            top: 50%;
+            right: 16px;
+
+            transform: rotate(90deg) translate(-50%);
+
+            width: 12px;
+            height: 17px;
+
+            background-color: var(--white-color);
+            background-image: url(../images/icons/arrow-icon.svg);
+            background-repeat: no-repeat;
         }
 
 /* =============================================================================
@@ -213,6 +241,29 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
     transform: translateY(0);
 }
 
+/* =============================================================================
+  #FORM SETTINGS
+============================================================================= */
+.form--settings {
+    padding: 50px var(--default-padding) 68px var(--default-padding)!important;
+}
+
+    .form--settings fieldset {
+        flex-direction: column;
+    }
+
+        fieldset > button {
+            position: relative;
+            display: block;
+            top: auto;
+            left: auto;
+            right: auto;
+            bottom: auto;
+        }
+
+        fieldset > button + button {
+            margin-top: var(--default-padding);
+        }
 /* =============================================================================
   #TOGGLE BUTTON (RADIO)
 ============================================================================= */

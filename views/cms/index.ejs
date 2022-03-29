@@ -1,0 +1,37 @@
+<%- include ('../partials/head.ejs') -%>
+
+<body class="form--overview">
+    <%- include ('../partials/title-banner.ejs') -%>
+
+    <main>
+        <form method="post" action="/maintenance/<%= formAction %> ">
+            <% if (formAction == 'topic') { %>
+                
+                <fieldset>
+                    <legend>Wat wil je toevoegen/wijzigen?</legend>
+
+                    <button type="submit" value="Gebruikers" name="cms_option">Gebruikers</button>
+                    <button type="submit" value="Vakken" name="cms_option">Vakken</button>
+                    <button disabled type="submit" value="Klassen" name="cms_option">Klassen</button>
+                    <button disabled type="submit" value="CMD skills" name="cms_option">CMD skills</button>
+
+                </fieldset>
+        
+            <% } else { %>
+                
+                <fieldset>
+                    <legend><%= legendTitle %> </legend>
+
+                    <button type="submit" value="add" name="<%= selectName %>_option"><%= buttonAddLabel %></button>
+                    <button type="submit" value="delete" name="<%= selectName %>_option"><%= buttonDeleteLabel %></button>
+
+                </fieldset>
+
+                <div class="btn--container">
+                    <a class="btn--small btn--small-arrow" href="/maintenance"><img src="../public/images/icons/arrow-icon.svg" alt="Back icon"></a>
+                </div>
+
+            <% } %>
+        </form>
+    </main>
+</body>

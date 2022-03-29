@@ -6,26 +6,60 @@
 
 // CRUD.createMultipleDocs(schemas.Course, [
 //     {
-//         title: 'Project Tech',
-//         linkRef: paramCase.paramCase('Project Tech')
+//         title: 'Content Delivery',
+//         linkRef: paramCase.paramCase('Content Delivery'),
+//         in_blok: ['6241abeb7922cfeee8b07983', '6241abeb7922cfeee8b07984'],
+//         in_year: 2,
+//         type: 'normal' 
 //     },
 //     {
-//         title: 'Front-end Development',
-//         linkRef: paramCase.paramCase('Front-end Development')
+//         title: 'Ontwerponderzoek',
+//         linkRef: paramCase.paramCase('Ontwerponderzoek'),
+//         in_blok: ['6241abeb7922cfeee8b07983', '6241abeb7922cfeee8b07984'],
+//         in_year: 2,
+//         type: 'normal' 
 //     },
 //     {
-//         title: 'Back-end Development',
-//         linkRef: paramCase.paramCase('Back-end Development')
+//         title: 'Project Beyond',
+//         linkRef: paramCase.paramCase('Project Beyond'),
+//         in_blok: ['6241abeb7922cfeee8b07983', '6241abeb7922cfeee8b07984'],
+//         in_year: 2,
+//         type: 'normal' 
 //     },
 //     {
-//         title: 'Front-end voor Designers',
-//         linkRef: paramCase.paramCase('Front-end voor Designers')
+//         title: 'Ubicomp',
+//         linkRef: paramCase.paramCase('Ubicomp'),
+//         in_blok: ['6241abeb7922cfeee8b07983', '6241abeb7922cfeee8b07984'],
+//         in_year: 2,
+//         type: 'normal' 
 //     },
 //     {
-//         title: 'Audio Visueel Design',
-//         linkRef: paramCase.paramCase('Audio Visueel Design')
+//         title: 'Front-end Development 1',
+//         linkRef: paramCase.paramCase('Front-end Development 1'),
+//         in_blok: ['6241abeb7922cfeee8b07983', '6241abeb7922cfeee8b07984'],
+//         in_year: 2,
+//         type: 'normal' 
+//     },
+//     {
+//         title: 'Project Responsive Multi Device Design',
+//         linkRef: paramCase.paramCase('Project Responsive Multi Device Design'),
+//         in_blok: ['6241abeb7922cfeee8b07983', '6241abeb7922cfeee8b07984'],
+//         in_year: 2,
+//         type: 'normal' 
+//     },
+//     {
+//         title: 'Vormgeving 2',
+//         linkRef: paramCase.paramCase('Vormgeving 2'),
+//         in_blok: ['6241abeb7922cfeee8b07983', '6241abeb7922cfeee8b07984'],
+//         in_year: 2,
+//         type: 'normal' 
 //     }
-// ]);
+// ]).then((data) => {
+//     data.forEach(item => {
+//         CRUD.addIdReferenceToDoc(schemas.SchoolBloks, ['6241abeb7922cfeee8b07983', '6241abeb7922cfeee8b07984'], 'courses', item.id);
+//         CRUD.addIdReferenceToDoc(schemas.SchoolYear, '623f5bdd7e6402036fae21ea', 'courses', item.id);
+//     });
+// });
 
 // CRUD.createMultipleDocs(schemas.cmdSkill, [
 //     {
@@ -411,5 +445,34 @@
 //     {
 //         year: 'Vierde jaar',
 //         slug: 4,
+//     }
+// ]);
+
+// CRUD.createMultipleDocs(schemas.SchoolBloks, [
+//     {
+//         title: 'Blok 1',
+//         linkRef: '1_normal'
+//     },
+//     {
+//         title: 'Blok 2',
+//         linkRef: '2_normal'
+//     },
+//     {
+//         title: 'Blok 3: STAGE',
+//         linkRef: '3_internship'
+//     },
+//     {
+//         title: 'Blok 3: KEUZEBLOK',
+//         linkRef: '3_elective',
+//         courses: ['62386607b31742dbaa43dca9', '62386607b31742dbaa43dca8', '62386607b31742dbaa43dca7']
+//     },
+//     {
+//         title: 'Blok 4: STAGE',
+//         linkRef: '4_internship'
+//     },
+//     {
+//         title: 'Blok 4: KEUZEBLOK',
+//         linkRef: '4_elective',
+//         courses: ['62386607b31742dbaa43dca9', '62386607b31742dbaa43dca8', '62386607b31742dbaa43dca7']
 //     }
 // ]);
