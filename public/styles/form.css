@@ -92,7 +92,7 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
     }
 
         .input--normal { width: 100%; }
-        label + .input--normal { margin-top: 12px; }
+        label + .input--normal, label + .select-container { margin-top: 12px; }
         .input--normal + label { margin-top: var(--default-padding); }
 
         .input--custom {
@@ -252,7 +252,7 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
         flex-direction: column;
     }
 
-        .form--settings button {
+        fieldset > button {
             position: relative;
             display: block;
             top: auto;
@@ -261,7 +261,7 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
             bottom: auto;
         }
 
-        .form--settings button + button {
+        fieldset > button + button {
             margin-top: var(--default-padding);
         }
 /* =============================================================================

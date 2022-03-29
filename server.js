@@ -39,6 +39,7 @@ app.use('/', require('./routes/dashboard'));
 app.use('/users', require('./routes/users'));
 app.use('/:username', require('./routes/overviews'));
 app.use('/settings', require('./routes/settings'));
+app.use('/maintenance', require('./routes/maintenance'));
 
 app.get(`*`, (req, res) => {
     res.status(404).send(`Page not found!`);

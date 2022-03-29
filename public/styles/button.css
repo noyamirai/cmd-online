@@ -49,8 +49,8 @@ button:hover, .btn:hover, .btn--small:hover { transform: scale(1.02); }
         bottom: var(--default-padding);
         left: var(--default-padding);
 
-        display: flex;
-        width: 50px;
+        display: flex!important;
+        width: 50px!important;
         height: 50px;
 
         border: var(--border-settings);
