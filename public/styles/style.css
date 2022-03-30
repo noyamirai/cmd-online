@@ -133,6 +133,18 @@ main {
     margin-top: var(--default-big-padding);
   }
 
+  .dashboard .skills {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    margin: -24px -24px 0 -24px;
+    padding-bottom: var(--default-padding);
+    
+    background-color: var(--primary-color);
+  }
+
 .form--overview  {
   padding-bottom: var(--default-padding);
 }
