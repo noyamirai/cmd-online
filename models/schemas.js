@@ -192,10 +192,10 @@ const userStudent = new mongoose.Schema({
         type: Object,
         required: [true, `Why no CMD skills?`],
         properties: {
-            best: [{
+            best: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: `cmdSkill`
-            }],
+            },
             want_to_learn: [{
                 type: mongoose.Schema.Types.ObjectId,
                 ref: `cmdSkill`
@@ -250,9 +250,13 @@ const userTeacher = new mongoose.Schema({
 });
 
 const cmdSkillSchema = new mongoose.Schema({
-    skill: {
+    title: {
         type: String,
         required: [true, `Why no skill defined?`]
+    },
+    linkRef: {
+        type: String,
+        required: [true, 'Why no linkRef']
     }
 }, {
     collection: `cmd_skills`
