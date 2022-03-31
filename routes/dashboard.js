@@ -20,10 +20,14 @@ router.get('/', ensureAuthenticated, (req, res) => {
             }).exec((err, result) => {
                 if (err) Promise.reject(err);
 
-                // console.log(result);
-                res.render('index', {
-                    userData: result,
-                    headerClass: 'no-box-shadow'
+
+                CRUD.findDocByQuery(schemas.cmdSkill, '_id', result.cmd_skills.best).then((skill) => {
+
+                    res.render('index', {
+                        userData: result,
+                        userSkill: skill,
+                        headerClass: 'no-box-shadow'
+                    });
                 });
             });
 
@@ -37,6 +41,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
 
                 res.render('index', {
                     userData: result,
+                    userSkill: null,
                     headerClass: 'no-box-shadow'
                 });
             });

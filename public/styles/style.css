@@ -121,6 +121,7 @@ ul, ol {
 
 /* =============================================================================
   #MAIN
+<<<<<<< HEAD
 ============================================================================= */
 main {
   position: relative;
@@ -131,6 +132,37 @@ main {
 
   main section + section {
     margin-top: var(--default-big-padding);
+  }
+
+.form--overview  {
+  padding-bottom: var(--default-padding);
+}
+
+/* =============================================================================
+  #DEFAULT GRID
+============================================================================= */
+
+main {
+  position: relative;
+
+  padding: var(--default-padding) 0 110px 0px;
+  margin: 0 var(--default-padding);
+}
+
+  main section + section {
+    margin-top: var(--default-big-padding);
+  }
+
+  .dashboard .skills {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    margin: -24px -24px 0 -24px;
+    padding-bottom: var(--default-padding);
+    
+    background-color: var(--primary-color);
   }
 
 .form--overview  {

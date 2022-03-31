@@ -18,9 +18,23 @@
 
             </figcaption>
         </figure>
+<<<<<<< HEAD
     </header>
 
     <main class="dashboard">
+=======
+
+    </header>
+
+    <main class="dashboard">
+
+        <% if (userData.user.type == 'student' && userSkill != null) { %>
+            <section class="skills">
+                <span class="tag-label"><%= userSkill.title %> </span>
+            </section>
+        <% } %>
+
+>>>>>>> d4e453e0236ad26f39305827bbedf112ed3ed371
         <% if (userData.teams.length) { %>
         <section>
             <h2>Jouw teams</h2>
@@ -102,7 +116,13 @@
                 <legend>Instellingen</legend>
 
                 <button type="submit" value="profile-setup" name="settings_type">Vakken wijzigen</button>
+<<<<<<< HEAD
                 <button disabled type="submit" value="cmd-skills" name="settings_type">CMD Skills wijzigen</button>
+=======
+                <% if (userData.user.type == 'student') { %>
+                    <button type="submit" value="cmd-skills" name="settings_type">CMD Skills wijzigen</button>
+                <% } %>
+>>>>>>> d4e453e0236ad26f39305827bbedf112ed3ed371
                 <button disabled type="submit" value="account-details" name="settings_type">Account details wijzigen</button>
 
             </fieldset>
