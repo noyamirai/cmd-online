@@ -2,7 +2,7 @@
 require('dotenv').config();
 const express = require(`express`);
 const app = express();
-
+const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
 const compression = require('compression');
@@ -33,6 +33,9 @@ app.use(session({
     saveUninitialized: false
 })
 );
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // PASSPORT MIDDLEWARE
 app.use(passport.initialize());

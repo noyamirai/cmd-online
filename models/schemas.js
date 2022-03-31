@@ -148,7 +148,7 @@ const userSchema = new mongoose.Schema({
         }
     },
     profile_pic: {
-        type: String,
+        type: String
     },
     classes: [{
         type: mongoose.Schema.Types.ObjectId,
