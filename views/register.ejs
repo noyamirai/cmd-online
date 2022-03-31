@@ -3,7 +3,7 @@
 <body>
     <header></header>
     <main class="form--overview">
-        <form action='/users/register' method='POST'>
+        <form action='/users/register' method='POST' enctype='multipart/form-data'>
             <fieldset>
                 <legend>Registreren</legend>
                 <%- include ('./partials/messages')-%>
@@ -49,6 +49,11 @@
                         <label for="teacher"><span>Docent</span></label>
                     </div>
                 </div>
+            </fieldset>
+            <fieldset>
+                <legend>Profiel foto</legend>
+                <label for='profile_pic'>Upload afbeelding</label>
+                <input type='file' name='profile_pic' id='profile_pic'>
             </fieldset>
 
             <button type='submit'>Registreren</button>
