@@ -5,7 +5,7 @@
     <header>
         <figure>
             <picture class="box-shadow">
-                <img src="https://avatars.githubusercontent.com/u/6113643?v=4" alt="Profiel foto van Student">
+                <img src="../public/<%= userData.user.profile_pic %> " alt="Profiel foto van <%= userData.user.name %> ">
             </picture>
 
             <figcaption>
@@ -13,7 +13,7 @@
                 <p><%= userData.user.name %> </p>
 
                 <% if (userData.user.type == "teacher") { %>
-                <span><img src="../../public/images/icons/check-icon.svg" alt="Checkmark icon"></span>
+                <span><img src="../public/images/icons/check-icon.svg" alt="Checkmark icon"></span>
                 <% } %>
 
             </figcaption>
