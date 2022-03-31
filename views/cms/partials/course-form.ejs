@@ -1,0 +1,54 @@
+<form method="post" action="/maintenance/<%= formAction %>">
+
+    <fieldset>
+        <legend>Naam van het vak</legend>
+
+        <input type='text' class="input input--normal" id='title' name="title" placeholder='Naam van het vak'>
+
+    </fieldset>
+
+    <fieldset>
+        <legend>In welk jaar wordt het vak gegeven?</legend>
+        <div class="select-container">
+            <select class="input input--normal input--select" name="in_year" id="in_year">
+                <% allYearData.forEach(year => { %>
+                    <option value="<%= year.linkRef %>"><%= year.title %></option>
+                <% }) %>
+            </select>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>In welke twee blokken wordt het vak gegeven?</legend>
+        <div class="select-container">
+            <select class="input input--normal input--select" name="in_blok_1" id="in_blok_1">
+                <% allBlokData.forEach(blok => { %>
+                    <option value="<%= blok.linkRef %>"><%= blok.title %></option>
+                <% }) %>            
+            </select>
+        </div>
+        <div class="select-container">
+            <select class="input input--normal input--select" name="in_blok_2" id="in_blok_2">
+                <% allBlokData.forEach(blok => { %>
+                    <option value="<%= blok.linkRef %>"><%= blok.title %></option>
+                <% }) %>            
+            </select>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Wat voor soort vak is het?</legend>
+        <div class="select-container">
+            <select class="input input--normal input--select" name="type" id="type">
+                <% allTypesData.forEach(types => { %>
+                    <option value="<%= types.linkRef %>"><%= types.title %></option>
+                <% }) %> 
+            </select>
+        </div>
+    </fieldset>
+
+    <button type="submit">Vak toevoegen</button>
+
+</form>
+
+<a href='/maintenance'>Annuleren</a>

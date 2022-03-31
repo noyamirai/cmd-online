@@ -20,7 +20,8 @@ router.get(`/courses`, ensureAuthenticated, (req, res) => {
             res.render(`courses-overview`, {
                 profile_pic: userData.profile_pic,
                 userName: `${userData.name.first} ${userData.name.last}`,
-                courseData: courseData
+                courseData: courseData,
+                headerClass: ''
             });
         });
     });
@@ -86,7 +87,7 @@ router.get(`/:course/:class`, ensureAuthenticated,(req, res) => {
                 bannerSubtitle: `${classData.students.length} studenten`,
                 linkRef: classObject.linkRef,
                 classTeams: classObject.teams,
-                className: `overflow form`
+                className: `overflow form--popup`
             });
         });
     });

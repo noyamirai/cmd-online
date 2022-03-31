@@ -1,0 +1,92 @@
+/* =============================================================================
+  #UTILITIES
+============================================================================= */
+.hide {
+    display: none !important;
+}
+
+.box-shadow > * {
+    position: relative;
+    z-index: 10;
+}
+
+.box-shadow::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: var(--white-color);
+    border: var(--border-settings);
+    border-radius: var(--border-radius);
+    z-index: 5;
+}
+
+.box-shadow::after {
+    content: "";
+
+    position: absolute;
+
+    top: 7px;
+    left: 7px;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: var(--white-color);
+    border: var(--border-settings);
+    border-radius: var(--border-radius);
+    z-index: 0;
+}
+
+.grid--img .box-shadow::before {
+    background-color: transparent;
+    z-index: 20;
+    min-height: 100%;
+}
+
+.grid--img .box-shadow::after { min-height: 100%; }
+
+.yellow-bg { background-color: var(--primary-color); }
+.yellow-bg .box-shadow::after { background-color: var(--white-color); }
+.yellow-bg header { border-bottom: var(--border-settings); }
+
+.loading main { border: none; }
+
+.orange-item, .orange-item.box-shadow::after { background-color: var(--cmd-color-orange); }
+.green-item, .green-item.box-shadow::after { background-color: var(--cmd-color-green); }
+.blue-item, .blue-item.box-shadow::after { background-color: var(--cmd-color-blue); }
+.pink-item, .pink-item.box-shadow::after { background-color: var(--cmd-color-pink); }
+.yellow-item, .yellow-item.box-shadow::after { background-color: var(--primary-color); }
+
+.overlay::before {
+    content: "";
+    ;
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(0, 0, 0, .8);
+    z-index: 50;
+    transition: all 100ms ease-in-out;
+}
+
+/* arrow icon */
+.icon {
+    height: 16px;
+    width: auto;
+
+    margin: 0 0 0 auto;
+}

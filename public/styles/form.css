@@ -1,0 +1,359 @@
+/* =============================================================================
+  #GENERAL FORM ELEMENTS
+============================================================================= */
+/* when button is not inside btn-container */
+form > button {
+    position: unset;
+    margin-top: var(--default-big-padding);
+}
+
+fieldset {
+    display: block;
+    width: 100%;
+}
+
+.form--popup fieldset {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+fieldset + fieldset { margin-top: var(--default-big-padding); }
+
+    fieldset label {
+        display: block;
+        font-weight: 700;
+    }
+
+    /* radio button containers */
+    .form--popup fieldset div {
+        position: relative;
+        width: 33.33%;
+
+        border: var(--border-settings);
+        border-radius: var(--border-radius);
+
+        background-color: var(--white-color);
+    }
+
+        .form--popup fieldset div > label {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+
+            padding: 12px;
+
+            background-color: transparent;
+
+            cursor: pointer;
+
+            transition: all 100ms ease-in-out;
+        }
+
+            .form--popup fieldset div > label > span:first-of-type { font-weight: 700; }
+
+            .form--popup fieldset div > label > span:last-of-type {
+                font-size: 14px;
+                font-size: 1.4rem;
+                font-weight: 400;
+
+                color: var(--grey-text-color);
+
+                margin-top: -4px;
+            }
+
+    .form--popup fieldset div + div { 
+        margin: 0 0 0 8px;
+        padding: 0;
+    }
+
+    fieldset div + div { 
+        border-top: 3px solid var(--grey-color);
+
+        padding-top: var(--default-padding);
+        margin-top: var(--default-padding); 
+    }
+
+    input[type="radio"], input[type="checkbox"] {
+        position: absolute;
+
+        visibility: hidden;
+        top: 0;
+        right: 0;
+        z-index: 5;
+    }
+
+    .input {
+        padding: 14px;
+        font-size: 14px; font-size: 1.4rem;
+        border: var(--border-settings);
+        border-radius: var(--border-radius);
+    }
+
+        .input--normal { width: 100%; }
+        label + .input--normal, label + .select-container { margin-top: 12px; }
+        .input--normal + label { margin-top: var(--default-padding); }
+
+        .input--custom {
+            position: absolute;
+
+            visibility: hidden;
+            top: 0;
+            right: 0;
+            z-index: 5;
+        }
+
+        .select-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+            .input--select {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+            }
+
+        .select-container::before {
+            content: "";
+            position: absolute;
+
+            top: 50%;
+            right: 16px;
+
+            transform: rotate(90deg) translate(-50%);
+
+            width: 12px;
+            height: 17px;
+
+            background-color: var(--white-color);
+            background-image: url(../images/icons/arrow-icon.svg);
+            background-repeat: no-repeat;
+        }
+
+/* =============================================================================
+  #REGISTRATION AND LOGIN
+============================================================================= */
+.form--overview form {
+    justify-content: center;
+}
+
+    .form--overview .btn--container {
+        border: none;
+        height: auto;
+
+        padding: 0 var(--default-padding) var(--default-padding) var(--default-padding);
+    }
+
+        .form--overview .btn--container button + *,
+        .form--overview form + a {
+            display: block;
+            margin-top: var(--default-padding);
+        }
+
+        .form--overview .btn--container a, form + a {
+            display: block;
+            width: 100%;
+
+            text-align: center;
+            text-decoration: underline;
+            color: var(--grey-text-color);
+        }
+/* =============================================================================
+  #POP-UP FORM
+============================================================================= */
+.form-trigger {
+    z-index: 80;
+}
+
+.form--popup form {
+    position: fixed;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    transform: translateY(100%);
+
+    padding: 50px var(--default-padding) 138px var(--default-padding);
+
+    background-color: var(--white-color);
+
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    z-index: 100;
+
+    transition: transform 300ms ease-in-out;
+}
+
+.form--popup form::before {
+    content: "";
+
+    position: absolute;
+    top: 16px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 65px;
+    height: 4px;
+
+    border-radius: 4px;
+
+    background-color: var(--grey-color);
+}
+
+    .form--popup form > div {
+        position: fixed;
+        left: var(--default-padding);
+        right: var(--default-padding);
+
+        display: flex;
+        flex-direction: column;
+
+        bottom: 10px;
+    }
+
+        .form--popup form > div > button {
+            position: relative;
+            top: auto;
+            bottom: auto;
+            left: auto;
+            right: auto;
+        }
+
+        .form--popup form > div > button:last-of-type, 
+        .form--overview form > div > a {
+            background-color: var(--white-color);
+            color: var(--grey-text-color);
+            text-decoration: underline;
+        }
+
+        .form--popup .input--custom:checked + label {
+            background-color: var(--secondary-color);
+        }
+
+        .form--popup .input--custom:checked + label, .form--popup .input--custom:checked + label > span:last-of-type {
+            color: var(--white-color);
+        }
+
+.form--popup form.form-active {
+    transform: translateY(0);
+}
+
+/* =============================================================================
+  #FORM SETTINGS
+============================================================================= */
+.form--settings {
+    padding: 50px var(--default-padding) 68px var(--default-padding)!important;
+}
+
+    .form--settings fieldset {
+        flex-direction: column;
+    }
+
+        fieldset > button {
+            position: relative;
+            display: block;
+            top: auto;
+            left: auto;
+            right: auto;
+            bottom: auto;
+        }
+
+        fieldset > button + button {
+            margin-top: var(--default-padding);
+        }
+/* =============================================================================
+  #TOGGLE BUTTON (RADIO)
+============================================================================= */
+.toggle-container {
+    position: relative;
+    
+    display: flex;
+    flex-direction: row;
+
+    width: 100%;
+
+    border: var(--border-settings);
+    border-radius: var(--border-radius);
+
+    background-color: transparent;
+}
+
+    .toggle::before {
+        content: "";
+
+        position: absolute;
+        top: 0;
+
+        transform: translateX(0);
+
+        height: 100%;
+        width: 50%;
+
+        background-color: var(--secondary-color);
+
+        transition: 250ms ease-in-out;
+        z-index: 10;
+    }
+
+    .toggled::before {
+        transform: translateX(100%);
+    }
+
+    .toggle-container > div {
+        display: flex;
+        justify-content: center;
+
+        width: 50%;
+
+        border: none;
+
+        cursor: pointer;
+        transition: color 50ms ease-in-out;
+    }
+
+    .toggle-container div + div {
+        margin: 0;
+        padding: 0;
+    }
+
+        .toggle-container > div > label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            width: 100%;
+
+            padding: 12px;
+            text-align: center;
+
+            cursor: pointer;
+
+            background-color: transparent;
+            transition: all 100ms ease-in-out;
+        }
+
+            .toggle-container > div > label > span:first-of-type {
+                z-index: 15;
+                
+                color: var(--secondary-color);
+                font-size: 16px;
+                font-size: 1.6rem;
+
+                margin-top: 0;
+            }
+
+            .toggle-container input[type="radio"]:checked + label {
+                background-color: var(--secondary-color);
+            }
+
+            .toggle-container > div + div {
+                margin-left: 0;
+            }
+
+.toggle--active label > span:first-of-type {
+    color: var(--white-color)!important;
+}

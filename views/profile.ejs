@@ -1,54 +1,18 @@
 <%- include ('./partials/head.ejs') -%>
-<body>
-<main>
-<h1> Cmd-online </h1>
 
-<h2> het profiel van (naam)</h2>
+<body class="">
+    <%- include ('./partials/title-banner.ejs') -%>
 
-<form action="/register" method="post" id="form">
-    <fieldset>
-        <legend> In welk leerjaar zit je</legend>
-        <select name="leerjaar" id="leerjaar">
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-</select>
+    <main>
+        <form action="/profile/<%= formAction %>" method="post" id="form">
 
-<legend> In welke klas zit je</legend>
-<select name="Klas" id="Klas">
-    <option value="201">201</option>
-    <option value="202">202</option>
-    <option value="203">203</option>
-    <option value="204">204</option>
-    <option value="205">205</option>
-    <option value="206">206</option>
-    <option value="207">207</option>
-    <option value="208">208</option>
-    <option value="209">209</option>
-    <option value="210">210</option>
-    <option value="211">211</option>
-    <option value="212">212</option>
-    </select>
+            <%- include ('./partials/select-input.ejs') -%>
 
-<legend> In welk BLok zit je</legend>
-<select name="blok" id="blok">
-    <option value="1">blok 1</option>
-    <option value="2">blok 2</option>
-    <option value="3 (stage)">blok 3 (stage)</option>
-    <option value="4 (stage)">blok 4 (stage)</option>
-    <option value="3 (keuze-blok)">blok 3 (Keuze-blok)</option>
-    <option value="4 (keuze-blok)">blok 4 (Keuze-blok)</option>
-    </select>
+            <div class="btn--container">
+                <a class="btn--small btn--small-arrow" href="#"><img src="../public/images/icons/arrow-icon.svg" alt="Back icon"></a>
+                <button type="submit">Volgende vraag</button>
+            </div>
+        </form>
 
-        <legend>herkansing of keuzeblok </legend>
-        <label for="text"> Zet hier je herkansing en of keuzeblok/vak neer. </label>
-        <input type="text" id="Extravak" name="Extravak">
-        </select>
-    </fieldset>
-    <button type="submit">Verstuur</button>
-</form>
-
-</main>
+    </main>
 </body>
-

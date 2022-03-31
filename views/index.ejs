@@ -1,7 +1,122 @@
 <%- include ('./partials/head.ejs') -%>
 
-<body>
-    <main>
-        <h1>Dashboard</h1>
+<body class="overflow form--popup">
+
+    <header>
+        <figure>
+            <picture class="box-shadow">
+                <img src="https://avatars.githubusercontent.com/u/6113643?v=4" alt="Profiel foto van Student">
+            </picture>
+
+            <figcaption>
+
+                <p><%= userData.user.name %> </p>
+
+                <% if (userData.user.type == "teacher") { %>
+                <span><img src="../../public/images/icons/check-icon.svg" alt="Checkmark icon"></span>
+                <% } %>
+
+            </figcaption>
+        </figure>
+    </header>
+
+    <main class="dashboard">
+        <% if (userData.teams.length) { %>
+        <section>
+            <h2>Jouw teams</h2>
+
+            <ul class="grid grid--overview">
+                <% userData.teams.forEach(item => { %>
+                <li>
+                    <a class="box-shadow" href="#">
+                        <div>
+                            <h3><%= item.title %></h3>
+                            <p>course</p>
+                        </div>
+                        <p>Bekijk team</p>
+                    </a>
+                </li>
+                <% }) %>
+            </ul>
+
+        </section>
+        <% } %>
+
+        <section class="dashboard__overview">
+            <h2>Overzicht</h2>
+
+            <ul class="grid grid--list">
+                <% if (userData.classes == null) { %>
+                <li>
+                    <a class="box-shadow" href="/profile">
+                        <div>
+                            <h3>Voeg je klas toe</h3>
+                            <p>Profiel setup</p>
+                        </div>
+
+                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                    </a>
+                </li>
+                <li>
+                    <a class="box-shadow" href="#">
+                        <div>
+                            <h3>Wat zijn jouw CMD Skills?</h3>
+                            <p>CMD Skills</p>
+                        </div>
+
+                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                    </a>
+                </li>
+
+                <% } else { %>
+                <li>
+                    <a class="box-shadow" href="#">
+                        <div>
+                            <h3>Mijn vakken</h3>
+                            <p><%= userData.courses.length %> vakken</p>
+                        </div>
+
+                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                    </a>
+                </li>
+                <li>
+                    <a class="box-shadow" href="#">
+                        <div>
+                            <h3>Klassenoverzicht</h3>
+                            <!-- TO DO: IN SCHEMA TURN THIS INTO OBJECT INSTEAD OF ARRAY? -->
+                            <% userData.classes.normal.forEach(mainClass => { %>
+                            <p><%= mainClass.title %></p>
+                            <% }) %>
+                        </div>
+
+                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                    </a>
+                </li>
+                <% } %>
+
+            </ul>
+        </section>
+
+        <form class="form--settings" method="post" action="/settings">
+            <fieldset>
+                <legend>Instellingen</legend>
+
+                <button type="submit" value="profile-setup" name="settings_type">Vakken wijzigen</button>
+                <button disabled type="submit" value="cmd-skills" name="settings_type">CMD Skills wijzigen</button>
+                <button disabled type="submit" value="account-details" name="settings_type">Account details wijzigen</button>
+
+            </fieldset>
+
+            <div>
+                <button id="close-form">Annuleren</button>
+            </div>
+        </form>
+
+        <div class="btn--container">
+            <a class="btn--small btn--small-arrow form-trigger" href="/profile"><img src="../public/images/icons/settings-icon.svg" alt="Settings icon"></a>
+        </div>
     </main>
+
+    <script src="../public/js/color-generator.js"></script>
+    <script async src="../public/js/form-script.js"></script>
 </body>
