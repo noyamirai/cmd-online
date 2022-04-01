@@ -111,13 +111,10 @@
                     </a>
                 </li>
                 <li>
-                    <a class="box-shadow" href="#">
+                    <a class="box-shadow" href="<%= userData.user.username %>/class/<%= userData.classes.normal.linkRef %>_normal">
                         <div>
                             <h3>Klassenoverzicht</h3>
-                            <!-- TO DO: IN SCHEMA TURN THIS INTO OBJECT INSTEAD OF ARRAY? -->
-                            <% userData.classes.normal.forEach(mainClass => { %>
-                            <p><%= mainClass.title %></p>
-                            <% }) %>
+                            <p><%= userData.classes.normal.title %></p>
                         </div>
 
                         <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
@@ -136,13 +133,10 @@
                     </a>
                 </li>
                 <li>
-                    <a class="box-shadow" href="#">
+                    <a class="box-shadow" href="<%= userData.user.username %>/class/<%= userData.classes.normal.linkRef %>_normal">
                         <div>
                             <h3>Klassenoverzicht</h3>
-                            <!-- TO DO: IN SCHEMA TURN THIS INTO OBJECT INSTEAD OF ARRAY? -->
-                            <% userData.classes.normal.forEach(mainClass => { %>
-                            <p><%= mainClass.title %></p>
-                            <% }) %>
+                            <p><%= userData.classes.normal.title %></p>
                         </div>
 
                         <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">

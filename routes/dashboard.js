@@ -10,7 +10,6 @@ const schemas = require('../models/schemas');
 const CRUD = require(`../controller/crud-operations`);
 
 router.get('/', ensureAuthenticated, (req, res) => {
-    console.log('hi');
 
     CRUD.findDocByQuery(schemas.User, 'username', req.user.username).then((userData) => {
         if (userData.type == 'student') {
@@ -20,6 +19,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
                 path: `user classes.normal`
             }).exec((err, result) => {
                 if (err) Promise.reject(err);
+                console.log(result.classes.normal);
 
                 if (result.cmd_skills.best == null) {
                     res.render('index', {
