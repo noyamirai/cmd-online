@@ -95,6 +95,8 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
         label + .input--normal, label + .select-container { margin-top: 12px; }
         .input--normal + label { margin-top: var(--default-padding); }
 
+        .select-container + button { margin-top: 12px; }
+
         .input--custom {
             position: absolute;
 

@@ -47,25 +47,28 @@ router.post('/courses', (req, res) => {
     if (req.body.course_option == 'add') {
 
         schemas.SchoolYear.find({}).then((allYearData) => {
-            schemas.SchoolBloks.find({}).then((allBlokData) => {
-
-                const allTypes = [
-                    { 
-                        title: 'Algemeen vak',
-                        linkRef: 'normal'
-                    },
-                    { 
-                        title: 'Keuzeproject',
-                        linkRef: 'project'
-                    },
-                    { 
-                        title: 'Keuzeproject vak',
-                        linkRef: 'project_class'
-                    },
-                    { 
-                        title: 'Profileringsvak',
-                        linkRef: 'elective'
-                    }
+            schemas.SchoolBloks.find({
+                'linkRef': {
+                    '$regex': '^((?!internship).)*$',
+                    '$options': 'i'
+                }
+            }).then((allBlokData) => {
+                const allTypes = [{
+                    title: 'Algemeen vak',
+                    linkRef: 'normal'
+                },
+                {
+                    title: 'Keuzeproject',
+                    linkRef: 'project'
+                },
+                {
+                    title: 'Keuzeproject vak',
+                    linkRef: 'project_class'
+                },
+                {
+                    title: 'Profileringsvak',
+                    linkRef: 'elective'
+                }
                 ];
 
                 res.render('./cms/form', {
@@ -85,35 +88,48 @@ router.post('/courses', (req, res) => {
 });
 
 router.post('/courses/add', (req, res) => {
-    console.log('?');
     let inBloks = [];
     inBloks.push(req.body.in_blok_1);
-    inBloks.push(req.body.in_blok_2);
+
+    if (req.body.in_blok_2) {
+        inBloks.push(req.body.in_blok_2);
+    }
 
     schemas.SchoolBloks.find({
-        'linkRef': { 
-            $in: inBloks 
+        'linkRef': {
+            $in: inBloks
         }
     }).then((result) => {
-        console.log(result);
-        res.send('check');
+        let blokIds = [];
+        result.forEach((blok) => {
+            blokIds.push(blok.id);
+        });
+
+        CRUD.createDoc(schemas.Course, {
+            title: req.body.title,
+            linkRef: paramCase.paramCase(req.body.title),
+            in_blok: blokIds,
+            in_year: req.body.in_year,
+            type: req.body.type
+        }).then((courseData) => {
+
+            console.log(courseData);
+
+            schemas.SchoolBloks.find({ '_id': { $in: courseData.in_blok }}).then((foundBloks) => {
+                foundBloks.forEach((blok) => {
+                    blok.courses.push(courseData);
+                    blok.save();
+                });
+            });
+
+            schemas.SchoolYear.findOne({ 'linkRef': courseData.in_year}).then((foundYear) => {
+                foundYear.courses.push(courseData);
+                foundYear.save();
+            });
+
+            res.send('course aangemaakt');
+        });
     });
-
-    // CRUD.createDoc(schemas.Course, {
-    //     title: req.body.title,
-    //     linkRef: paramCase.paramCase(req.body.title),
-    //     in_blok: ['6241abeb7922cfeee8b07983', '6241abeb7922cfeee8b07984'],
-    //     in_year: req.body.in_year,
-    //     type: req.body.type 
-    // }).then((result) => {
-    //     console.log(result);
-    //     res.send('course aangemaakt');
-    // });
 });
-
-
-
-
-
 
 module.exports = router;

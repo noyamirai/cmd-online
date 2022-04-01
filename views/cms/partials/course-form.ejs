@@ -27,13 +27,9 @@
                 <% }) %>            
             </select>
         </div>
-        <div class="select-container">
-            <select class="input input--normal input--select" name="in_blok_2" id="in_blok_2">
-                <% allBlokData.forEach(blok => { %>
-                    <option value="<%= blok.linkRef %>"><%= blok.title %></option>
-                <% }) %>            
-            </select>
-        </div>
+
+        <button type="button" class="add-blok">Nog een blok toevoegen</button>
+        
     </fieldset>
 
     <fieldset>
@@ -47,7 +43,7 @@
         </div>
     </fieldset>
 
-    <button type="submit">Vak toevoegen</button>
+    <button type="submit">Vak aanmaken!</button>
 
 </form>
 
