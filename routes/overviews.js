@@ -27,7 +27,6 @@ router.get(`/courses`, ensureAuthenticated, (req, res) => {
                 });
 
                 res.render(`courses-overview`, {
-                    profile_pic: studentData.profile_pic,
                     userData: studentData,
                     courseData: courseData,
                     prevURL: '/'
@@ -35,23 +34,35 @@ router.get(`/courses`, ensureAuthenticated, (req, res) => {
             });
 
         } else if (userData.type == 'teacher') {
-            schemas.TeacherCourse.find({
-                'userId': userData.id
-            }).lean().populate(`course`).exec(function(err, courseData) {
+
+            schemas.Teacher.findOne({
+                'user': userData.id
+            }).lean().populate('user').exec((err, teacherData) => {
                 if (err) Promise.reject(err);
 
-                courseData.forEach(doc => {
-                    doc.acronym = acronymGen.createAcronym(doc.course.title);
-                });
+                if (teacherData.courses != null) {
+                    schemas.TeacherCourse.find({
+                        'userId': teacherData.id
+                    }).lean().populate(`course`).exec(function(err, courseData) {
+                        if (err) Promise.reject(err);
 
-                res.render(`courses-overview`, {
-                    profile_pic: userData.profile_pic,
-                    userData: userData,
-                    courseData: courseData
-                });
+                        courseData.forEach(doc => {
+                            doc.acronym = acronymGen.createAcronym(doc.course.title);
+                        });
+
+                        res.render(`courses-overview`, {
+                            userData: teacherData,
+                            courseData: courseData
+                        });
+                    });
+                } else {
+                    res.render(`courses-overview`, {
+                        userData: teacherData,
+                        courseData: null
+                    });
+                }
             });
         }
-
     });
 });
 

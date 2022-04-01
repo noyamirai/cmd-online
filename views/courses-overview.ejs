@@ -2,7 +2,8 @@
 
 <body>
     <%- include ('./partials/profile-banner.ejs') -%>
-    <main>
+    <main <% if (userData.user.type == 'teacher' && courseData == null) { %> class="dashboard"<% } %>>
+        <% if (userData.user.type == 'teacher' && userData.courses != null) { %>
         <h2>Jouw vakken</h2>
 
         <ul class="grid grid--list">
@@ -28,9 +29,29 @@
             <% }) %>
         </ul>
 
+        <% } else if (userData.user.type == 'teacher' && courseData == null) { %>
+        <h2>Welkom!</h2>
+        <ul class="grid grid--list">
+            <li>
+                <!-- TODO: PROFILE SETUP FOR TEACHERS: assign courses and classes they teach -->
+                <a class="box-shadow" href="/profile/teacher">
+                    <div>
+                        <h3>Voeg vakken toe</h3>
+                        <p>Profiel setup</p>
+                    </div>
+
+                    <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                </a>
+            </li>
+        </ul>
+
+        <% } %>
+
+        <% if (userData.user.type == 'student') { %>
         <div class="btn--container">
             <a class="btn--small btn--small-arrow" href="<%= prevURL %>"><img src="../../public/images/icons/arrow-icon.svg" alt="Back icon"></a>
         </div>
+        <% } %>
     </main>
 </body>
 

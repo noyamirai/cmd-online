@@ -38,19 +38,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
             });
 
         } else if (userData.type == 'teacher') {
-            schemas.Teacher.findOne({
-                'user': userData.id
-            }).lean().populate({
-                path: `user`
-            }).exec((err, result) => {
-                if (err) Promise.reject(err);
-
-                res.render('index', {
-                    userData: result,
-                    userSkill: null,
-                    headerClass: 'no-box-shadow'
-                });
-            });
+            res.redirect(`${req.user.username}/courses`);
         }
     });
 });
