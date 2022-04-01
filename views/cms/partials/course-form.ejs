@@ -43,6 +43,17 @@
         </div>
     </fieldset>
 
+    <fieldset class="hide" id="parent-course">
+        <legend>Wat is het hoofdvak?</legend>
+        <div class="select-container">
+            <select class="input input--normal input--select" name="course_parent" id="course_parent">
+                <% allTypesData.forEach(types => { %>
+                    <option value="<%= types.linkRef %>"><%= types.title %></option>
+                <% }) %> 
+            </select>
+        </div>
+    </fieldset>
+
     <button type="submit">Vak aanmaken!</button>
 
 </form>

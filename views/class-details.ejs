@@ -3,9 +3,9 @@
 <body class="<%= className %> yellow-bg">
     <%- include ('./partials/title-banner.ejs') -%>
 
-    <main <% if (classTeams.length) { %> class="home"<% } %>>
+    <main <% if (classTeams != undefined && classTeams.length) { %> class="home"<% } %>>
 
-        <% if (classTeams.length) { %>
+        <% if (classTeams != undefined && classTeams.length) { %>
 
             <div>
                 <a href="<%= prevURL %>/<%= linkRef %>" class="btn">Alle studenten</a>
@@ -22,7 +22,7 @@
                 <% userData.forEach(item => { %>
                     <li>
                         <a class="box-shadow" href="#">
-                            <img src="<%= item.user.profile_pic %>" alt="Profielfoto van <%= item.user.name.first %>">
+                            <img src="<%= item.user.profile_pic %>" alt="Profielfoto van <%= item.user.name %>">
                         </a>
                     </li>
                 <% }) %>
@@ -33,11 +33,13 @@
                 <a class="btn form-trigger" href="<%= prevURL %>/<%= linkRef %>/teams/team-generation/form">Teams aanmaken</a>
             </div>
 
-            <%- include ('./partials/form.ejs') -%>
+            <% if (userData.type == 'teacher') { %>
+                <%- include ('./partials/form.ejs') -%>
+            <% } %>
         <% } %>
     </main>
 </body>
 
-<% if (!classTeams.length) { %>
+<% if (classTeams != undefined && !classTeams.length) { %>
      <script async src="../../public/js/form-script.js"></script>
 <% } %>

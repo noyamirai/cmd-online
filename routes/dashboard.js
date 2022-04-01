@@ -10,8 +10,9 @@ const schemas = require('../models/schemas');
 const CRUD = require(`../controller/crud-operations`);
 
 router.get('/', ensureAuthenticated, (req, res) => {
-    CRUD.findDocByQuery(schemas.User, 'username', req.user.username).then((userData) => {
+    console.log('hi');
 
+    CRUD.findDocByQuery(schemas.User, 'username', req.user.username).then((userData) => {
         if (userData.type == 'student') {
             schemas.Student.findOne({
                 'user': userData.id
@@ -20,15 +21,20 @@ router.get('/', ensureAuthenticated, (req, res) => {
             }).exec((err, result) => {
                 if (err) Promise.reject(err);
 
-                CRUD.findDocByQuery(schemas.cmdSkill, '_id', result.cmd_skills.best).then((skill) => {
-
+                if (result.cmd_skills.best == null) {
                     res.render('index', {
                         userData: result,
-                        userSkill: skill,
-                        headerClass: 'no-box-shadow'
+                        userSkill: null,
                     });
-                });
-                
+                } else {
+
+                    CRUD.findDocByQuery(schemas.cmdSkill, '_id', result.cmd_skills.best).then((skill) => {
+                        res.render('index', {
+                            userData: result,
+                            userSkill: skill,
+                        });
+                    });
+                }
             });
 
         } else if (userData.type == 'teacher') {

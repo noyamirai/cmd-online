@@ -68,8 +68,7 @@ router.post('/courses', (req, res) => {
                 {
                     title: 'Profileringsvak',
                     linkRef: 'elective'
-                }
-                ];
+                }];
 
                 res.render('./cms/form', {
                     bannerTitle: 'Vak toevoegen',

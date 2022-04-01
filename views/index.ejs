@@ -18,15 +18,14 @@
 
             </figcaption>
         </figure>
-
     </header>
 
     <main class="dashboard">
 
         <% if (userData.user.type == 'student' && userSkill != null) { %>
-            <section class="skills">
-                <span class="tag-label"><%= userSkill.title %> </span>
-            </section>
+        <section class="skills">
+            <span class="tag-label"><%= userSkill.title %> </span>
+        </section>
         <% } %>
 
         <% if (userData.teams.length) { %>
@@ -54,7 +53,7 @@
             <h2>Overzicht</h2>
 
             <ul class="grid grid--list">
-                <% if (userData.classes == null) { %>
+                <% if (userData.classes == undefined && userData.cmd_skills.best == null) { %>
                 <li>
                     <a class="box-shadow" href="/profile">
                         <div>
@@ -66,7 +65,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="box-shadow" href="#">
+                    <a class="box-shadow" href="/skills">
                         <div>
                             <h3>Wat zijn jouw CMD Skills?</h3>
                             <p>CMD Skills</p>
@@ -76,9 +75,58 @@
                     </a>
                 </li>
 
-                <% } else { %>
+                <% } else if (userData.classes == undefined && userData.cmd_skills.best != null) { %>
+                <li>
+                    <a class="box-shadow" href="/profile">
+                        <div>
+                            <h3>Voeg je klas toe</h3>
+                            <p>Profiel setup</p>
+                        </div>
+
+                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                    </a>
+                </li>
+
+                <% } else if (userData.classes != undefined && userData.cmd_skills.best == null) { %>
+
+                <li>
+                    <a class="box-shadow" href="/skills">
+                        <div>
+                            <h3>Wat zijn jouw CMD Skills?</h3>
+                            <p>CMD Skills</p>
+                        </div>
+
+                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                    </a>
+                </li>
+
+                <li>
+                    <a class="box-shadow" href="<%= userData.user.username %>/courses">
+                        <div>
+                            <h3>Mijn vakken</h3>
+                            <p><%= userData.courses.length %> vakken</p>
+                        </div>
+
+                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                    </a>
+                </li>
                 <li>
                     <a class="box-shadow" href="#">
+                        <div>
+                            <h3>Klassenoverzicht</h3>
+                            <!-- TO DO: IN SCHEMA TURN THIS INTO OBJECT INSTEAD OF ARRAY? -->
+                            <% userData.classes.normal.forEach(mainClass => { %>
+                            <p><%= mainClass.title %></p>
+                            <% }) %>
+                        </div>
+
+                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                    </a>
+                </li>
+
+                <% } else { %>
+                <li>
+                    <a class="box-shadow" href="<%= userData.user.username %>/courses">
                         <div>
                             <h3>Mijn vakken</h3>
                             <p><%= userData.courses.length %> vakken</p>
@@ -110,8 +158,8 @@
                 <legend>Instellingen</legend>
 
                 <button type="submit" value="profile-setup" name="settings_type">Vakken wijzigen</button>
-                <% if (userData.user.type == 'student') { %>
-                    <button type="submit" value="cmd-skills" name="settings_type">CMD Skills wijzigen</button>
+                <% if (userData.user.type == 'student' && userData.cmd_skills.best != null) { %>
+                <button type="submit" value="cmd-skills" name="settings_type">CMD Skills wijzigen</button>                 
                 <% } %>
                 <button disabled type="submit" value="account-details" name="settings_type">Account details wijzigen</button>
 

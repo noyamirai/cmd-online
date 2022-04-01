@@ -1,6 +1,8 @@
 console.log('CMS SCRIPT: ACTIVE');
 
 const addBlokBtns = document.querySelectorAll('.add-blok');
+const typeSelect = document.querySelector('#type');
+const parentCourse = document.querySelector('#parent-course');
 
 const getClone = (toBeClonedItem) => {
     let nodeCopy = toBeClonedItem.cloneNode(true);
@@ -12,7 +14,6 @@ const getClone = (toBeClonedItem) => {
 };
 
 addBlokBtns.forEach((button) => {
-
     button.addEventListener('click', (e) => {
         e.preventDefault();
 
@@ -35,7 +36,15 @@ addBlokBtns.forEach((button) => {
 
             e.target.textContent = 'Blok verwijderen';
         }
-
     });
+});
 
+typeSelect.addEventListener('input', (e) => {
+    if (e.target.value == 'project_class') {
+        parentCourse.classList.remove('hide');
+    } else {
+        if (!parentCourse.classList.contains('hide')) {
+            parentCourse.classList.add('hide');                    
+        }
+    }
 });

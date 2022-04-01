@@ -3,16 +3,23 @@
 <body>
     <%- include ('./partials/profile-banner.ejs') -%>
     <main>
-        <h2>Jouw gegeven vakken</h2>
+        <h2>Jouw vakken</h2>
 
         <ul class="grid grid--list">
             <% courseData.forEach((item) => { %>
                 <li>
-                    <a class="box-shadow" href="<%= item.course.linkRef %>/classes">
+                    <a class="box-shadow" href="<%= item.linkRef %><% if (userData.type == 'teacher') { %>/classes<% } %>">
                         <p><%= item.acronym %></p>
                         <div>
-                            <h3><%= item.course.title %></h3>
-                            <p><%= item.classes.length %> klassen</p>
+                            <h3><%= item.title %></h3>
+                            <% if (userData.type == 'teacher') { %>
+                                <% if (item.type == 'elective' || item.type == 'project') { %>
+                                    <p><%= item.classes.elective.length %> klassen</p>
+
+                                <% } else if (item.type == 'normal') { %>
+                                    <p><%= item.classes.normal.length %> klassen</p>
+                                <% } %>
+                            <% } %>
                         </div>
 
                         <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
