@@ -9,6 +9,9 @@ const argon2 = require('argon2');
 const passport = require('passport');
 
 const CRUD = require(`../controller/crud-operations`);
+const nodemailer = require("nodemailer");
+const { getMaxListeners } = require('../../Test/test/models/user');
+
 
 //RENDER PAGES
 router.get('/login', (req, res) => { res.render('login'); });
@@ -35,7 +38,7 @@ const multerStorage = multer.diskStorage({
         cb(null, 'public');
     },
     filename: (req, file, cb) => {
-        const ext = file.mimetype.split("/")[1];
+        const ext = file.mimetype.split('/')[1];
         cb(null, `uploads/${file.fieldname}-${Date.now()}.${ext}`);
     },
 });
@@ -47,7 +50,7 @@ const upload = multer({
 //REGISTER HANDLER
 router.post('/register', upload.single('profile_pic'), (req, res) => {
     let { name, username, email, password, password2, type } = req.body;
-    let  profile_pic  = req.file.filename;
+    let profile_pic = req.file.filename;
     let errors = [];
     // const obj = {
     //     img: {
@@ -123,6 +126,34 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                     }).then((userObject) => {
                         CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: null, courses: null });
                         res.redirect('/users/login');
+                        let transporter = nodemailer.createTransport({
+                            host: req.body.email,
+                            port: 587,
+                            secure: false,
+                            auth: {
+                                user: req.body.email,
+                                pass: req.body.password
+                            },
+                            tls:{
+                                rejectUnautorized:false
+                            }
+                        });
+                        let mailoptions = {
+                            from: '"Nodemailer contact" <tejovdburg@gmail.com>',
+                            to: req.body.email,
+                            subject: 'Node contact request',
+                            text: 'Hello world?',
+                            html: '<b> Hello world <b>',
+
+                        };
+                        transporter.sendMail(mailoptions, (error, info) => {
+                            if (error) {
+                                return console.log(error);
+                            }
+                            console.log('message send: %s', info.messageID);
+                            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+                            res.render('contact',{msg:'email had been sent'});
+                        });
                     });
                 }
             });
