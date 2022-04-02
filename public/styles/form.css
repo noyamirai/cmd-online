@@ -12,7 +12,7 @@ fieldset {
     width: 100%;
 }
 
-.form--popup fieldset {
+.form__radio-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -27,7 +27,7 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
     }
 
     /* radio button containers */
-    .form--popup fieldset div {
+    .form__radio-container div {
         position: relative;
         width: 33.33%;
 
@@ -37,7 +37,7 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
         background-color: var(--white-color);
     }
 
-        .form--popup fieldset div > label {
+        .form__radio-container div > label {
             display: flex;
             align-items: center;
             flex-direction: column;
@@ -51,9 +51,9 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
             transition: all 100ms ease-in-out;
         }
 
-            .form--popup fieldset div > label > span:first-of-type { font-weight: 700; }
+            .form__radio-container div > label > span:first-of-type { font-weight: 700; }
 
-            .form--popup fieldset div > label > span:last-of-type {
+            .form__radio-container div > label > span:last-of-type {
                 font-size: 14px;
                 font-size: 1.4rem;
                 font-weight: 400;
@@ -63,7 +63,16 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
                 margin-top: -4px;
             }
 
-    .form--popup fieldset div + div { 
+        .form__radio-container div > .input--custom:checked + label {
+            background-color: var(--secondary-color);
+        }
+
+        .form__radio-container div > .input--custom:checked + label,
+        .form__radio-container div > .input--custom:checked + label > span:last-of-type {
+            color: var(--white-color);
+        }
+
+    .form__radio-container div + div { 
         margin: 0 0 0 8px;
         padding: 0;
     }
@@ -229,14 +238,6 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
             background-color: var(--white-color);
             color: var(--grey-text-color);
             text-decoration: underline;
-        }
-
-        .form--popup .input--custom:checked + label {
-            background-color: var(--secondary-color);
-        }
-
-        .form--popup .input--custom:checked + label, .form--popup .input--custom:checked + label > span:last-of-type {
-            color: var(--white-color);
         }
 
 .form--popup form.form-active {

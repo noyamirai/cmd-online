@@ -49,6 +49,7 @@ app.use('/:username', require('./routes/overviews'));
 app.use('/settings', require('./routes/settings'));
 app.use('/maintenance', require('./routes/maintenance'));
 app.use('/skills', require('./routes/skills'));
+app.use('/teams', require('./routes/teams'));
 
 
 app.get(`*`, (req, res) => {

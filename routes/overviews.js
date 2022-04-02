@@ -216,6 +216,7 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
             res.render(`class-details`, {
                 prevURL: prevURL,
                 formURL: formURL,
+                isPopup: true,
                 studentData: classData.students,
                 userData: userData,
                 bannerTitle: classData.title,
