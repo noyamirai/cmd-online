@@ -3,41 +3,26 @@
 <body class="<%= className %> yellow-bg">
     <%- include ('./partials/title-banner.ejs') -%>
 
-    <main <% if (classTeams != undefined && classTeams.length) { %> class="home"<% } %>>
+    <main>
+        <ul class="grid grid--overview grid--img">
+            <% studentData.forEach(item => { %>
+                <li>
+                    <a class="box-shadow" href="#">
+                        <img src="../../public/<%= item.user.profile_pic %>" alt="Profielfoto van <%= item.user.name %>">
+                    </a>
+                </li>
+            <% }) %>
+        </ul>
 
-        <% if (classTeams != undefined && classTeams.length) { %>
-
-            <div>
-                <a href="<%= prevURL %>/<%= linkRef %>" class="btn">Alle studenten</a>
-                <a href="<%= prevURL %>/<%= linkRef %>/teams" class="btn">Overzicht van teams</a>
-            </div>
-
-            <div class="btn--container">
-                <a class="btn--small btn--small-arrow" href="<%= prevURL %>"><img src="../../../public/images/icons/arrow-icon.svg" alt="Back icon"></a>
-            </div>
-
-        <% } else { %>
-             
-            <ul class="grid grid--overview grid--img">
-                <% studentData.forEach(item => { %>
-                    <li>
-                        <a class="box-shadow" href="#">
-                            <img src="../../public/<%= item.user.profile_pic %>" alt="Profielfoto van <%= item.user.name %>">
-                        </a>
-                    </li>
-                <% }) %>
-            </ul>
-
-            <div class="btn--container">
-                <a class="btn--small btn--small-arrow" href="<%= prevURL %>"><img src="../../public/images/icons/arrow-icon.svg" alt="Back icon"></a>
-                <% if (userData.type == 'teacher') { %>
-                    <a class="btn form-trigger" href="/teams">Teams aanmaken</a>
-                <% } %>
-            </div>
-
-            <% if (userData.type == 'teacher') { %>
-                <%- include ('./partials/form.ejs') -%>
+        <div class="btn--container">
+            <a class="btn--small btn--small-arrow" href="<%= prevURL %>"><img src="../../public/images/icons/arrow-icon.svg" alt="Back icon"></a>
+            <% if (userData.type == 'teacher' && !classTeams.length) { %>
+                <a class="btn form-trigger" href="/teams">Teams aanmaken</a>
             <% } %>
+        </div>
+
+        <% if (userData.type == 'teacher') { %>
+            <%- include ('./partials/form.ejs') -%>
         <% } %>
     </main>
 </body>

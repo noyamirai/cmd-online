@@ -10,8 +10,6 @@ const CRUD = require(`../controller/crud-operations`);
 
 const acronymGen = require(`../public/js/acronym-generator`);
 
-const team = require(`../controller/team-generator`);
-
 router.get(`/courses`, ensureAuthenticated, (req, res) => {
     CRUD.findDocByQuery(schemas.User, `username`, req.params.username).then((userData) => {
 
@@ -167,9 +165,7 @@ router.get(`/:course/classes`, ensureAuthenticated, (req, res) => {
     });
 });
 
-/**
- * TODO: confirm whether or not user sees "/:class/home" when a class has teams already
- */
+
 router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
     const classType = req.params.class.substring(req.params.class.indexOf('_') + 1);
     const classLink = req.params.class.split('_')[0];
@@ -190,7 +186,7 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
         } else if (userData.type == 'teacher') {
             prevURL = `/${req.params.username}/${req.params.course}/classes`;
             className = 'overflow form--popup';
-            formURL = `${req.params.class}/team-generation`;
+            formURL = `/teams/create`;
         }
 
         if (classType != 'normal') {
@@ -231,75 +227,76 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
     });
 });
 
-router.post('/:course/:class/team-generation', (req, res) => {
-    const teamSize = req.body.teamSize;
+router.get(`/:course/:class/home`, ensureAuthenticated, (req, res) => {
+    let prevURL;
+    let schema;
+    let linkRef;
 
-    let allStudentObjects = [];
-    let allTeams = [];
-
-    console.log(teamSize);
-
-    // reset
-    // schemas.Team.remove((err) => {
-    //     if (err) Promise.reject(err);
-    //     console.log(`deleted`);
-    // });
-
-    // schemas.Class.updateMany({
-    //     title: `Tech-2`
-    // }, {
-    //     $set: {
-    //         teams: []
-    //     }
-    // },
-    // (err, affected) => {
-    //     console.log(`affected`, affected);
-    // }
-    // );
-
-    // schemas.Student.updateMany({}, {
-    //     $set: {
-    //         teams: []
-    //     }
-    // },
-    // (err, affected) => {
-    //     console.log(`affected`, affected);
-    // }
-    // );
+    if (req.user.type == 'student') {
+        prevURL = `/${req.params.username}/courses`;
+    } else if (req.user.type == 'teacher') {
+        prevURL = `/${req.params.username}/${req.params.course}/classes`;
+    }
 
     CRUD.findDocByQuery(schemas.Course, 'linkRef', req.params.course).then((courseData) => {
 
-        let schema;
-
         if (courseData.type != 'normal') {
             schema = schemas.ElectiveClass;
+            linkRef = `${courseData.linkRef}/${req.params.class}_elective`;
         } else {
             schema = schemas.Class;
+            linkRef = `${courseData.linkRef}/${req.params.class}_normal`;
         }
 
-        schema.findOne({
-            'linkRef': req.params.class
-        }).lean().populate({
-            path: 'students',
-            populate: {
-                path: 'user'
-            }
-        }).exec((err, classData) => {
-            if (err) Promise.reject(err);
+        CRUD.findDocByQuery(schema, `linkRef`, req.params.class).then((classObject) => {
 
-            allStudentObjects = classData.students;
-
-            team.generate(allStudentObjects, teamSize).then((generatedTeams) => {
-                generatedTeams.forEach((team) => {
-                    console.log(team);
-                });
+            // insert user info based on id  
+            res.render(`class-home`, {
+                userData: req.user,
+                prevURL: prevURL,
+                bannerTitle: classObject.title,
+                bannerSubtitle: `${classObject.students.length} studenten`,
+                linkRef: linkRef
             });
-
         });
-
     });
+});
 
-    res.send('check');
+router.get(`/:course/:class/teams`, ensureAuthenticated, (req, res) => {
+    let schema;
+    let linkRef;
+
+    const classType = req.params.class.substring(req.params.class.indexOf('_') + 1);
+    const classLink = req.params.class.split('_')[0];
+
+    if (classType != 'normal') {
+        schema = schemas.ElectiveClass;
+        linkRef = `${req.params.course}/${req.params.class}_elective`;
+    } else {
+        schema = schemas.Class;
+        linkRef = `${req.params.course}/${req.params.class}_normal`;
+    }
+
+    schema.findOne({
+        'linkRef': classLink
+    }).lean().populate({
+        path: `teams`,
+        select: `name students number`
+    }).exec((err, classData) => {
+        if (err) Promise.reject(err);
+        console.log(classData);
+
+        res.render(`team-overview`, {
+            prevURL: `/${req.params.username}/${req.params.course}/${req.params.class}/home`,
+            formURL: `/teams/create`,
+            userData: null,
+            isPopup: true,
+            teamData: classData.teams.sort((a, b) => parseFloat(a.number) - parseFloat(b.number)),
+            bannerTitle: classData.title,
+            bannerSubtitle: `Team overzicht`,
+            linkRef: linkRef
+        });
+    });
 
 });
 
