@@ -174,7 +174,6 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
 
     CRUD.findDocByQuery(schemas.User, 'username', req.params.username).then((userData) => {
         let prevURL;
-        let userType;
         let schema;
         let className;
         let formURL;
@@ -186,10 +185,8 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
                 prevURL = `/${req.params.username}/courses`;
             }
 
-            userType = 'students';
         } else if (userData.type == 'teacher') {
             prevURL = `/${req.params.username}/${req.params.course}/classes`;
-            userType = 'teachers';
             className = 'overflow form--popup';
             formURL = `${req.path}/teams/team-generation`;
         }
@@ -204,9 +201,14 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
         schema.findOne({
             'linkRef': classLink
         }).lean().populate({
-            path: userType,
+            path: 'teachers',
             populate: {
                 path: `user`
+            }
+        }).populate({
+            path: 'students',
+            populate: {
+                path: 'user'
             }
         }).exec((err, classData) => {
             if (err) Promise.reject(err);
