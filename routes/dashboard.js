@@ -19,7 +19,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
                 path: `user classes.normal`
             }).exec((err, result) => {
                 if (err) Promise.reject(err);
-                console.log(result.classes.normal);
+                console.log(result);
 
                 if (result.cmd_skills.best == null) {
                     res.render('index', {
