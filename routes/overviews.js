@@ -216,7 +216,8 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
             res.render(`class-details`, {
                 prevURL: prevURL,
                 formURL: formURL,
-                userData: classData.students,
+                studentData: classData.students,
+                userData: userData,
                 bannerTitle: classData.title,
                 bannerSubtitle: `${classData.students.length} studenten`,
                 linkRef: classData.linkRef,
