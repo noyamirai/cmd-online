@@ -233,10 +233,16 @@ const userTeacher = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: `User`
     },
-    classes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `Class`
-    }],
+    classes: {
+        normal: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `Class`
+        },
+        elective: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `ElectiveClass`
+        }]
+    },
     courses: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: `Course`

@@ -8,8 +8,10 @@ const router = express.Router({
 
 router.post('/', ensureAuthenticated, (req, res) => {
     
-    if (req.body.settings_type == 'profile-setup') {
+    if (req.body.settings_type == 'profile-setup' && req.user.type == 'student') {
         res.redirect('/profile');
+    } else if (req.body.settings_type == 'profile-setup' && req.user.type == 'teacher') {
+        res.redirect('/profile/teacher');
     } else if (req.body.settings_type == 'cmd-skills') {
         res.redirect('/skills');
     }
