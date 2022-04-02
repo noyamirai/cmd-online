@@ -33,9 +33,9 @@ const generate = async (students, teamSize) => {
             let result;
 
             // logging purposes
-            // studentsInTeam.forEach(member => {
-            //     console.log(`student in TEAM ${teamCounter}: ${member.name} with skill: ${member.cmd_skill}`);
-            // });
+            studentsInTeam.forEach(member => {
+                console.log(`student in TEAM ${teamCounter}: ${member.name} with skill: ${member.cmd_skill}`);
+            });
 
             /**
              * * Check whether or not students have been added to teams (modified students array)
@@ -50,8 +50,9 @@ const generate = async (students, teamSize) => {
             let student = result[0];
             updatedStudentArray = result[1];
 
-            // console.log(`adding: ${student.user.name.first} with skill: ${student.cmd_skills.best}`);
+            console.log(`adding: ${student.user.name.first} with skill: ${student.cmd_skills.best}`);
             studentsInTeam.push({
+                name: student.user.username,
                 student: student._id,
                 cmd_skill: student.cmd_skills.best
             });
@@ -69,11 +70,11 @@ const generate = async (students, teamSize) => {
             if (Array.isArray(teamMembers) && teamMembers.length > 0) {
 
                 // logging purposes
-                // console.log(`team has members!`);
-                // teamMembers.forEach(member => {
-                //     console.log(`member: ${member.name} with skill: ${member.cmd_skill}`);
-                // })
-                // console.log(`new potential student: ${student.user.name.first} with skill: ${student.cmd_skills.best}`);
+                console.log(`team has members!`);
+                teamMembers.forEach(member => {
+                    console.log(`member: ${member.name} with skill: ${member.cmd_skill}`);
+                });
+                console.log(`new potential student: ${student.user.name.first} with skill: ${student.cmd_skills.best}`);
 
                 /**
                  * * Compare skills of existing team members with new potential student
@@ -81,7 +82,7 @@ const generate = async (students, teamSize) => {
                  */
                 for (let i = 0; i < teamMembers.length; i++) {
                     const value = teamMembers[i];
-                    // console.log(`comparing ${value.cmd_skill} with ${student.cmd_skills.best}`);
+                    console.log(`comparing ${value.cmd_skill} with ${student.cmd_skills.best}`);
 
                     if (value.cmd_skill.equals(student.cmd_skills.best)) {
                         findDuplicates = true;
@@ -89,7 +90,7 @@ const generate = async (students, teamSize) => {
                     }
                 }
 
-                // console.log(`duplicate?: ${findDuplicates}`);
+                console.log(`duplicate?: ${findDuplicates}`);
 
                 /**
                  * * Check if random student's cmd skill is already inside team
@@ -97,7 +98,7 @@ const generate = async (students, teamSize) => {
                 if (findDuplicates) {
                     // check what skills are left in allStudents
 
-                    // console.log(`skill already found in team :(`);
+                    console.log(`skill already found in team :(`);
                     let allSkills = allStudents.map(e => e.cmd_skills.best);
 
                     /**
@@ -105,12 +106,12 @@ const generate = async (students, teamSize) => {
                      * * just add into team. If they're all different, locate student
                      */
                     if (new Set(allSkills).size === 1) {
-                        // console.log(`all students left have the same cmd skills LMAO so just add to team`);
+                        console.log(`all students left have the same cmd skills LMAO so just add to team`);
                         const updatedStudentArray = allStudents.filter(item => item._id != student._id);
                         return [student, updatedStudentArray];
 
                     } else {
-                        // console.log(`students still have different skills!`);
+                        console.log(`students still have different skills!`);
 
                         let newStudent;
 
@@ -121,8 +122,8 @@ const generate = async (students, teamSize) => {
                             let duplicate = false;
                             const potentialStudent = allStudents[i];
 
-                            // console.log(`okay! going through students and finding unique one`);
-                            // console.log(`potential new member: ${potentialStudent.user.name.first} their skill: ${potentialStudent.cmd_skills.best}`);
+                            console.log(`okay! going through students and finding unique one`);
+                            console.log(`potential new member: ${potentialStudent.user.name.first} their skill: ${potentialStudent.cmd_skills.best}`);
 
                             /**
                              * * Compare skills of existing team members with new potential student
@@ -130,22 +131,22 @@ const generate = async (students, teamSize) => {
                              */
                             for (let i = 0; i < teamMembers.length; i++) {
                                 const value = teamMembers[i];
-                                // console.log(`comparing ${value.cmd_skill} with ${potentialStudent.cmd_skills.best}`);
+                                console.log(`comparing ${value.cmd_skill} with ${potentialStudent.cmd_skills.best}`);
 
                                 if (value.cmd_skill.equals(potentialStudent.cmd_skills.best)) {
-                                    // console.log('potential new member has same skill as this team member! Grab next student!?');
+                                    console.log('potential new member has same skill as this team member! Grab next student!?');
                                     duplicate = true;
                                     break;
                                 }
                             }
 
-                            // console.log(`is there duplicate?: ${duplicate}`);
+                            console.log(`is there duplicate?: ${duplicate}`);
 
                             /**
                              * * If student has unique skill, add them to team
                              */
                             if (!duplicate) {
-                                // console.log(`potential new member doesnt have same skill as this team member!`);
+                                console.log(`potential new member doesnt have same skill as this team member!`);
                                 newStudent = potentialStudent;
 
                                 const updatedStudentArray = allStudents.filter(item => item._id != newStudent._id);

@@ -10,6 +10,8 @@ const CRUD = require(`../controller/crud-operations`);
 
 const acronymGen = require(`../public/js/acronym-generator`);
 
+const team = require(`../controller/team-generator`);
+
 router.get(`/courses`, ensureAuthenticated, (req, res) => {
     CRUD.findDocByQuery(schemas.User, `username`, req.params.username).then((userData) => {
 
@@ -188,7 +190,7 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
         } else if (userData.type == 'teacher') {
             prevURL = `/${req.params.username}/${req.params.course}/classes`;
             className = 'overflow form--popup';
-            formURL = `${req.path}/teams/team-generation`;
+            formURL = `${req.params.class}/team-generation`;
         }
 
         if (classType != 'normal') {
@@ -227,6 +229,78 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
             });
         });
     });
+});
+
+router.post('/:course/:class/team-generation', (req, res) => {
+    const teamSize = req.body.teamSize;
+
+    let allStudentObjects = [];
+    let allTeams = [];
+
+    console.log(teamSize);
+
+    // reset
+    // schemas.Team.remove((err) => {
+    //     if (err) Promise.reject(err);
+    //     console.log(`deleted`);
+    // });
+
+    // schemas.Class.updateMany({
+    //     title: `Tech-2`
+    // }, {
+    //     $set: {
+    //         teams: []
+    //     }
+    // },
+    // (err, affected) => {
+    //     console.log(`affected`, affected);
+    // }
+    // );
+
+    // schemas.Student.updateMany({}, {
+    //     $set: {
+    //         teams: []
+    //     }
+    // },
+    // (err, affected) => {
+    //     console.log(`affected`, affected);
+    // }
+    // );
+
+    CRUD.findDocByQuery(schemas.Course, 'linkRef', req.params.course).then((courseData) => {
+
+        let schema;
+
+        if (courseData.type != 'normal') {
+            schema = schemas.ElectiveClass;
+        } else {
+            schema = schemas.Class;
+        }
+
+        schema.findOne({
+            'linkRef': req.params.class
+        }).lean().populate({
+            path: 'students',
+            populate: {
+                path: 'user'
+            }
+        }).exec((err, classData) => {
+            if (err) Promise.reject(err);
+
+            allStudentObjects = classData.students;
+
+            team.generate(allStudentObjects, teamSize).then((generatedTeams) => {
+                generatedTeams.forEach((team) => {
+                    console.log(team);
+                });
+            });
+
+        });
+
+    });
+
+    res.send('check');
+
 });
 
 module.exports = router;
