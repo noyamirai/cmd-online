@@ -6,6 +6,8 @@
         <main class="dashboard">
         <% } else if (userData.user.type == 'teacher' && userData.courses != null) { %>
         <main class="overflow form--popup">
+        <% } else { %>
+         <main>
     <% } %>
         <% if (userData.user.type == 'teacher' && userData.courses != null) { %>
         <h2>Jouw vakken</h2>
