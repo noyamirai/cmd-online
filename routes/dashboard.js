@@ -20,6 +20,9 @@ router.get('/', ensureAuthenticated, (req, res) => {
             }).exec((err, result) => {
                 if (err) Promise.reject(err);
 
+                console.log(result);
+
+
                 if (result.cmd_skills.best == null) {
                     res.render('index', {
                         userData: result,

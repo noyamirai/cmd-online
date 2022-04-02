@@ -8,9 +8,14 @@
 
             <%- include ('./partials/select-input.ejs') -%>
 
+            <% if (addExtra) { %>
+                <button type="submit" name="button_action" value="add-extra">Voeg klas toe</button>
+            <% } %>
+
             <div class="btn--container">
                 <a class="btn--small btn--small-arrow" href="#"><img src="../public/images/icons/arrow-icon.svg" alt="Back icon"></a>
-                <button type="submit">Volgende vraag</button>
+                
+                <button type="submit" name="button_action" value="next-question">Volgende vraag</button>
             </div>
         </form>
 
