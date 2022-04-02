@@ -42,7 +42,7 @@ router.get(`/courses`, ensureAuthenticated, (req, res) => {
 
                 if (teacherData.courses != null) {
                     schemas.TeacherCourse.find({
-                        'userId': teacherData.id
+                        'userId': teacherData._id
                     }).lean().populate(`course`).exec(function(err, courseData) {
                         if (err) Promise.reject(err);
 
@@ -119,33 +119,45 @@ router.get('/:course', ensureAuthenticated, (req, res) => {
 
 // Only teachers will navigate here
 router.get(`/:course/classes`, ensureAuthenticated, (req, res) => {
-
     CRUD.findDocByQuery(schemas.Course, `linkRef`, req.params.course).then((paramCourse) => {
-        CRUD.findDocByQuery(schemas.User, `username`, req.params.username).then((user) => {
+        CRUD.findDocByQuery(schemas.Teacher, `user`, req.user.id).then((user) => {
 
             schemas.TeacherCourse.find({
                 'userId': user.id
-            }, (err, allTeacherCourses) => {
-                if (err) Promise.reject(err);
+            }).then((allTeacherCourses) => {
 
-                allTeacherCourses.forEach(teacherCourse => {
+                allTeacherCourses.forEach((teacherCourse) => {
                     if (teacherCourse.course == paramCourse.id) {
 
-                        schemas.Class.find({
-                            '_id': {
-                                $in: teacherCourse.classes
-                            }
-                        }, (err, classData) => {
-                            if (err) Promise.reject(err);
+                        if (paramCourse.type != 'normal') {
 
-                            res.render(`classes-overview`, {
-                                prevURL: `/${req.params.username}/courses`,
-                                bannerTitle: paramCourse.title,
-                                bannerSubtitle: `Klassenoverzicht`,
-                                classData: classData
+                            schemas.ElectiveClass.find({
+                                '_id': {
+                                    $in: teacherCourse.classes
+                                }
+                            }).then((classData) => {
+                                res.render(`classes-overview`, {
+                                    prevURL: `/${req.params.username}/courses`,
+                                    bannerTitle: paramCourse.title,
+                                    bannerSubtitle: `Klassenoverzicht`,
+                                    classData: classData
+                                });
                             });
 
-                        }).lean();
+                        } else {
+                            schemas.Class.find({
+                                '_id': {
+                                    $in: teacherCourse.classes
+                                }
+                            }).then((classData) => {
+                                res.render(`classes-overview`, {
+                                    prevURL: `/${req.params.username}/courses`,
+                                    bannerTitle: paramCourse.title,
+                                    bannerSubtitle: `Klassenoverzicht`,
+                                    classData: classData
+                                });
+                            });
+                        }
                     }
                 });
             });

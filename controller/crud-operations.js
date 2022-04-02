@@ -196,7 +196,7 @@ const removeUserFromClassesAndCourses = (schemaToFind, userId, type) => {
  *   @param savedInfo: saved data from form (Object)
  *   @param userId: which user has to be removed from this class? (ObjectId)
  **/
-const addUserToClassesAndCourses = (schemaToFind, savedInfo, userId) => {
+const addStudentToClassesAndCourses = (schemaToFind, savedInfo, userId) => {
     return new Promise((resolve) => {
         let allCourses = [];
 
@@ -246,11 +246,59 @@ const addUserToClassesAndCourses = (schemaToFind, savedInfo, userId) => {
     });
 };
 
+/**
+ *   addTeacherToClassesAndCourses
+ *   * Updates all classes and courses by adding userId to their respective reference id field (students or teachers)
+ *
+ *   @param schemaToFind: in which collection/schema is the document you want to update located? (Model: Student or Teacher)
+ *   @param savedInfo: saved data from form (Object)
+ *   @param userId: which user has to be removed from this class? (ObjectId)
+ **/
+const addTeacherToClassesAndCourses = (schemaToFind, savedInfo, userId) => {
+    return new Promise((resolve) => {
+
+        const courseType = savedInfo.course_type;
+
+        if (courseType != 'normal') {
+
+            schemaToFind.findOneAndUpdate({
+                'user': userId
+            }, {
+                classes: {
+                    elective: savedInfo.course_classes
+                },
+                courses: savedInfo.teacher_course,
+            }, {
+                returnNewDocument: true
+            }).then((object) => {
+                resolve(object);
+            });
+
+        } else {
+
+            schemaToFind.findOneAndUpdate({
+                'user': userId
+            }, {
+                classes: {
+                    normal: savedInfo.course_classes
+                },
+                courses: savedInfo.teacher_course,
+            }, {
+                returnNewDocument: true
+            }).then((object) => {
+                resolve(object);
+            });
+
+        }
+    });
+};
+
 module.exports = {
     createDoc,
     createMultipleDocs,
     findDocByQuery,
     addIdReferenceToDoc,
     removeUserFromClassesAndCourses,
-    addUserToClassesAndCourses
+    addStudentToClassesAndCourses,
+    addTeacherToClassesAndCourses
 };
