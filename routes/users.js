@@ -93,9 +93,9 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                         is_admin: false
                     }).then((userObject) => {
                         if (type == 'student') {
-                            CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: null, courses: null });
+                            CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: { normal: null, elective: null }, courses: null });
                         } else {
-                            CRUD.createDoc(Teacher, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: null, courses: null });
+                            CRUD.createDoc(Teacher, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: { normal: null, elective: null }, courses: null });
                         }
                         res.redirect('/users/login');
                     });
