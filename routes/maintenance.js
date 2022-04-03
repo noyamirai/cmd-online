@@ -90,7 +90,8 @@ router.post('/courses', (req, res) => {
                 bannerSubtitle: `Spannend!`,
                 formAction: 'courses/delete',
                 courseData: allCourses,
-                topic: 'vakken'
+                topic: 'vakken',
+                course: true
             });
         });
     }
@@ -157,10 +158,11 @@ router.post('/courses/delete', (req, res) => {
         }).then((courses) => {
 
             courses.forEach((course) => {
-                CRUD.deleteCourses(course.id, course.type).then(() => {
-                    res.redirect(`${course.linkRef}/done`);
-                });
+                console.log(`deleting course: ${course.id}`);
+                CRUD.deleteCourses(course.id, course.type);
             });
+
+            res.redirect(`course/done`);
 
         });
     } else {
@@ -196,13 +198,13 @@ router.post('/classes', (req, res) => {
 router.post('/classes/:class_type/action', (req, res) => {
     let type;
 
+    if (req.params.class_type != 'normal') {
+        type = 'project';
+    } else {
+        type = 'normal';
+    }
+
     if (req.body.class_option == 'add') {
-            
-        if (req.params.class_type != 'normal') {
-            type = 'project';
-        } else {
-            type = 'normal';
-        }
 
         schemas.Course.find({
             'type': type
@@ -222,7 +224,19 @@ router.post('/classes/:class_type/action', (req, res) => {
         });
 
     } else if (req.body.class_option == 'delete') {
-        // todo
+        const classSchema = CRUD.getClassSchema(req.params.class_type);
+
+        classSchema.find({}).then((allClasses) => {
+
+            res.render('./cms/overview', {
+                bannerTitle: 'Klas verwijderen',
+                bannerSubtitle: `Spannend!`,
+                formAction: `classes/${req.params.class_type}/delete`,
+                classData: allClasses.sort((a, b) => parseFloat(a.linkRef) - parseFloat(b.linkRef)),
+                topic: 'klassen',
+                course: false
+            });
+        });
     }
 });
 
@@ -293,6 +307,50 @@ router.post('/classes/:class_type/add', (req, res) => {
             });
         });
     });
+});
+
+router.post('/classes/:class_type/delete', (req, res) => {
+    const classesToDelete = req.body.classesToDelete;
+    const classSchema = CRUD.getClassSchema(req.params.class_type);
+
+    let classType;
+
+    if (req.params.class_type != 'normal') {
+        classType = 'elective';
+    } else {
+        classType = 'normal';
+    }
+
+    console.log(classesToDelete);
+
+    if (Array.isArray(classesToDelete)) {
+
+        classSchema.find({
+            'linkRef': {
+                $in: classesToDelete
+            }
+        }).then((classData) => {
+
+            classData.forEach((classObject) => {
+                console.log(`deleting class: ${classObject.id}`);
+                CRUD.deleteClasses(classObject.id, classType);
+            });
+
+            res.redirect(`done`);
+
+        });
+        
+    } else {
+
+        CRUD.findDocByQuery(classSchema, 'linkRef', classesToDelete).then((classData) => {
+            console.log(`deleting class: ${classData.id}`);
+
+            CRUD.deleteClasses(classData.id, classType).then(() => {
+                res.redirect(`done`);
+            });
+        });
+
+    }
 });
 
 
