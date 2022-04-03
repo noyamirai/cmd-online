@@ -121,7 +121,27 @@ ul, ol {
 
 /* =============================================================================
   #MAIN
+<<<<<<< HEAD
 ============================================================================= */
+main {
+  position: relative;
+
+  padding: var(--default-padding) 0 110px 0px;
+  margin: 0 var(--default-padding);
+}
+
+  main section + section {
+    margin-top: var(--default-big-padding);
+  }
+
+.form--overview  {
+  padding-bottom: var(--default-padding);
+}
+
+/* =============================================================================
+  #DEFAULT GRID
+============================================================================= */
+
 main {
   position: relative;
 

@@ -50,7 +50,6 @@ app.use('/settings', require('./routes/settings'));
 app.use('/maintenance', require('./routes/maintenance'));
 app.use('/skills', require('./routes/skills'));
 
-
 app.get(`*`, (req, res) => {
     res.status(404).send(`Page not found!`);
 });

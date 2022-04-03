@@ -10,6 +10,15 @@ const schemas = require('../models/schemas');
 const CRUD = require(`../controller/crud-operations`);
 
 router.get('/', ensureAuthenticated, (req, res) => {
+    CRUD.findDocByQuery(schemas.User, 'username', req.user.username).then((userData) => {
+
+        if (userData.type == 'student') {
+            schemas.Student.findOne({
+                'user': userData.id
+            }).lean().populate({
+                path: `user classes.normal`
+            }).exec((err, result) => {
+                if (err) Promise.reject(err);
     if (req.user.type == 'student') {
         schemas.Student.findOne({
             'user': req.user.id
@@ -35,6 +44,15 @@ router.get('/', ensureAuthenticated, (req, res) => {
                         userSkill: skill,
                     });
                 });
+            });
+
+        } else if (userData.type == 'teacher') {
+            schemas.Teacher.findOne({
+                'user': userData.id
+            }).lean().populate({
+                path: `user`
+            }).exec((err, result) => {
+                if (err) Promise.reject(err);
             }
         });
 
