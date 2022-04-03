@@ -297,61 +297,82 @@ router.post('/:course/:class/teams/create', (req, res) => {
             if (err) Promise.reject(err);
 
             let allStudentIds = [];
+            let amountOfStudents = classData.students.length - 1;
 
-            allStudentObjects = classData.students;
+            // Only allow team generation when there are enough students in class
+            if (amountOfStudents >= 8) {
 
-            allStudentObjects.forEach((student) => {
-                allStudentIds.push(student._id);
-            });
+                allStudentObjects = classData.students;
 
-            CRUD.resetTeams(classData.teams, classSchema, classData.linkRef, allStudentIds).then(() => {
-                console.log('DONE! Start generating new teams');
-                
-                team.generate(allStudentObjects, teamSize).then((generatedTeams) => {
-                    generatedTeams.forEach((team) => {
+                allStudentObjects.forEach((student) => {
+                    allStudentIds.push(student._id);
+                });
 
-                        CRUD.createDoc(schemas.Team, {
-                            name: team.name,
-                            number: team.number,
-                            students: team.students,
-                            class: { [classType]: classData._id },
-                            course: courseData.id
-                        }).then((doc) => {
+                CRUD.resetTeams(classData.teams, classSchema, classData.linkRef, allStudentIds).then(() => {
+                    console.log('DONE! Start generating new teams');
 
-                            // add team id to class teams
-                            CRUD.addIdReferenceToDoc(classSchema, classData._id, 'teams', doc._id);
+                    team.generate(allStudentObjects, teamSize).then((generatedTeams) => {
+                        generatedTeams.forEach((team) => {
 
-                            doc.students.forEach((object) => {
-                                // add team id to teams of each student
-                                CRUD.addIdReferenceToDoc(schemas.Student, object.student._id, 'teams', doc._id);
-                            });
+                            CRUD.createDoc(schemas.Team, {
+                                name: team.name,
+                                number: team.number,
+                                students: team.students,
+                                class: {
+                                    [classType]: classData._id
+                                },
+                                course: courseData.id
+                            }).then((doc) => {
 
-                            schemas.Team.findById(doc.id).lean().populate({
-                                path: `students.student`,
-                                select: `user`,
-                                populate: {
-                                    path: `user`,
-                                    select: `name profile_pic`
-                                }
-                            }).populate('students.cmd_skill').exec((err, teamData) => {
-                                if (err) Promise.reject(err);
+                                // add team id to class teams
+                                CRUD.addIdReferenceToDoc(classSchema, classData._id, 'teams', doc._id);
 
-                                allTeams.push(teamData);
+                                doc.students.forEach((object) => {
+                                    // add team id to teams of each student
+                                    CRUD.addIdReferenceToDoc(schemas.Student, object.student._id, 'teams', doc._id);
+                                });
 
-                                if (allTeams.length === generatedTeams.length) {
-                                    
-                                    res.render('team-details', {
-                                        allTeams: allTeams.sort((a, b) => parseFloat(a.number) - parseFloat(b.number)),
-                                        userData: null,
-                                        courseData: null,
-                                        memberView: false
-                                    });
-                                }
+                                schemas.Team.findById(doc.id).lean().populate({
+                                    path: `students.student`,
+                                    select: `user`,
+                                    populate: {
+                                        path: `user`,
+                                        select: `name profile_pic`
+                                    }
+                                }).populate('students.cmd_skill').exec((err, teamData) => {
+                                    if (err) Promise.reject(err);
+
+                                    allTeams.push(teamData);
+
+                                    if (allTeams.length === generatedTeams.length) {
+
+                                        res.render('team-details', {
+                                            allTeams: allTeams.sort((a, b) => parseFloat(a.number) - parseFloat(b.number)),
+                                            userData: null,
+                                            courseData: null,
+                                            memberView: false,
+                                            error: false
+                                        });
+                                    }
+                                });
                             });
                         });
                     });
                 });
-            });
+
+            } else {
+                // TODO: CHECK IF WORKS
+                let errors = [];
+                errors.push({ msg: 'Not enough students :(' });
+
+                res.render('team-details', {
+                    allTeams: null,
+                    userData: null,
+                    courseData: null,
+                    memberView: false,
+                    error: true
+                });
+            }
         });
     });
 });
