@@ -18,12 +18,10 @@ router.get('/', ensureAuthenticated, (req, res) => {
         }).populate({
             path: 'teams',
             populate: {
-                path: 'course'
+                path: 'course class.elective class.normal'
             }
         }).exec((err, result) => {
             if (err) Promise.reject(err);
-
-            console.log(result);
 
             if (result.cmd_skills.best == null) {
                 res.render('index', {

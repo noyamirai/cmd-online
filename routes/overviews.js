@@ -436,4 +436,39 @@ router.get(`/:course/:class/teams`, ensureAuthenticated, (req, res) => {
     });
 });
 
+router.get('/:course/:class/teams/:team_number/overview', (req, res) => {
+    let prevURL;
+
+    if (req.user.type == 'student') {
+        prevURL = `/`;
+    } else if (req.user.type == 'teacher') {
+        prevURL = `/${req.params.username}/${req.params.course}/${req.params.class}/teams`;
+    }
+
+    schemas.Team.findOne({
+        'number': req.params.team_number
+    }).lean().populate({
+        path: `students.student`,
+        select: `user`,
+        populate: {
+            path: `user`,
+            select: `name profile_pic`
+        }
+    }).populate({
+        path: `students.cmd_skill`,
+        select: `title`
+    }).exec((err, teamData) => {
+
+        res.render(`team-details`, {
+            memberView: true,
+            studentData: teamData.students,
+            prevURL: prevURL,
+            bannerTitle: teamData.name,
+            bannerSubtitle: `Team overzicht`,
+            error: false
+        });
+    });
+
+});
+
 module.exports = router;
