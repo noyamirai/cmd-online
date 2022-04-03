@@ -141,35 +141,21 @@ router.post('/courses/add', (req, res) => {
                 foundYear.save();
             });
 
-            res.redirect(`${courseData.linkRef}/added`);
+            res.redirect(`${courseData.linkRef}/done`);
         });
     });
 });
 
-router.get('/:type/:item/added', (req, res) => {
-    let schema;
-    let textStart;
-
-    if (req.params.type == 'courses') {
-        schema = schemas.Course;
-        textStart = 'Het vak';
-    } else if (req.params.type == 'classes') {
-        schema = schemas.Class;
-        textStart = 'De klas';
-    }
-
-    CRUD.findDocByQuery(schema, 'linkRef', req.params.item).then((data) => {
-        res.render('./cms/confirmation', {
-            createDoc: `${textStart} "${data.title}"`,
-            bannerTitle: 'CMS',
-            bannerSubtitle: `Bevestiging`,
-        });
+router.get('/:type/:item/done', (req, res) => {
+    res.render('./cms/confirmation', {
+        bannerTitle: 'CMS',
+        bannerSubtitle: `Bevestiging`,
     });
 });
 
 router.post('/courses/delete', (req, res) => {
-    const coursesToDelete = req.body.courseToDelete;
-
+    const coursesToDelete = req.body.coursesToDelete;
+    console.log(coursesToDelete);
     if (Array.isArray(coursesToDelete)) {
         schemas.Course.find({
             'linkRef': {
@@ -178,17 +164,20 @@ router.post('/courses/delete', (req, res) => {
         }).then((courses) => {
 
             courses.forEach((course) => {
-                CRUD.deleteCourses(course.id, course.type);
+                CRUD.deleteCourses(course.id, course.type).then(() => {
+                    res.redirect(`${course.linkRef}/done`);
+                });
             });
 
         });
     } else {
         CRUD.findDocByQuery(schemas.Course, 'linkRef', coursesToDelete).then((courseData) => {
             console.log(`deleting course: ${courseData.id}`);
-            CRUD.deleteCourses(courseData.id, courseData.type);
+            CRUD.deleteCourses(courseData.id, courseData.type).then(() => {
+                res.redirect(`${courseData.linkRef}/done`);
+            });
         });
     }
-    res.send('check');
 
 });
 

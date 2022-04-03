@@ -380,8 +380,10 @@ const deleteCourses = async (courseToDelete, courseType) => {
             $pull: {
                 'courses': courseToDelete
             }
-        }).then(console.log('Courses deleted from object'));
+        });
     });
+
+    console.log('Course deleted from other relevant collections');
 
     schemas.Team.find({
         'course': courseToDelete
