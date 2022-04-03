@@ -19,7 +19,79 @@ fieldset {
     flex-direction: row;
 }
 
+.form__checkbox-container label {
+    position: relative;
+
+    background-color: var(--white-color);
+    border: var(--border-settings);
+    border-radius: var(--border-radius);
+
+    padding: 16px;
+
+    transition: all 250ms ease-in-out;
+}
+
+    .form__checkbox-container label > span {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        top: 50%;
+        right: 16px;
+
+        transform: translateY(-50%);
+
+        width: 30px;
+        height: 30px;
+
+        border-radius: 50%;
+
+        background-color: var(--white-color);
+        border: var(--border-settings);
+    }
+
+    .form__checkbox-container .input--custom:checked + label {
+        background-color: var(--secondary-color);
+        color: var(--white-color)
+    }
+
+        @keyframes checkmarkAnimation {
+            0% {
+                opacity: 0;
+                transform: scale(1.4);
+            }
+
+            50% {
+                opacity: 100%;
+                transform: scale(0.8);
+            }
+
+            100% {
+                opacity: 100%;
+                transform: scale(1);
+            }
+        }
+
+        .form__checkbox-container label > span img {
+            opacity: 0;
+            width: 14px;
+            height: auto;
+
+            transition: all 250ms ease-in-out;
+            animation-duration: .55s;
+            animation-timing-function: linear;
+            animation-fill-mode: forwards;
+            animation-direction: normal;
+            animation-iteration-count: 1;
+        }
+
+        .form__checkbox-container .input--custom:checked + label > span img {
+            animation-name: checkmarkAnimation;
+        }
+
 fieldset + fieldset { margin-top: var(--default-big-padding); }
+.form__checkbox-container + .form__checkbox-container { margin-top: 12px; }
 
     fieldset label {
         display: block;
@@ -169,6 +241,12 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
             text-align: center;
             text-decoration: underline;
             color: var(--grey-text-color);
+        }
+        
+        .form--overview .btn--container > a.btn:first-of-type {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            text-decoration: none;
         }
 /* =============================================================================
   #POP-UP FORM

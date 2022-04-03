@@ -68,7 +68,8 @@ router.post('/courses', (req, res) => {
                 {
                     title: 'Profileringsvak',
                     linkRef: 'elective'
-                }];
+                }
+                ];
 
                 res.render('./cms/form', {
                     bannerTitle: 'Vak toevoegen',
@@ -82,7 +83,17 @@ router.post('/courses', (req, res) => {
         });
 
     } else if (req.body.course_option == 'delete') {
-        // do stuff
+
+        schemas.Course.find({}).then((allCourses) => {
+
+            res.render('./cms/overview', {
+                bannerTitle: 'Vak verwijderen',
+                bannerSubtitle: `Spannend!`,
+                formAction: 'courses/delete',
+                courseData: allCourses,
+                topic: 'vakken'
+            });
+        });
     }
 });
 
@@ -112,23 +123,73 @@ router.post('/courses/add', (req, res) => {
             type: req.body.type
         }).then((courseData) => {
 
-            console.log(courseData);
-
-            schemas.SchoolBloks.find({ '_id': { $in: courseData.in_blok }}).then((foundBloks) => {
+            schemas.SchoolBloks.find({
+                '_id': {
+                    $in: courseData.in_blok
+                }
+            }).then((foundBloks) => {
                 foundBloks.forEach((blok) => {
                     blok.courses.push(courseData);
                     blok.save();
                 });
             });
 
-            schemas.SchoolYear.findOne({ 'linkRef': courseData.in_year}).then((foundYear) => {
+            schemas.SchoolYear.findOne({
+                'linkRef': courseData.in_year
+            }).then((foundYear) => {
                 foundYear.courses.push(courseData);
                 foundYear.save();
             });
 
-            res.send('course aangemaakt');
+            res.redirect(`${courseData.linkRef}/added`);
         });
     });
+});
+
+router.get('/:type/:item/added', (req, res) => {
+    let schema;
+    let textStart;
+
+    if (req.params.type == 'courses') {
+        schema = schemas.Course;
+        textStart = 'Het vak';
+    } else if (req.params.type == 'classes') {
+        schema = schemas.Class;
+        textStart = 'De klas';
+    }
+
+    CRUD.findDocByQuery(schema, 'linkRef', req.params.item).then((data) => {
+        res.render('./cms/confirmation', {
+            createDoc: `${textStart} "${data.title}"`,
+            bannerTitle: 'CMS',
+            bannerSubtitle: `Bevestiging`,
+        });
+    });
+});
+
+router.post('/courses/delete', (req, res) => {
+    const coursesToDelete = req.body.courseToDelete;
+
+    if (Array.isArray(coursesToDelete)) {
+        schemas.Course.find({
+            'linkRef': {
+                $in: coursesToDelete
+            }
+        }).then((courses) => {
+
+            courses.forEach((course) => {
+                CRUD.deleteCourses(course.id, course.type);
+            });
+
+        });
+    } else {
+        CRUD.findDocByQuery(schemas.Course, 'linkRef', coursesToDelete).then((courseData) => {
+            console.log(`deleting course: ${courseData.id}`);
+            CRUD.deleteCourses(courseData.id, courseData.type);
+        });
+    }
+    res.send('check');
+
 });
 
 module.exports = router;

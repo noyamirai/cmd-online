@@ -313,7 +313,7 @@ const resetTeams = async (teamsToDelete, classTypeSchema, classLinkRef, studentI
         '_id': {
             $in: teamsToDelete
         }
-    }).then('All teams removed from teams collection');
+    }).then(console.log('All teams removed from teams collection'));
 
     classTypeSchema.findOneAndUpdate({
         'linkRef': classLinkRef
@@ -347,7 +347,86 @@ const getClassSchema = (courseType) => {
     }
 };
 
+/**
+ *   deleteCourse
+ *   * Removes courses from relevant collections
+ *
+ *   @param courseToDelete: which course has to be deleted? (ObjectId)
+ *   @param courseType: what type of course is it? (normal or not)
+ **/
+const deleteCourses = async (courseToDelete, courseType) => {
+    let classTypeSchema = getClassSchema(courseType);
 
+    const toBeUpdated = [
+        schemas.Teacher,
+        schemas.Student,
+        schemas.SchoolBloks,
+        schemas.SchoolYear,
+        classTypeSchema
+    ];
+
+    schemas.Course.deleteMany({
+        '_id': courseToDelete
+    }).then(console.log(`All courses deleted from course collection`));
+
+    schemas.TeacherCourse.deleteMany({
+        'course': courseToDelete
+    }).then(console.log(`All courses deleted from teacher course collection`));
+
+    toBeUpdated.forEach((schema) => {
+        schema.updateMany({
+            'courses': courseToDelete
+        }, {
+            $pull: {
+                'courses': courseToDelete
+            }
+        }).then(console.log('Courses deleted from object'));
+    });
+
+    schemas.Team.find({
+        'course': courseToDelete
+    }).then((teamObjects) => {
+
+        if (teamObjects.length) {
+            console.log('Teams linked to course');
+
+            let teamIds = [];
+
+            teamObjects.forEach((team) => {
+                teamIds.push(team.id);
+            });
+
+            schemas.Team.deleteMany({
+                'course': courseToDelete
+            }).then(() => {
+                console.log(`Deleted all teams with connection to course`);
+
+                schemas.Student.updateMany({
+                    'teams': {
+                        $in: teamIds
+                    }
+                }, {
+                    $pullAll: {
+                        'teams': teamIds
+                    }
+                }).then(console.log('Teams with connection to course deleted from student object'));
+
+                classTypeSchema.updateMany({
+                    'teams': {
+                        $in: teamIds
+                    }
+                }, {
+                    $pullAll: {
+                        'teams': teamIds
+                    }
+                }).then(console.log('Teams with connection to course deleted from class object'));
+            });
+
+        } else {
+            console.log('No teams linked to course');
+        }
+    });
+};
 
 module.exports = {
     createDoc,
@@ -358,5 +437,6 @@ module.exports = {
     addStudentToClassesAndCourses,
     addTeacherToClassesAndCourses,
     resetTeams,
-    getClassSchema
+    getClassSchema,
+    deleteCourses
 };

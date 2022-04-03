@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "start:dev": "nodemon server.js",
-    "prestart:dev": "gulp"
+    "start:dev": "gulp"
   },
   "repository": {
     "type": "git",
@@ -26,6 +25,7 @@
     "gulp-clean-css": "^4.3.0",
     "gulp-cli": "^2.3.0",
     "gulp-concat": "^2.6.1",
+    "gulp-nodemon": "^2.5.0",
     "nodemon": "^2.0.15"
   },
   "dependencies": {
