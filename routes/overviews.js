@@ -122,7 +122,6 @@ router.get('/:course', ensureAuthenticated, (req, res) => {
 
 //Class details directly after clicking on 'main' class (only students will navigate here)
 router.get('/class/:class', ensureAuthenticated, (req, res) => {
-
     schemas.Class.findOne({
         'linkRef': req.params.class
     }).lean().populate({
@@ -159,35 +158,20 @@ router.get(`/:course/classes`, ensureAuthenticated, (req, res) => {
                 allTeacherCourses.forEach((teacherCourse) => {
                     if (teacherCourse.course == paramCourse.id) {
 
-                        if (paramCourse.type != 'normal') {
+                        const classSchema = CRUD.getClassSchema(paramCourse.type);
 
-                            schemas.ElectiveClass.find({
-                                '_id': {
-                                    $in: teacherCourse.classes
-                                }
-                            }).then((classData) => {
-                                res.render(`classes-overview`, {
-                                    prevURL: `/${req.params.username}/courses`,
-                                    bannerTitle: paramCourse.title,
-                                    bannerSubtitle: `Klassenoverzicht`,
-                                    classData: classData
-                                });
+                        classSchema.find({
+                            '_id': {
+                                $in: teacherCourse.classes
+                            }
+                        }).then((classData) => {
+                            res.render(`classes-overview`, {
+                                prevURL: `/${req.params.username}/courses`,
+                                bannerTitle: paramCourse.title,
+                                bannerSubtitle: `Klassenoverzicht`,
+                                classData: classData
                             });
-
-                        } else {
-                            schemas.Class.find({
-                                '_id': {
-                                    $in: teacherCourse.classes
-                                }
-                            }).then((classData) => {
-                                res.render(`classes-overview`, {
-                                    prevURL: `/${req.params.username}/courses`,
-                                    bannerTitle: paramCourse.title,
-                                    bannerSubtitle: `Klassenoverzicht`,
-                                    classData: classData
-                                });
-                            });
-                        }
+                        });
                     }
                 });
             });
@@ -200,7 +184,6 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
 
     CRUD.findDocByQuery(schemas.Course, 'linkRef', req.params.course).then((courseData) => {
         let prevURL;
-        let schema;
         let className;
         let formURL;
 
@@ -229,15 +212,10 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
             formURL = `/${req.params.username}/${req.params.course}/${req.params.class}/teams/create`;
         }
 
-
-        if (courseData.type != 'normal') {
-            schema = schemas.ElectiveClass;
-        } else {
-            schema = schemas.Class;
-        }
+        const classSchema = CRUD.getClassSchema(courseData.type);
 
         // insert user info based on id      
-        schema.findOne({
+        classSchema.findOne({
             'linkRef': req.params.class
         }).lean().populate({
             path: 'teachers',
@@ -270,17 +248,11 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
 
 // Team form page (teacher can only get here when JS is disabled)
 router.get(`/:course/:class/team-form`, ensureAuthenticated, (req, res) => {
-    let schema;
 
     CRUD.findDocByQuery(schemas.Course, 'linkRef', req.params.course).then((courseData) => {
+        const classSchema = CRUD.getClassSchema(courseData.type);
 
-        if (courseData.type != 'normal') {
-            schema = schemas.ElectiveClass;
-        } else {
-            schema = schemas.Class;
-        }
-
-        CRUD.findDocByQuery(schema, 'linkRef', req.params.class).then((classObject) => {
+        CRUD.findDocByQuery(classSchema, 'linkRef', req.params.class).then((classObject) => {
 
             res.render('team-generation', {
                 bannerTitle: classObject.title,
@@ -302,14 +274,13 @@ router.post('/:course/:class/teams/create', (req, res) => {
     let allTeams = [];
 
     CRUD.findDocByQuery(schemas.Course, 'linkRef', req.params.course).then((courseData) => {
-        let classSchema;
         let classType;
 
+        const classSchema = CRUD.getClassSchema(courseData.type);
+
         if (courseData.type != 'normal') {
-            classSchema = schemas.ElectiveClass;
             classType = 'elective';
         } else {
-            classSchema = schemas.Class;
             classType = 'normal';
         }
 
@@ -411,7 +382,6 @@ router.post('/:course/:class/teams/create', (req, res) => {
 // Class home page (only visible if class has teams already)
 router.get(`/:course/:class/home`, ensureAuthenticated, (req, res) => {
     let prevURL;
-    let schema;
 
     if (req.user.type == 'student') {
         prevURL = `/${req.params.username}/courses`;
@@ -421,13 +391,9 @@ router.get(`/:course/:class/home`, ensureAuthenticated, (req, res) => {
 
     CRUD.findDocByQuery(schemas.Course, 'linkRef', req.params.course).then((courseData) => {
 
-        if (courseData.type != 'normal') {
-            schema = schemas.ElectiveClass;
-        } else {
-            schema = schemas.Class;
-        }
+        const classSchema = CRUD.getClassSchema(courseData.type);
 
-        CRUD.findDocByQuery(schema, `linkRef`, req.params.class).then((classObject) => {
+        CRUD.findDocByQuery(classSchema, `linkRef`, req.params.class).then((classObject) => {
 
             // insert user info based on id  
             res.render(`class-home`, {
@@ -443,16 +409,11 @@ router.get(`/:course/:class/home`, ensureAuthenticated, (req, res) => {
 
 // Get all teams of specific course class
 router.get(`/:course/:class/teams`, ensureAuthenticated, (req, res) => {
-    let schema;
 
     CRUD.findDocByQuery(schemas.Course, 'linkRef', req.params.course).then((courseData) => {
-        if (courseData.type != 'normal') {
-            schema = schemas.ElectiveClass;
-        } else {
-            schema = schemas.Class;
-        }
+        const classSchema = CRUD.getClassSchema(courseData.type);
 
-        schema.findOne({
+        classSchema.findOne({
             'linkRef': req.params.class
         }).lean().populate({
             path: `teams`,

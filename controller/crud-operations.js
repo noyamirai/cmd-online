@@ -190,9 +190,9 @@ const removeUserFromClassesAndCourses = (schemaToFind, userId, type) => {
 
 /**
  *   addStudentToClassesAndCourses
- *   * Updates all classes and courses by adding userId to their respective reference id field (students or teachers)
+ *   * Updates all classes and courses by adding userId to their respective reference id field (students)
  *
- *   @param schemaToFind: in which collection/schema is the document you want to update located? (Model: Student or Teacher)
+ *   @param schemaToFind: in which collection/schema is the document you want to update located? (Model: Student)
  *   @param savedInfo: saved STUDENT data from form (Object)
  *   @param userId: which user has to be removed from this class? (ObjectId)
  **/
@@ -254,9 +254,9 @@ const addStudentToClassesAndCourses = (schemaToFind, savedInfo, userId) => {
 
 /**
  *   addTeacherToClassesAndCourses
- *   * Updates all classes and courses by adding userId to their respective reference id field (students or teachers)
+ *   * Updates all classes and courses by adding userId to their respective reference id field (teachers)
  *
- *   @param schemaToFind: in which collection/schema is the document you want to update located? (Model: Student or Teacher)
+ *   @param schemaToFind: in which collection/schema is the document you want to update located? (Model: Teacher)
  *   @param savedInfo: saved TEACHER data from form (Object)
  *   @param userId: which user has to be removed from this class? (ObjectId)
  **/
@@ -330,8 +330,24 @@ const resetTeams = async (teamsToDelete, classTypeSchema, classLinkRef, studentI
             'teams': teamsToDelete
         }
     }).then(console.log('Team removed from student objects'));
-
 };
+
+/**
+ *   getClassSchema
+ *   * Returns correct class schema based on course type
+ *
+ *   @param courseType: what kind of course is it? (String)
+ **/
+const getClassSchema = (courseType) => {
+
+    if (courseType != 'normal') {
+        return schemas.ElectiveClass;
+    } else {
+        return schemas.Class;
+    }
+};
+
+
 
 module.exports = {
     createDoc,
@@ -341,5 +357,6 @@ module.exports = {
     removeUserFromClassesAndCourses,
     addStudentToClassesAndCourses,
     addTeacherToClassesAndCourses,
-    resetTeams
+    resetTeams,
+    getClassSchema
 };
