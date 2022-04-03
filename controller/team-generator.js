@@ -24,7 +24,7 @@ const generate = async (students, teamSize) => {
         };
         allTeams.push(teamObject);
 
-        // console.log(`TEAM ${teamCounter}`);
+        console.log(`TEAM ${teamCounter}`);
 
         /**
          * * Creating x amount of students based on @param teamSize

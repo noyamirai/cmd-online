@@ -112,7 +112,14 @@ const teamSchema = new mongoose.Schema({
         }
     }],
     class: {
-        type: mongoose.Schema.Types.ObjectId, ref: `Class`
+        normal: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `Class`
+        },
+        elective: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `ElectiveClass`
+        }
     },
     course: {
         type: mongoose.Schema.Types.ObjectId,

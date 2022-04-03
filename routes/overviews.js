@@ -199,7 +199,7 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
             }
 
             className = 'overflow form--popup';
-            formURL = `/teams/create`;
+            formURL = `/${req.params.username}/${req.params.course}/${req.params.class}/teams/create`;
         }
 
 
@@ -233,7 +233,6 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
                 userData: req.user,
                 bannerTitle: classData.title,
                 bannerSubtitle: `${classData.students.length} studenten`,
-                linkRef: classData.linkRef,
                 classTeams: classData.teams,
                 className: className
             });
@@ -277,36 +276,15 @@ router.post('/:course/:class/teams/create', (req, res) => {
 
     CRUD.findDocByQuery(schemas.Course, 'linkRef', req.params.course).then((courseData) => {
         let classSchema;
+        let classType;
 
         if (courseData.type != 'normal') {
             classSchema = schemas.ElectiveClass;
+            classType = 'elective';
         } else {
             classSchema = schemas.Class;
+            classType = 'normal';
         }
-
-        // reset
-        schemas.Team.remove((err) => {
-            if (err) Promise.reject(err);
-            console.log(`deleted`);
-        });
-
-        classSchema.updateMany({
-            linkRef: req.params.class
-        }, {
-            $set: {
-                teams: []
-            }
-        }, (err, affected) => {
-            console.log(`affected`, affected);
-        });
-
-        schemas.Student.updateMany({}, {
-            $set: {
-                teams: []
-            }
-        }, (err, affected) => {
-            console.log(`affected`, affected);
-        });
 
         classSchema.findOne({
             'linkRef': req.params.class
@@ -318,52 +296,58 @@ router.post('/:course/:class/teams/create', (req, res) => {
         }).exec((err, classData) => {
             if (err) Promise.reject(err);
 
+            let allStudentIds = [];
+
             allStudentObjects = classData.students;
 
-            team.generate(allStudentObjects, teamSize).then((generatedTeams) => {
-                generatedTeams.forEach((team) => {
+            allStudentObjects.forEach((student) => {
+                allStudentIds.push(student._id);
+            });
 
-                    CRUD.createDoc(schemas.Team, {
-                        name: team.name,
-                        number: team.number,
-                        students: team.students,
-                        class: classData.id,
-                        course: courseData.id
-                    }).then((doc) => {
+            CRUD.resetTeams(classData.teams, classSchema, classData.linkRef, allStudentIds).then(() => {
+                console.log('DONE! Start generating new teams');
+                
+                team.generate(allStudentObjects, teamSize).then((generatedTeams) => {
+                    generatedTeams.forEach((team) => {
 
-                        // add team id to class teams
-                        CRUD.addIdReferenceToDoc(classSchema, classData._id, 'teams', doc._id);
+                        CRUD.createDoc(schemas.Team, {
+                            name: team.name,
+                            number: team.number,
+                            students: team.students,
+                            class: { [classType]: classData._id },
+                            course: courseData.id
+                        }).then((doc) => {
 
-                        doc.students.forEach((object) => {
-                            // add team id to teams of each student
-                            CRUD.addIdReferenceToDoc(schemas.Student, object.student._id, 'teams', doc._id);
-                        });
+                            // add team id to class teams
+                            CRUD.addIdReferenceToDoc(classSchema, classData._id, 'teams', doc._id);
 
-                        schemas.Team.findById(doc.id).lean().populate({
-                            path: `students.student`,
-                            select: `user`,
-                            populate: {
-                                path: `user`,
-                                select: `name profile_pic`
-                            }
-                        }).populate('students.cmd_skill').exec((err, teamData) => {
-                            if (err) Promise.reject(err);
+                            doc.students.forEach((object) => {
+                                // add team id to teams of each student
+                                CRUD.addIdReferenceToDoc(schemas.Student, object.student._id, 'teams', doc._id);
+                            });
 
-                            allTeams.push(teamData);
+                            schemas.Team.findById(doc.id).lean().populate({
+                                path: `students.student`,
+                                select: `user`,
+                                populate: {
+                                    path: `user`,
+                                    select: `name profile_pic`
+                                }
+                            }).populate('students.cmd_skill').exec((err, teamData) => {
+                                if (err) Promise.reject(err);
 
-                            if (allTeams.length === generatedTeams.length) {
-                                allTeams.forEach((team) => {
-                                    team.students.forEach(member => {
-                                        console.log(member.cmd_skill);
+                                allTeams.push(teamData);
+
+                                if (allTeams.length === generatedTeams.length) {
+                                    
+                                    res.render('team-details', {
+                                        allTeams: allTeams.sort((a, b) => parseFloat(a.number) - parseFloat(b.number)),
+                                        userData: null,
+                                        courseData: null,
+                                        memberView: false
                                     });
-                                });
-                                res.render('team-details', {
-                                    allTeams: allTeams.sort((a, b) => parseFloat(a.number) - parseFloat(b.number)),
-                                    userData: null,
-                                    courseData: null,
-                                    memberView: false
-                                });
-                            }
+                                }
+                            });
                         });
                     });
                 });
