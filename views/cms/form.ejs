@@ -5,7 +5,13 @@
 
     <main class="form--overview">
 
-        <%- include ('../cms/partials/course-form.ejs') -%>
+        <% if (course) { %>
+            <%- include ('../cms/partials/course-form.ejs') -%>
+            
+        <% } else { %>
+            <%- include ('../cms/partials/class-form.ejs') -%>
+        <% } %>
+
         
     </main>
 
