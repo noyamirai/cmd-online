@@ -1,41 +1,31 @@
 const express = require('express');
 const router = express.Router();
-
 const { User } = require('../models/schemas');
 const multer = require('multer');
-// const fs = require('fs');
 const { Student } = require('../models/schemas');
 const argon2 = require('argon2');
 const passport = require('passport');
+const compression = require('compression');
 
 const CRUD = require(`../controller/crud-operations`);
+
+router.use(compression({
+    level: 6,
+    threshold: 1000
+}));
+
 
 //RENDER PAGES
 router.get('/login', (req, res) => { res.render('login'); });
 router.get('/register', (req, res) => res.render('register'));
 
 //MULTER
-// let storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, '../public/uploads');
-//     },
-//     filename: (req, file, cb) => {
-//         // cb(null, file.fieldname + '-' + Date.now());
-//         let ext = ''; // set default extension (if any)
-//         if (file.originalname.split(".").length>1) // checking if there is an extension or not.
-//             ext = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
-//         cb(null, Date.now() + ext);
-//     }
-// });
-
-// let upload = multer({ storage: storage });
-
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'public');
     },
     filename: (req, file, cb) => {
-        const ext = file.mimetype.split("/")[1];
+        const ext = file.mimetype.split('/')[1];
         cb(null, `uploads/${file.fieldname}-${Date.now()}.${ext}`);
     },
 });
@@ -49,20 +39,6 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
     let { name, username, email, password, password2, type } = req.body;
     let  profile_pic  = req.file.filename;
     let errors = [];
-    // const obj = {
-    //     img: {
-    //         data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
-    //         contentType: 'image/png'
-    //     }
-    // };
-    // Student.create(obj, (err, item) => {
-    //     if (err) {
-    //         console.log(err);
-    //         errors.push({msg: 'Could not upload image'}); 
-    //     } else {
-    //         item.save();
-    //     }
-    // });
 
     //CHECK FIELDS
     if (!name || !username || !email || !password || !password2 || !type) {
