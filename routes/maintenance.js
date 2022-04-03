@@ -194,16 +194,30 @@ router.post('/classes', (req, res) => {
 });
 
 router.post('/classes/:class_type/action', (req, res) => {
+    let type;
 
     if (req.body.class_option == 'add') {
+            
+        if (req.params.class_type != 'normal') {
+            type = 'project';
+        } else {
+            type = 'normal';
+        }
 
-        schemas.SchoolYear.find({}).then((allYearData) => {
-            res.render('./cms/form', {
-                bannerTitle: 'Klas toevoegen',
-                bannerSubtitle: `Pog`,
-                course: false,
-                allYearData: allYearData.sort((a, b) => parseFloat(a.linkRef) - parseFloat(b.linkRef)),
-                formAction: `classes/${req.params.class_type}/add`
+        schemas.Course.find({
+            'type': type
+        }).then((allCourses) => {
+
+            schemas.SchoolYear.find({}).then((allYearData) => {
+                res.render('./cms/form', {
+                    bannerTitle: 'Klas toevoegen',
+                    bannerSubtitle: `Pog`,
+                    course: false,
+                    type: type,
+                    allYearData: allYearData.sort((a, b) => parseFloat(a.linkRef) - parseFloat(b.linkRef)),
+                    formAction: `classes/${req.params.class_type}/add`,
+                    allCourses: allCourses
+                });
             });
         });
 
@@ -215,16 +229,19 @@ router.post('/classes/:class_type/action', (req, res) => {
 router.post('/classes/:class_type/add', (req, res) => {
 
     const classSchema = CRUD.getClassSchema(req.params.class_type);
-    let type;
+    let courseType;
+    let classType;
 
     if (req.params.class_type != 'normal') {
-        type = 'project';
+        courseType = 'project';
+        classType = 'elective';
     } else {
-        type = 'normal';
+        courseType = 'normal';
+        classType = 'normal';
     }
 
     schemas.Course.find({
-        'type': type,
+        'type': courseType,
         'in_year': req.body.in_year
     }).then((allCourses) => {
         let courseIds = [];
@@ -232,6 +249,7 @@ router.post('/classes/:class_type/add', (req, res) => {
         allCourses.forEach((course) => {
             if (course.type == 'project') {
                 courseIds = course.accompanying_courses;
+                courseIds.push(course._id);
             } else {
                 courseIds.push(course._id);
             }
@@ -247,12 +265,14 @@ router.post('/classes/:class_type/add', (req, res) => {
             in_year: req.body.in_year
         }).then((classData) => {
 
-            schemas.SchoolYear.findOne({
-                'linkRef': classData.in_year
-            }).then((foundYear) => {
-                foundYear.courses.push(classData);
-                foundYear.save();
-            });
+            if (classType == 'normal') {
+                schemas.SchoolYear.findOne({
+                    'linkRef': classData.in_year
+                }).then((foundYear) => {
+                    foundYear.classes.push(classData);
+                    foundYear.save();
+                });
+            }
 
             schemas.Course.find({
                 '_id': {
@@ -260,8 +280,13 @@ router.post('/classes/:class_type/add', (req, res) => {
                 }
             }).then((foundCourses) => {
                 foundCourses.forEach((course) => {
-                    course.classes.normal.push(classData._id);
-                    course.save();
+                    if (course.type != 'normal') {
+                        course.classes.elective.push(classData._id);
+                        course.save();
+                    } else {
+                        course.classes.normal.push(classData._id);
+                        course.save();
+                    }
                 });
 
                 res.redirect(`done`);
