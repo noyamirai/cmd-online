@@ -1,0 +1,25 @@
+<form method="post" action="/maintenance/<%= formAction %>">
+
+    <fieldset>
+        <legend>Naam van de klas</legend>
+
+        <input type='text' class="input input--normal" id='title' name="title" placeholder='Naam van de klas'>
+
+    </fieldset>
+
+    <fieldset>
+        <legend>In welk jaar wordt het vak gegeven?</legend>
+        <div class="select-container">
+            <select class="input input--normal input--select" name="in_year" id="in_year">
+                <% allYearData.forEach(year => { %>
+                    <option value="<%= year.linkRef %>"><%= year.title %></option>
+                <% }) %>
+            </select>
+        </div>
+    </fieldset>
+
+    <button type="submit">Klas aanmaken!</button>
+
+</form>
+
+<a href='/maintenance'>Annuleren</a>

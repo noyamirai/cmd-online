@@ -74,6 +74,7 @@ const findDocByQuery = async (schema, attribute, equalTo) => {
  *   @param referenceSchemas: which reference id are you adding into the attribute? (ObjectId) or ([ObjectId])
  **/
 const addIdReferenceToDoc = async (schemaToFind, docIds, referenceSchemas, referenceIds) => {
+    
 
     // one doc to be updated with single id
     if (!Array.isArray(docIds) && !Array.isArray(referenceIds)) {
@@ -96,7 +97,7 @@ const addIdReferenceToDoc = async (schemaToFind, docIds, referenceSchemas, refer
 
         // multiple docs to be updated with single id
     } else if (Array.isArray(docIds) && !Array.isArray(referenceIds)) {
-
+        
         for (let id of docIds) {
             await findDocByQuery(schemaToFind, `_id`, id).then((doc) => {
                 doc[referenceSchemas].push(referenceIds);
