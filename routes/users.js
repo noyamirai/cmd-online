@@ -150,7 +150,7 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                             let mailoptions = {
                                 from: 'Cmd-Online',
                                 to: email,
-                                subject: 'Node contact request',
+                                subject: 'Cmd-Online',
                                 text: 'Regegisteert',
                                 html: '<b> Uw registratie bij de cmd-online aplicatie is gelukt <b>',
 
@@ -165,7 +165,7 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                                 }
                                 console.log('message send: %s', info.messageID);
                                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                                res.render('contact', { msg: 'email had been sent' });
+                                res.render('login', { msg: 'email had been sent' });
                                 res.redirect('/users/login');
                             });
                         }

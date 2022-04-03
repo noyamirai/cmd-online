@@ -26,13 +26,18 @@ DB_USER= your database user
 DB_NAME= cmd-online-db
 DB_PASS= your database password
 SecretSESSION= your session password
+usermail=your gmail
+passmail=your gmail password
 ~~~
 
 The password for `SecretSESSION` can be anything you want. As of now, we do not have a base JSON file with dummy data you could import into your database, but we're working on it :wink:. That's why we have a dev database. To gain access to this database, please get in touch with the creator.
+---
+Don't forget to chage your gmail acount to make sure it has asses to 
+[gmail less secure apps](https://stackoverflow.com/questions/19877246/nodemailer-with-gmail-and-nodejs).
 
 ---
 
-Now that you're ready to ***really*** get started, you can run the application with or without [nodemon](https://www.npmjs.com/package/nodemon). 
+Now that you're ready to ***really*** get started, you can run the application with or without [nodemon](https://www.google.com/settings/security/lesssecureapps). 
 
 Running the application 'normally'
 ~~~
