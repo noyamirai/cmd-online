@@ -9,7 +9,7 @@ const argon2 = require('argon2');
 const passport = require('passport');
 
 const CRUD = require(`../controller/crud-operations`);
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
 const { getMaxListeners } = require('../../Test/test/models/user');
 
 
@@ -125,35 +125,50 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                         is_admin: false
                     }).then((userObject) => {
                         CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: null, courses: null });
-                        res.redirect('/users/login');
-                        let transporter = nodemailer.createTransport({
-                            host: req.body.email,
-                            port: 587,
-                            secure: false,
-                            auth: {
-                                user: req.body.email,
-                                pass: req.body.password
-                            },
-                            tls:{
-                                rejectUnautorized:false
-                            }
-                        });
-                        let mailoptions = {
-                            from: '"Nodemailer contact" <tejovdburg@gmail.com>',
-                            to: req.body.email,
-                            subject: 'Node contact request',
-                            text: 'Hello world?',
-                            html: '<b> Hello world <b>',
+                        async function main() {
+                            // Generate test SMTP service account from ethereal.email
+                            // Only needed if you don't have a real mail account for testing
+                            let testAccount = await nodemailer.createTestAccount();
 
-                        };
-                        transporter.sendMail(mailoptions, (error, info) => {
-                            if (error) {
-                                return console.log(error);
-                            }
-                            console.log('message send: %s', info.messageID);
-                            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                            res.render('contact',{msg:'email had been sent'});
-                        });
+                            // create reusable transporter object using the default SMTP transport
+                            let transporter = nodemailer.createTransport({
+                                host: 'smtp.ethereal.email',
+                                port: 587,
+                                secure: false, // true for 465, false for other ports
+                                auth: {
+                                    user: testAccount.user, // generated ethereal user
+                                    pass: testAccount.pass, // generated ethereal password
+                                },
+                                tls: {
+                                    rejectUnautorized: false
+                                },
+                            });
+
+
+                            let mailoptions = {
+                                from: '"Nodemailer contact" <tejovdburg@gmail.com>',
+                                to: email,
+                                subject: 'Node contact request',
+                                text: 'Hello world?',
+                                html: '<b> Hello world <b>',
+
+                            };
+                            transporter.sendMail(mailoptions, (error, info) => {
+                                if (error) {
+                                    return console.log(error),
+                                    res.json({
+                                        error: error,
+                                        message: 'er gaat hier iets fout',
+                                    });
+                                }
+                                console.log('message send: %s', info.messageID);
+                                console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+                                res.render('contact', { msg: 'email had been sent' });
+                                res.redirect('/users/login');
+                            });
+                        }
+                        main().catch(console.error);
+
                     });
                 }
             });
