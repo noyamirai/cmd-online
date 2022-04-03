@@ -28,7 +28,7 @@
         </section>
         <% } %>
 
-        <% if (userData.type == 'student' && userData.teams.length) { %>
+        <% if (userData.user.type == 'student' && userData.teams.length) { %>
         <section>
             <h2>Jouw teams</h2>
 
@@ -37,8 +37,8 @@
                 <li>
                     <a class="box-shadow" href="#">
                         <div>
-                            <h3><%= item.title %></h3>
-                            <p>course</p>
+                            <h3><%= item.name %></h3>
+                            <p><%= item.course.title %></p>
                         </div>
                         <p>Bekijk team</p>
                     </a>
@@ -133,7 +133,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="box-shadow" href="<%= userData.user.username %>/class/<%= userData.classes.normal.linkRef %>_normal">
+                    <a class="box-shadow" href="<%= userData.user.username %>/class/<%= userData.classes.normal.linkRef %>">
                         <div>
                             <h3>Klassenoverzicht</h3>
                             <p><%= userData.classes.normal.title %></p>

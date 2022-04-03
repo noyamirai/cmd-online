@@ -120,6 +120,33 @@ router.get('/:course', ensureAuthenticated, (req, res) => {
     });
 });
 
+//Class details directly after clicking on 'main' class (only students will navigate here)
+router.get('/class/:class', ensureAuthenticated, (req, res) => {
+
+    schemas.Class.findOne({
+        'linkRef': req.params.class
+    }).lean().populate({
+        path: 'students',
+        populate: {
+            path: 'user'
+        }
+    }).exec((err, classData) => {
+        if (err) Promise.reject(err);
+
+        res.render(`class-details`, {
+            prevURL: '/',
+            formURL: '',
+            isPopup: false,
+            studentData: classData.students,
+            userData: req.user,
+            bannerTitle: classData.title,
+            bannerSubtitle: `${classData.students.length} studenten`,
+            classTeams: classData.teams,
+            className: ''
+        });
+    });
+});
+
 //Get all classes of specific course (only teachers will navigate here)
 router.get(`/:course/classes`, ensureAuthenticated, (req, res) => {
     CRUD.findDocByQuery(schemas.Course, `linkRef`, req.params.course).then((paramCourse) => {
@@ -363,7 +390,9 @@ router.post('/:course/:class/teams/create', (req, res) => {
             } else {
                 // TODO: CHECK IF WORKS
                 let errors = [];
-                errors.push({ msg: 'Not enough students :(' });
+                errors.push({
+                    msg: 'Not enough students :('
+                });
 
                 res.render('team-details', {
                     allTeams: null,

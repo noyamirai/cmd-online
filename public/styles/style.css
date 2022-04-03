@@ -231,7 +231,7 @@ main {
   padding: 20px 16px;
 }
 
-.dashboard .box-shadow::after {
+.dashboard__overview .box-shadow::after {
   display: none;
 }
 
