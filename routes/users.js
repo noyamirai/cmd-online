@@ -14,8 +14,10 @@ const passport = require('passport');
 // const logout_btn = document.getElementById('logout');
 const CRUD = require(`../controller/crud-operations`);
 const nodemailer = require('nodemailer');
-const { getMaxListeners } = require('../../Test/test/models/user');
+// const { getMaxListeners } = require('../../Test/test/models/user');
+// eslint-disable-next-line no-undef
 const mailuser = process.env.usermail;
+// eslint-disable-next-line no-undef
 const mailpass = process.env.passmail;
 
 
@@ -165,7 +167,7 @@ router.post('/login', (req, res, next) => {
 
 //LOGOUT HANDLER
 router.get('/logout', (req, res) => {
-    req.logout()
-    res.redirect('/users/login')
-  })
+    req.logout();
+    res.redirect('/users/login');
+});
 module.exports = router;
