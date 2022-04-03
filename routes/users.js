@@ -1,5 +1,8 @@
+/*eslint no-undef: "error"*/
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
+
 
 const { User } = require('../models/schemas');
 const multer = require('multer');
@@ -11,6 +14,9 @@ const passport = require('passport');
 const CRUD = require(`../controller/crud-operations`);
 const nodemailer = require('nodemailer');
 const { getMaxListeners } = require('../../Test/test/models/user');
+const mailuser = process.env.usermail;
+const mailpass = process.env.passmail;
+
 
 
 //RENDER PAGES
@@ -97,7 +103,7 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
         User.findOne({ email: email })
             .then(async user => {
                 if (user) {
-                    // ACCOUNT ALREADY EXISTS
+                    //ACCOUNT ALREADY EXISTS
                     errors.push({ msg: 'This email is already in use' });
                     res.render('./register', {
                         errors,
@@ -128,16 +134,12 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                         async function main() {
                             // Generate test SMTP service account from ethereal.email
                             // Only needed if you don't have a real mail account for testing
-                            let testAccount = await nodemailer.createTestAccount();
-
                             // create reusable transporter object using the default SMTP transport
                             let transporter = nodemailer.createTransport({
-                                host: 'smtp.ethereal.email',
-                                port: 587,
-                                secure: false, // true for 465, false for other ports
+                                service: 'gmail',
                                 auth: {
-                                    user: testAccount.user, // generated ethereal user
-                                    pass: testAccount.pass, // generated ethereal password
+                                    user: mailuser, // generated ethereal user
+                                    pass: mailpass, // generated ethereal password
                                 },
                                 tls: {
                                     rejectUnautorized: false
@@ -146,11 +148,11 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
 
 
                             let mailoptions = {
-                                from: '"Nodemailer contact" <tejovdburg@gmail.com>',
+                                from: 'Cmd-Online',
                                 to: email,
                                 subject: 'Node contact request',
-                                text: 'Hello world?',
-                                html: '<b> Hello world <b>',
+                                text: 'Regegisteert',
+                                html: '<b> Uw registratie bij de cmd-online aplicatie is gelukt <b>',
 
                             };
                             transporter.sendMail(mailoptions, (error, info) => {
