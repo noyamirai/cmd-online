@@ -8,7 +8,7 @@ const { Student } = require('../models/schemas');
 const { Teacher } = require('../models/schemas');
 const argon2 = require('argon2');
 const passport = require('passport');
-
+// const logout_btn = document.getElementById('logout');
 const CRUD = require(`../controller/crud-operations`);
 
 //RENDER PAGES
@@ -114,4 +114,9 @@ router.post('/login', (req, res, next) => {
     errors.push({ msg: 'email not found' });
 });
 
+//LOGOUT HANDLER
+router.get('/logout', (req, res) => {
+    req.logout()
+    res.redirect('/users/login')
+  })
 module.exports = router;

@@ -29,7 +29,6 @@ router.get('/', ensureAuthenticated, (req, res) => {
                     userSkill: null,
                 });
             } else {
-
                 CRUD.findDocByQuery(schemas.cmdSkill, '_id', result.cmd_skills.best).then((skill) => {
                     res.render('index', {
                         userData: result,
