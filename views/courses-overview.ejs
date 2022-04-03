@@ -2,25 +2,99 @@
 
 <body>
     <%- include ('./partials/profile-banner.ejs') -%>
-    <main>
-        <h2>Jouw gegeven vakken</h2>
+    <% if (userData.user.type == 'teacher' && courseData == null) { %>
+        <main class="dashboard">
+        <% } else if (userData.user.type == 'teacher' && userData.courses != null) { %>
+        <main class="overflow form--popup">
+        <% } else { %>
+         <main>
+    <% } %>
+        <% if (userData.user.type == 'teacher' && userData.courses != null) { %>
+        <h2>Jouw vakken</h2>
 
         <ul class="grid grid--list">
             <% courseData.forEach((item) => { %>
-                <li>
-                    <a class="box-shadow" href="<%= item.course.linkRef %>/classes">
-                        <p><%= item.acronym %></p>
-                        <div>
-                            <h3><%= item.course.title %></h3>
-                            <p><%= item.classes.length %> klassen</p>
-                        </div>
+            <li>
+                <a class="box-shadow" href="<%= item.course.linkRef %><% if (userData.user.type == 'teacher') { %>/classes<% } %>">
+                    <p><%= item.acronym %></p>
+                    <div>
+                        <h3><%= item.course.title %></h3>
+                        <p><%= item.classes.length %> klassen</p>
+                    </div>
 
-                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
-                    </a>
-                </li>
+                    <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                </a>
+            </li>
             <% }) %>
         </ul>
+
+        <% } else if (userData.user.type == 'student') { %>
+        <h2>Jouw vakken</h2>
+
+        <ul class="grid grid--list">
+            <% courseData.forEach((item) => { %>
+            <li>
+                <a class="box-shadow" href="<%= item.linkRef %><% if (userData.user.type == 'teacher') { %>/classes<% } %>">
+                    <p><%= item.acronym %></p>
+                    <div>
+                        <h3><%= item.title %></h3>
+                    </div>
+
+                    <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                </a>
+            </li>
+            <% }) %>
+        </ul>
+
+        <% } else if (userData.user.type == 'teacher' && courseData == null) { %>
+        <h2>Welkom!</h2>
+        <ul class="grid grid--list">
+            <li>
+                <!-- TODO: PROFILE SETUP FOR TEACHERS: assign courses and classes they teach -->
+                <a class="box-shadow" href="/profile/teacher">
+                    <div>
+                        <h3>Voeg vakken toe</h3>
+                        <p>Profiel setup</p>
+                    </div>
+
+                    <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                </a>
+            </li>
+        </ul>
+
+        <% } %>
+
+        <% if (userData.user.type == 'student') { %>
+        <div class="btn--container">
+            <a class="btn--small btn--small-arrow" href="<%= prevURL %>"><img src="../../public/images/icons/arrow-icon.svg" alt="Back icon"></a>
+        </div>
+
+        <% } else { %>
+
+        <form class="form--settings" method="post" action="/settings">
+            <fieldset>
+                <legend>Instellingen</legend>
+
+                <button type="submit" value="profile-setup" name="settings_type">Vak toevoegen</button>
+                <button disabled type="submit" value="account-details" name="settings_type">Account details wijzigen</button>
+
+            </fieldset>
+
+            <div>
+                <button id="close-form">Annuleren</button>
+            </div>
+        </form>
+
+        <div class="btn--container">
+            <a class="btn--small btn--small-arrow form-trigger" href="/profile"><img src="../public/images/icons/settings-icon.svg" alt="Settings icon"></a>
+        </div>
+
+        <% } %>
     </main>
 </body>
 
 <script src="../public/js/color-generator.js"></script>
+
+<% if (userData.user.type == 'teacher') { %>
+     <script async src="../public/js/form-script.js"></script>
+<% } %>

@@ -175,7 +175,7 @@ const removeUserFromClassesAndCourses = (schemaToFind, userId, type) => {
                         [type]: [user._id]
                     }
                 });
-                
+
                 resolve(user);
 
                 console.log('User no longer part of any classes or courses');
@@ -189,14 +189,14 @@ const removeUserFromClassesAndCourses = (schemaToFind, userId, type) => {
 };
 
 /**
- *   addUserToClassesAndCourses
- *   * Updates all classes and courses by adding userId to their respective reference id field (students or teachers)
+ *   addStudentToClassesAndCourses
+ *   * Updates all classes and courses by adding userId to their respective reference id field (students)
  *
- *   @param schemaToFind: in which collection/schema is the document you want to update located? (Model: Student or Teacher)
- *   @param savedInfo: saved data from form (Object)
+ *   @param schemaToFind: in which collection/schema is the document you want to update located? (Model: Student)
+ *   @param savedInfo: saved STUDENT data from form (Object)
  *   @param userId: which user has to be removed from this class? (ObjectId)
  **/
-const addUserToClassesAndCourses = (schemaToFind, savedInfo, userId) => {
+const addStudentToClassesAndCourses = (schemaToFind, savedInfo, userId) => {
     return new Promise((resolve) => {
         let allCourses = [];
 
@@ -219,7 +219,10 @@ const addUserToClassesAndCourses = (schemaToFind, savedInfo, userId) => {
             }, {
                 returnNewDocument: true
             }).then((object) => {
-                resolve({user: object, courseData: allCourses});
+                resolve({
+                    user: object,
+                    courseData: allCourses
+                });
             });
 
         } else if (blockType == 'elective') {
@@ -240,11 +243,111 @@ const addUserToClassesAndCourses = (schemaToFind, savedInfo, userId) => {
             }, {
                 returnNewDocument: true
             }).then((object) => {
-                resolve({user: object, courseData: allCourses});
+                resolve({
+                    user: object,
+                    courseData: allCourses
+                });
             });
         }
     });
 };
+
+/**
+ *   addTeacherToClassesAndCourses
+ *   * Updates all classes and courses by adding userId to their respective reference id field (teachers)
+ *
+ *   @param schemaToFind: in which collection/schema is the document you want to update located? (Model: Teacher)
+ *   @param savedInfo: saved TEACHER data from form (Object)
+ *   @param userId: which user has to be removed from this class? (ObjectId)
+ **/
+const addTeacherToClassesAndCourses = (schemaToFind, savedInfo, userId) => {
+    return new Promise((resolve) => {
+
+        const courseType = savedInfo.course_type;
+
+        if (courseType != 'normal') {
+
+            schemaToFind.findOneAndUpdate({
+                'user': userId
+            }, {
+                classes: {
+                    elective: savedInfo.course_classes
+                },
+                courses: savedInfo.teacher_course,
+            }, {
+                returnNewDocument: true
+            }).then((object) => {
+                resolve(object);
+            });
+
+        } else {
+
+            schemaToFind.findOneAndUpdate({
+                'user': userId
+            }, {
+                classes: {
+                    normal: savedInfo.course_classes
+                },
+                courses: savedInfo.teacher_course,
+            }, {
+                returnNewDocument: true
+            }).then((object) => {
+                resolve(object);
+            });
+
+        }
+    });
+};
+
+/**
+ *   resetTeams
+ *   * Removes all teams from relevant collections in order to prevent duplicates when generating new teams
+ *
+ *   @param teamsToDelete: which teams will be deleted? [ObjectId]
+ *   @param classTypeSchema: from which class do the teams have to be removed? (Elective or Class)
+ *   @param classLinkRef: linkRef of the class that needs to be found
+ *   @param studentIds: from which students do the teams have to be removed? [ObjectIds]
+ **/
+const resetTeams = async (teamsToDelete, classTypeSchema, classLinkRef, studentIds) => {
+    schemas.Team.deleteMany({
+        '_id': {
+            $in: teamsToDelete
+        }
+    }).then('All teams removed from teams collection');
+
+    classTypeSchema.findOneAndUpdate({
+        'linkRef': classLinkRef
+    }, {
+        'teams': []
+    }).then(console.log('All teams removed from class'));
+
+    schemas.Student.updateMany({
+        '_id': {
+            $in: studentIds
+        }
+    }, {
+        $pullAll: {
+            'teams': teamsToDelete
+        }
+    }).then(console.log('Team removed from student objects'));
+};
+
+/**
+ *   getClassSchema
+ *   * Returns correct class schema based on course type
+ *
+ *   @param courseType: what kind of course is it? (String)
+ **/
+const getClassSchema = (courseType) => {
+
+    if (courseType != 'normal') {
+        return schemas.ElectiveClass;
+    } else {
+        return schemas.Class;
+    }
+};
+
+
 
 module.exports = {
     createDoc,
@@ -252,5 +355,8 @@ module.exports = {
     findDocByQuery,
     addIdReferenceToDoc,
     removeUserFromClassesAndCourses,
-    addUserToClassesAndCourses
+    addStudentToClassesAndCourses,
+    addTeacherToClassesAndCourses,
+    resetTeams,
+    getClassSchema
 };

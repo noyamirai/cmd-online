@@ -22,6 +22,30 @@ const handleGesture = () => {
     }
 };
 
+const checkIfTeamGenerator = () => {
+    if (formEl.getElementsByTagName('input').length) {
+        for (let item of formEl.getElementsByTagName('input')) {
+            if (item.name == 'teamSize') {
+                return true;
+            }
+        }
+    }
+};
+
+window.addEventListener('load', () => {
+    const isTeamGenerator = checkIfTeamGenerator();
+    let url = window.location.pathname.split('/');
+    const currentURL = url.pop();
+
+    if (currentURL != 'teams' && isTeamGenerator) {
+        const amountOfStudents = document.querySelector('ul');
+
+        if (!(amountOfStudents.getElementsByTagName('li').length >= 8)) {
+            formTriggerBtn.classList.add('hide');
+        }
+    }
+});
+
 formTriggerBtn.addEventListener(`click`, () => {
     toggleClass();
 });

@@ -8,9 +8,10 @@ const { User } = require('../models/schemas');
 const multer = require('multer');
 // const fs = require('fs');
 const { Student } = require('../models/schemas');
+const { Teacher } = require('../models/schemas');
 const argon2 = require('argon2');
 const passport = require('passport');
-
+// const logout_btn = document.getElementById('logout');
 const CRUD = require(`../controller/crud-operations`);
 const nodemailer = require('nodemailer');
 const { getMaxListeners } = require('../../Test/test/models/user');
@@ -22,22 +23,6 @@ const mailpass = process.env.passmail;
 //RENDER PAGES
 router.get('/login', (req, res) => { res.render('login'); });
 router.get('/register', (req, res) => res.render('register'));
-
-//MULTER
-// let storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, '../public/uploads');
-//     },
-//     filename: (req, file, cb) => {
-//         // cb(null, file.fieldname + '-' + Date.now());
-//         let ext = ''; // set default extension (if any)
-//         if (file.originalname.split(".").length>1) // checking if there is an extension or not.
-//             ext = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
-//         cb(null, Date.now() + ext);
-//     }
-// });
-
-// let upload = multer({ storage: storage });
 
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -58,20 +43,6 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
     let { name, username, email, password, password2, type } = req.body;
     let profile_pic = req.file.filename;
     let errors = [];
-    // const obj = {
-    //     img: {
-    //         data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
-    //         contentType: 'image/png'
-    //     }
-    // };
-    // Student.create(obj, (err, item) => {
-    //     if (err) {
-    //         console.log(err);
-    //         errors.push({msg: 'Could not upload image'}); 
-    //     } else {
-    //         item.save();
-    //     }
-    // });
 
     //CHECK FIELDS
     if (!name || !username || !email || !password || !password2 || !type) {
@@ -170,7 +141,12 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                             });
                         }
                         main().catch(console.error);
-
+                        if (type == 'student') {
+                            CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: { normal: null, elective: null }, courses: null });
+                        } else {
+                            CRUD.createDoc(Teacher, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: { normal: null, elective: null }, courses: null });
+                        }
+                        res.redirect('/users/login');
                     });
                 }
             });
@@ -187,4 +163,9 @@ router.post('/login', (req, res, next) => {
     errors.push({ msg: 'email not found' });
 });
 
+//LOGOUT HANDLER
+router.get('/logout', (req, res) => {
+    req.logout()
+    res.redirect('/users/login')
+  })
 module.exports = router;

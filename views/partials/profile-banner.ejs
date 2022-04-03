@@ -1,13 +1,17 @@
 <header>
     <figure>
         <picture class="box-shadow">
-            <img src="<%= profile_pic %>" alt="Profiel foto van <%= userName %>">
+            <img src="../public/<%= userData.user.profile_pic %> " alt="Profiel foto van <%= userData.user.name %> ">
         </picture>
 
         <figcaption>
-            
-            <p><%= userName %></p>
-            <span><img src="../../public/images/icons/check-icon.svg" alt="Checkmark icon"></span>
+
+            <p><%= userData.user.name %> </p>
+
+            <% if (userData.user.type == "teacher") { %>
+            <span><img src="../public/images/icons/check-icon.svg" alt="Checkmark icon"></span>
+            <% } %>
+
         </figcaption>
     </figure>
 </header>

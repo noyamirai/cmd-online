@@ -19,14 +19,29 @@ router.get('/', ensureAuthenticated, (req, res) => {
                 path: `user classes.normal`
             }).exec((err, result) => {
                 if (err) Promise.reject(err);
+    if (req.user.type == 'student') {
+        schemas.Student.findOne({
+            'user': req.user.id
+        }).lean().populate({
+            path: `user classes.normal`
+        }).populate({
+            path: 'teams',
+            populate: {
+                path: 'course class.elective class.normal'
+            }
+        }).exec((err, result) => {
+            if (err) Promise.reject(err);
 
-
+            if (result.cmd_skills.best == null) {
+                res.render('index', {
+                    userData: result,
+                    userSkill: null,
+                });
+            } else {
                 CRUD.findDocByQuery(schemas.cmdSkill, '_id', result.cmd_skills.best).then((skill) => {
-
                     res.render('index', {
                         userData: result,
                         userSkill: skill,
-                        headerClass: 'no-box-shadow'
                     });
                 });
             });
@@ -38,15 +53,12 @@ router.get('/', ensureAuthenticated, (req, res) => {
                 path: `user`
             }).exec((err, result) => {
                 if (err) Promise.reject(err);
+            }
+        });
 
-                res.render('index', {
-                    userData: result,
-                    userSkill: null,
-                    headerClass: 'no-box-shadow'
-                });
-            });
-        }
-    });
+    } else if (req.user.type == 'teacher') {
+        res.redirect(`${req.user.username}/courses`);
+    }
 });
 
 module.exports = router;

@@ -251,7 +251,7 @@ main {
   padding: 20px 16px;
 }
 
-.dashboard .box-shadow::after {
+.dashboard__overview .box-shadow::after {
   display: none;
 }
 
@@ -277,6 +277,10 @@ main {
 
     .dashboard .grid--list li:nth-of-type(2) a > div p {
       background-color: var(--cmd-color-orange);
+    }
+
+    .dashboard .grid--list li:nth-of-type(3) a > div p {
+      background-color: var(--cmd-color-pink);
     }
 /* =============================================================================
   #GRID OVERVIEW

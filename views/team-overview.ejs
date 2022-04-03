@@ -1,0 +1,42 @@
+<%- include ('./partials/head.ejs') -%>
+
+<body class="overflow overflow--white form--popup">
+
+    <%- include ('./partials/title-banner.ejs') -%>
+
+    <main>
+
+        <h2>Alle teams!!</h2>
+
+        <ol class="grid grid--list">
+            <% teamData.forEach(team => { %>
+
+                <li>
+                    <a class="box-shadow" href="teams/<%= team.number %>/overview">
+                        <p><%= team.number %></p>
+                        <div>
+                            <h3><%= team.name %></h3>
+
+                            <p><%= team.students.length %> studenten</p>
+                        </div>
+
+                        <img class="icon" src="/public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                    </a>
+                </li>
+             
+            <% }) %>
+                
+        </ol>
+
+        <div class="btn--container">
+            <a class="btn--small btn--small-arrow" href="<%= prevURL %>"><img src="/public/images/icons/arrow-icon.svg" alt="Back icon"></a>
+            <a class="btn form-trigger" href="<%= linkRef %>/team-form">Nieuwe teams maken</a>
+        </div>
+
+        <%- include ('./partials/form.ejs') -%>
+
+    </main>
+
+    <script src="/public/js/color-generator.js"></script>
+    <script src="/public/js/form-script.js"></script>
+</body>

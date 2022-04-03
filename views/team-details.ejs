@@ -1,0 +1,92 @@
+<%- include ('./partials/head.ejs') -%>
+
+<body class="overflow overflow--teams yellow-bg">
+
+    <% if (memberView) { %>
+
+        <%- include ('./partials/title-banner.ejs') -%>
+
+    <% } else { %>
+
+        <header>
+            <% allTeams.forEach(team => { %>
+            <h1 class="hide teamHeading" id="team-heading-<%= team.number %>"><%= team.name %></h1>
+            <% }) %>
+        </header>
+
+    <% } %>
+
+    <main>
+
+        <% if (error) { %>
+
+            <%- include ('./partials/messages')-%>
+
+        <% } else { %>
+
+            <% if (memberView) { %>
+
+                <ul class="grid grid--list grid--list__team-members">
+                    <% studentData.forEach(object => { %>
+                    <li>
+                        <div class="box-shadow">
+                            <picture>
+                                <img src="/public/<%= object.student.user.profile_pic %>" alt="Profielfoto van <%= object.student.user.name %>">
+                            </picture>
+
+                            <div>
+                                <h3><%= object.student.user.name %></h3>
+                                <p><%= object.cmd_skill.title %></p>
+                            </div>
+
+                        </div>
+                    </li>
+                    <% }) %>
+                </ul>
+
+                <div class="btn--container">
+                    <a class="btn--small btn--small-arrow" href="<%= prevURL %>"><img src="/public/images/icons/arrow-icon.svg" alt="Back icon"></a>
+                </div>
+
+            <% } else { %>
+
+                <% allTeams.forEach(team => { %>
+                
+                    <ul class="hide grid grid--list grid--list__team-members" id="team-<%= team.number %>">
+                    <% team.students.forEach(object => { %>
+
+                        <li>
+                            <div class="box-shadow">
+                                <picture>
+                                    <img src="/public/<%= object.student.user.profile_pic %>" alt="Profielfoto van <%= object.student.user.name %>">
+                                </picture>
+
+                                <div>
+                                    <h3><%= object.student.user.name %></h3>
+                                    <p><%= object.cmd_skill.title %></p>
+                                </div>
+
+                            </div>
+                        </li>
+                    
+                    <% }) %>
+                    
+                    </ul>
+                <% }) %>
+
+                <div class="btn--container btn--container__column">
+                    <a class="btn" id="next-item">Volgende team</a>
+                    <a class="btn--subtle" id="skip-all">Naar resultaten</a>
+                </div>
+            
+            <% } %>
+         
+        <% } %>
+
+    </main>
+
+    <% if (!memberView) { %>
+        <script async src="/public/js/team-details-script.js"></script>
+    <% } %>
+
+</body>
