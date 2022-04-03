@@ -1,7 +1,7 @@
 <form action="<%= formURL %> " method="post">
-    <fieldset>
+    <fieldset class="form__radio-container">
         <legend>Hoe groot mogen de teams zijn?</legend>
-        
+
         <div>
             <input class="input input--custom" type="radio" id="teamSize-2" name="teamSize" value="2" checked="true">
             <label for="teamSize-2"><span>Twee</span><span>studenten</span></label>
@@ -18,24 +18,16 @@
         </div>
     </fieldset>
 
-    <!-- <fieldset>
-        <legend>Waarvoor worden de teams gemaakt?</legend>
-
-        <div class="toggle-container" id="toggle-container">
-            <div id="toggle-yes">
-                <input type="radio" id="teamType-p" name="teamType" value="project" checked="true">
-                <label for="teamType-p"><span>Project</span></label>
-            </div>
-            
-            <div id="toggle-no">
-                <input type="radio" id="teamType-g" name="teamType" value="group">
-                <label for="teamType-g"><span>Groepsopdracht</span></label>
-            </div>
-        </div>
-    </fieldset> -->
-
+    <% if (isPopup) { %>
     <div>
         <button type="submit">Start</button>
         <button id="close-form">Annuleren</button>
     </div>
+    <% } else { %>
+
+    <div class="btn--container btn--container__column">
+        <button type="submit">Start</button>
+        <a href='<%= prevURL %> '>Annuleren</a>
+    </div>
+    <% } %>
 </form>

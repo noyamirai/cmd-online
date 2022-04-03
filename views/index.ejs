@@ -28,20 +28,34 @@
         </section>
         <% } %>
 
-        <% if (userData.type == 'student' && userData.teams.length) { %>
+        <% if (userData.user.type == 'student' && userData.teams.length) { %>
         <section>
             <h2>Jouw teams</h2>
 
             <ul class="grid grid--overview">
                 <% userData.teams.forEach(item => { %>
                 <li>
-                    <a class="box-shadow" href="#">
+                    <% if (item.course.type != 'normal') { %>
+
+                    <a class="box-shadow" href="<%= userData.user.username %>/<%= item.course.linkRef %>/<%= item.class.elective.linkRef %>/teams/<%= item.number %>/overview">
                         <div>
-                            <h3><%= item.title %></h3>
-                            <p>course</p>
+                            <h3><%= item.name %></h3>
+                            <p><%= item.course.title %></p>
                         </div>
                         <p>Bekijk team</p>
                     </a>
+
+                    <% } else { %>
+                        <a class="box-shadow" href="<%= userData.user.username %>/<%= item.course.linkRef %>/<%= item.class.normal.linkRef %>/teams/<%= item.number %>/overview">
+                            <div>
+                                <h3><%= item.name %></h3>
+                                <p><%= item.course.title %></p>
+                            </div>
+                            <p>Bekijk team</p>
+                        </a>
+
+                    <% } %>
+
                 </li>
                 <% }) %>
             </ul>
@@ -53,7 +67,7 @@
             <h2>Overzicht</h2>
 
             <ul class="grid grid--list">
-                <% if (userData.classes == undefined && userData.cmd_skills.best == null) { %>
+                <% if (userData.courses == null && userData.cmd_skills.best == null) { %>
                 <li>
                     <a class="box-shadow" href="/profile">
                         <div>
@@ -75,7 +89,7 @@
                     </a>
                 </li>
 
-                <% } else if (userData.classes == undefined && userData.cmd_skills.best != null) { %>
+                <% } else if (userData.courses == null && userData.cmd_skills.best != null) { %>
                 <li>
                     <a class="box-shadow" href="/profile">
                         <div>
@@ -87,7 +101,7 @@
                     </a>
                 </li>
 
-                <% } else if (userData.classes != undefined && userData.cmd_skills.best == null) { %>
+                <% } else if (userData.courses != null && userData.cmd_skills.best == null) { %>
 
                 <li>
                     <a class="box-shadow" href="/skills">
@@ -133,7 +147,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="box-shadow" href="<%= userData.user.username %>/class/<%= userData.classes.normal.linkRef %>_normal">
+                    <a class="box-shadow" href="<%= userData.user.username %>/class/<%= userData.classes.normal.linkRef %>">
                         <div>
                             <h3>Klassenoverzicht</h3>
                             <p><%= userData.classes.normal.title %></p>
@@ -153,7 +167,7 @@
 
                 <button type="submit" value="profile-setup" name="settings_type">Vakken wijzigen</button>
                 <% if (userData.user.type == 'student' && userData.cmd_skills.best != null) { %>
-                <button type="submit" value="cmd-skills" name="settings_type">CMD Skills wijzigen</button>                 
+                <button type="submit" value="cmd-skills" name="settings_type">CMD Skills wijzigen</button>
                 <% } %>
                 <button disabled type="submit" value="account-details" name="settings_type">Account details wijzigen</button>
 
