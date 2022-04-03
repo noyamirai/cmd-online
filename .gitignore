@@ -1,7 +1,5 @@
 .DS_Store
 
-public/uploads/
-
 # Logs
 logs
 *.log
