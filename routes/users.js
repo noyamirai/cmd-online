@@ -64,7 +64,7 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
     let errors = [];
     
     //CHECK FIELDS
-    if (!name || !username || !email || !password || !password2 || !type || !profile_pic) {
+    if (!name || !username || !email || !password || !password2 || !type) {
         errors.push({ msg: 'Please fill in all fields' });
     }
 
@@ -89,7 +89,8 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
             password,
             password2,
             type,
-            // profile_pic
+            bannerTitle: 'Inloggen',
+            bannerSubtitle: 'CMD Online'
         });
     } else {
         User.findOne({ email: email })
@@ -105,6 +106,8 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                         password,
                         password2,
                         type,
+                        bannerTitle: 'Inloggen',
+                        bannerSubtitle: 'CMD Online'
                         // profile_pic
                     });
                 } else {
@@ -180,6 +183,7 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                         password: password,
                         name: name,
                         type: type,
+                        profile_pic: 'uploads/default-profile_pic.png',
                         is_admin: false
                     }).then((userObject) => {
                         CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: null, courses: null });

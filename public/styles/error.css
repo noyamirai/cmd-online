@@ -10,6 +10,7 @@
     margin-bottom: 4px;
 }
 
-.error + fieldset { 
+.error + fieldset,
+.error + div { 
     margin-top: var(--default-padding);
 }
