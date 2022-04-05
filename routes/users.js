@@ -157,7 +157,11 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                                     }
                                     console.log('message send: %s', info.messageID);
                                     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                                    res.render('login', { msg: 'email had been sent' });
+                                    res.render('login', { 
+                                        msg: 'email had been sent',
+                                        bannerTitle: 'Inloggen',
+                                        bannerSubtitle: 'CMD Online' 
+                                    });
                                     res.redirect('/users/login');
                                 });
                             }
@@ -246,7 +250,9 @@ router.post('/login', (req, res, next) => {
         res.render('./login', {
             errors,
             username,
-            password
+            password,
+            bannerTitle: 'Inloggen',
+            bannerSubtitle: 'CMD Online'
         });
     } else {
         passport.authenticate('local', {
