@@ -89,6 +89,9 @@
 
         <div class="btn--container">
             <a class="btn--small btn--small-arrow form-trigger" href="/profile"><img src="../public/images/icons/settings-icon.svg" alt="Settings icon"></a>
+            <% if (userData.user.type == 'teacher') { %>
+                <a class="btn" href="/users/logout">Log Out</a>
+            <% } %>
         </div>
 
         <% } %>
