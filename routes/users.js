@@ -44,14 +44,17 @@ const upload = multer({
 //REGISTER HANDLER
 router.post('/register', upload.single('profile_pic'), (req, res) => {
     let { name, username, email, password, password2, type } = req.body;
+
     let profile_pic ;
     if (profile_pic != undefined) {
         let profile_pic = req.file.filename;
     }
     let errors = [];
 
+    let errors = [];
+    
     //CHECK FIELDS
-    if (!name || !username || !email || !password || !password2 || !type) {
+    if (!name || !username || !email || !password || !password2 || !type || !profile_pic) {
         errors.push({ msg: 'Please fill in all fields' });
     }
 
@@ -64,8 +67,10 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
     if (password.length < 6) {
         errors.push({ msg: 'Your password needs to be at least 8 characters long' });
     }
+
     //RENDER PAGE WITH DATA
     if (errors.length > 0) {
+        console.log('??');
         res.render('./register', {
             errors,
             name,
@@ -74,7 +79,7 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
             password,
             password2,
             type,
-            profile_pic
+            // profile_pic
         });
     } else {
         User.findOne({ email: email })
@@ -90,7 +95,7 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                         password,
                         password2,
                         type,
-                        profile_pic
+                        // profile_pic
                     });
                 } else {
                     const hash = await argon2.hash(password, { hashLength: 10 });
@@ -236,7 +241,6 @@ router.post('/login', (req, res, next) => {
             failureFlash: true
         })(req, res, next);
     }
-
 });
 
 //LOGOUT HANDLER
