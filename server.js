@@ -6,9 +6,9 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
 const compression = require('compression');
+const flash = require('connect-flash');
 const port = process.env.PORT || 3000;
 const EXPsession = process.env.SecretSESSION;
-
 const db = require(`./config/db`);
 
 app.set(`view engine`, `ejs`);
@@ -40,6 +40,15 @@ app.use(bodyParser.json());
 // PASSPORT MIDDLEWARE
 app.use(passport.initialize());
 app.use(passport.session());
+
+// FLASH
+app.use(flash());
+app.use(function(req, res, next) {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    next();
+});
 
 // ROUTES
 app.use('/profile', require('./routes/profile'));

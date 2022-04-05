@@ -6,6 +6,7 @@
         <form action="/users/login" method="POST">
             <fieldset>
                 <legend>Inloggen</legend>
+                <%- include ('./partials/messages')-%>
                 <label for="username">Gebruikersnaam</label>
                 <input type='username' class="input input--normal" id='username' name="username" placeholder='gebruikersnaam'>
                 <label for="password">Wachtwoord</label>

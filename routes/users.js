@@ -217,12 +217,26 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
 
 //LOGIN HANDLER
 router.post('/login', (req, res, next) => {
+    let {username, password} = req.body;
     let errors = [];
-    passport.authenticate('local', {
-        successRedirect: '/',
-        failureRedirect: '/users/login',
-    })(req, res, next);
-    errors.push({ msg: 'email not found' });
+
+    if (!username || !password) {
+        errors.push({ msg: 'Please fill in all fields' });
+    }
+    if (errors.length > 0) {
+        res.render('./login', {
+            errors,
+            username,
+            password
+        });
+    } else {
+        passport.authenticate('local', {
+            successRedirect: '/',
+            failureRedirect: '/users/login',
+            failureFlash: true
+        })(req, res, next);
+    }
+
 });
 
 //LOGOUT HANDLER
