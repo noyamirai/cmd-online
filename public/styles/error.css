@@ -1,0 +1,16 @@
+.error {
+    color: black;
+    background-color: rgba(209, 8, 8, .5);
+    padding: 12px;
+
+    border: rgba(209, 8, 8, 1) 3px;
+    border-style: none none none solid;
+    border-radius: 4px;
+
+    margin-bottom: 4px;
+}
+
+.error + fieldset,
+.error + div { 
+    margin-top: var(--default-padding);
+}

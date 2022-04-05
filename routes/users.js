@@ -24,8 +24,19 @@ const mailpass = process.env.passmail;
 
 
 //RENDER PAGES
-router.get('/login', (req, res) => { res.render('login'); });
-router.get('/register', (req, res) => res.render('register'));
+router.get('/login', (req, res) => { 
+    res.render('login', {
+        bannerTitle: 'Inloggen',
+        bannerSubtitle: 'CMD Online'              
+    });
+});
+
+router.get('/register', (req, res) =>  {
+    res.render('register', {
+        bannerTitle: 'Registreren',
+        bannerSubtitle: 'CMD Online'   
+    });
+});
 
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -44,12 +55,14 @@ const upload = multer({
 //REGISTER HANDLER
 router.post('/register', upload.single('profile_pic'), (req, res) => {
     let { name, username, email, password, password2, type } = req.body;
+
     let profile_pic ;
     if (profile_pic != undefined) {
-        let profile_pic = req.file.filename;
+        profile_pic = req.file.filename;
     }
-    let errors = [];
 
+    let errors = [];
+    
     //CHECK FIELDS
     if (!name || !username || !email || !password || !password2 || !type) {
         errors.push({ msg: 'Please fill in all fields' });
@@ -64,8 +77,10 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
     if (password.length < 6) {
         errors.push({ msg: 'Your password needs to be at least 8 characters long' });
     }
+
     //RENDER PAGE WITH DATA
     if (errors.length > 0) {
+        console.log('??');
         res.render('./register', {
             errors,
             name,
@@ -74,7 +89,8 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
             password,
             password2,
             type,
-            profile_pic
+            bannerTitle: 'Inloggen',
+            bannerSubtitle: 'CMD Online'
         });
     } else {
         User.findOne({ email: email })
@@ -90,7 +106,9 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                         password,
                         password2,
                         type,
-                        profile_pic
+                        bannerTitle: 'Inloggen',
+                        bannerSubtitle: 'CMD Online'
+                        // profile_pic
                     });
                 } else {
                     const hash = await argon2.hash(password, { hashLength: 10 });
@@ -142,7 +160,11 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                                     }
                                     console.log('message send: %s', info.messageID);
                                     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                                    res.render('login', { msg: 'email had been sent' });
+                                    res.render('login', { 
+                                        msg: 'email had been sent',
+                                        bannerTitle: 'Inloggen',
+                                        bannerSubtitle: 'CMD Online' 
+                                    });
                                     res.redirect('/users/login');
                                 });
                             }
@@ -161,6 +183,7 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                         password: password,
                         name: name,
                         type: type,
+                        profile_pic: 'uploads/default-profile_pic.png',
                         is_admin: false
                     }).then((userObject) => {
                         CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: null, courses: null });
@@ -198,7 +221,11 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                                 }
                                 console.log('message send: %s', info.messageID);
                                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                                res.render('login', { msg: 'email had been sent' });
+                                res.render('login', { 
+                                    msg: 'email had been sent',
+                                    bannerTitle: 'Inloggen',
+                                    bannerSubtitle: 'CMD Online'
+                                });
                                 res.redirect('/users/login');
                             });
                         }
@@ -227,7 +254,9 @@ router.post('/login', (req, res, next) => {
         res.render('./login', {
             errors,
             username,
-            password
+            password,
+            bannerTitle: 'Inloggen',
+            bannerSubtitle: 'CMD Online'
         });
     } else {
         passport.authenticate('local', {
@@ -236,7 +265,6 @@ router.post('/login', (req, res, next) => {
             failureFlash: true
         })(req, res, next);
     }
-
 });
 
 //LOGOUT HANDLER

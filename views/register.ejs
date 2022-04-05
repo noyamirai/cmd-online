@@ -1,42 +1,43 @@
 <%- include ('./partials/head') -%>
 
 <body>
-    <header></header>
+    <%- include ('./partials/title-banner') -%>
+
     <main class="form--overview">
         <form action='/users/register' method='POST' enctype='multipart/form-data'>
             <fieldset>
-                <legend>Registreren</legend>
+                <legend>Welkom!</legend>
                 <%- include ('./partials/messages')-%>
 
                 <div>
-                    <label for="name">Naam</label>
+                    <label for="name">Naam *</label>
                     <input type='name' class="input input--normal" id='name' name='name' class='form-control' placeholder='naam' value='<%= typeof name != 'undefined' ? name : '' %>' />
                 </div>
                 
                 <div>
-                    <label for="username">Gebruikersnaam</label>
+                    <label for="username">Gebruikersnaam *</label>
                     <input type='username' class="input input--normal" id='username' name='username' class='form-control' placeholder='gebruikersnaam' value='<%= typeof username != 'undefined' ? username : '' %>' />
                 </div>
                 
                 <div>
-                    <label for="email">Email</label>
+                    <label for="email">Email *</label>
                     <input type='email' class="input input--normal" id='email' name='email' class='form-control' placeholder='email' value='<%= typeof email != 'undefined' ? email : '' %>' />
                 </div>
 
                 <div>
-                    <label for="password">Wachtwoord</label>
+                    <label for="password">Wachtwoord *</label>
                     <input type='password' class="input input--normal" id='password' name='password' class='form-control' placeholder='*************' value='<%= typeof password != 'undefined' ? password : '' %>' />
                 </div>
 
                 <div>
-                    <label for="password2">Herhaal wachtwoord</label>
+                    <label for="password2">Herhaal wachtwoord *</label>
                     <input type='password' class="input input--normal" id='password2' name='password2' class='form-control' placeholder='*************' value='<%= typeof password2 != 'undefined' ? password2 : '' %>' />
                 </div>
                 
             </fieldset>
 
             <fieldset>
-                <legend>Wat ben jij?</legend>
+                <legend>Wat ben jij? *</legend>
 
                 <div class="toggle-container" id="toggle-container">
                     <div id="toggle-yes" class="toggle--active">

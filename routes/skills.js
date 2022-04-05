@@ -25,10 +25,10 @@ router.get('/', ensureAuthenticated, (req, res) => {
 
 router.post('/submit', ensureAuthenticated, (req, res) => {
     
-
     CRUD.findDocByQuery(schemas.cmdSkill, 'linkRef', req.body.cmd_skill).then((newSkill) => {
         console.log(newSkill.id);
 
+        // Add selected skill to student user
         schemas.Student.findOneAndUpdate({ 
             'user': req.user.id
         }, {

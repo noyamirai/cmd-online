@@ -77,7 +77,9 @@
 
                 <button type="submit" value="profile-setup" name="settings_type">Vak toevoegen</button>
                 <button disabled type="submit" value="account-details" name="settings_type">Account details wijzigen</button>
-
+                <% if (userData.user.is_admin) { %>
+                    <button type="submit" value="cms" name="settings_type">CMS</button>
+                <% } %>
             </fieldset>
 
             <div>
@@ -87,6 +89,9 @@
 
         <div class="btn--container">
             <a class="btn--small btn--small-arrow form-trigger" href="/profile"><img src="../public/images/icons/settings-icon.svg" alt="Settings icon"></a>
+            <% if (userData.user.type == 'teacher') { %>
+                <a class="btn" href="/users/logout">Log Out</a>
+            <% } %>
         </div>
 
         <% } %>

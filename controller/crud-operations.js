@@ -1,3 +1,5 @@
+const schemas = require('../models/schemas');
+
 /**
  *   createDoc
  *   * Create document based on object and add into schema/collection
@@ -119,8 +121,6 @@ const addIdReferenceToDoc = async (schemaToFind, docIds, referenceSchemas, refer
         }
     }
 };
-
-const schemas = require('../models/schemas');
 
 /**
  *   removeFromClasses
