@@ -166,14 +166,6 @@ const userSchema = new mongoose.Schema({
     profile_pic: {
         type: String
     },
-    classes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `Class`
-    }],
-    courses: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `Course`
-    }],
     type: {
         type: String,
         required: [false, `Why no user type?`]

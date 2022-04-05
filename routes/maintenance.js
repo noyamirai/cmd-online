@@ -7,7 +7,12 @@ const schemas = require('../models/schemas');
 const CRUD = require(`../controller/crud-operations`);
 const paramCase = require('param-case');
 
-router.get('/', (req, res) => {
+const {
+    ensureAuthenticated
+} = require('../config/authenticate');
+
+// CMS index
+router.get('/', ensureAuthenticated, (req, res) => {
     res.render('./cms/index', {
         bannerTitle: 'CMS',
         bannerSubtitle: 'Overzicht',
@@ -15,7 +20,8 @@ router.get('/', (req, res) => {
     });
 });
 
-router.post('/topic', (req, res) => {
+// Show available CRUD options based on which button was clicked on index
+router.post('/topic', ensureAuthenticated, (req, res) => {
     if (req.body.cms_option == 'Klassen') {
 
         res.render('./cms/index', {
@@ -41,9 +47,13 @@ router.post('/topic', (req, res) => {
     }
 });
 
-router.post('/courses', (req, res) => {
+// CRUD operations for courses
+router.post('/courses', ensureAuthenticated, (req, res) => {
+
+    // Based on selected CRUD option (add/delete), perform operations
     if (req.body.course_option == 'add') {
 
+        // Get all school years and blok data (without internship bloks)
         schemas.SchoolYear.find({}).then((allYearData) => {
             schemas.SchoolBloks.find({
                 'linkRef': {
@@ -83,6 +93,7 @@ router.post('/courses', (req, res) => {
 
     } else if (req.body.course_option == 'delete') {
 
+        // On delete, get overview of all courses
         schemas.Course.find({}).then((allCourses) => {
 
             res.render('./cms/overview', {
@@ -97,7 +108,8 @@ router.post('/courses', (req, res) => {
     }
 });
 
-router.post('/courses/add', (req, res) => {
+// Adding course to database
+router.post('/courses/add', ensureAuthenticated, (req, res) => {
     let inBloks = [];
     inBloks.push(req.body.in_blok_1);
 
@@ -105,6 +117,7 @@ router.post('/courses/add', (req, res) => {
         inBloks.push(req.body.in_blok_2);
     }
 
+    // Get all selected bloks from form
     schemas.SchoolBloks.find({
         'linkRef': {
             $in: inBloks
@@ -115,6 +128,7 @@ router.post('/courses/add', (req, res) => {
             blokIds.push(blok.id);
         });
 
+        // Create new course with data from form
         CRUD.createDoc(schemas.Course, {
             title: req.body.title,
             linkRef: paramCase.paramCase(req.body.title),
@@ -123,6 +137,7 @@ router.post('/courses/add', (req, res) => {
             type: req.body.type
         }).then((courseData) => {
 
+            // Update relevant collections with course id
             schemas.SchoolBloks.find({
                 '_id': {
                     $in: courseData.in_blok
@@ -146,10 +161,12 @@ router.post('/courses/add', (req, res) => {
     });
 });
 
-router.post('/courses/delete', (req, res) => {
+// Deleting a course
+router.post('/courses/delete', ensureAuthenticated, (req, res) => {
     const coursesToDelete = req.body.coursesToDelete;
     console.log(coursesToDelete);
 
+    // If multiple courses selected, then perform CRUD for each selected course
     if (Array.isArray(coursesToDelete)) {
         schemas.Course.find({
             'linkRef': {
@@ -165,6 +182,8 @@ router.post('/courses/delete', (req, res) => {
             res.redirect(`course/done`);
 
         });
+    
+    // Perform CRUD for selected course
     } else {
         CRUD.findDocByQuery(schemas.Course, 'linkRef', coursesToDelete).then((courseData) => {
             console.log(`deleting course: ${courseData.id}`);
@@ -175,7 +194,8 @@ router.post('/courses/delete', (req, res) => {
     }
 });
 
-router.post('/classes', (req, res) => {
+// Show available CRUD options based on which class type was selected
+router.post('/classes', ensureAuthenticated, (req, res) => {
     let bannerTitle;
 
     if (req.body.class_type == 'normal') {
@@ -195,7 +215,8 @@ router.post('/classes', (req, res) => {
     });
 });
 
-router.post('/classes/:class_type/action', (req, res) => {
+// Navigate to correct form based on class type and which cms option was selected
+router.post('/classes/:class_type/action', ensureAuthenticated, (req, res) => {
     let type;
 
     if (req.params.class_type != 'normal') {
@@ -206,10 +227,12 @@ router.post('/classes/:class_type/action', (req, res) => {
 
     if (req.body.class_option == 'add') {
 
+        // Get all courses that match the type of class
         schemas.Course.find({
             'type': type
         }).then((allCourses) => {
 
+            // Get all school years
             schemas.SchoolYear.find({}).then((allYearData) => {
                 res.render('./cms/form', {
                     bannerTitle: 'Klas toevoegen',
@@ -226,6 +249,7 @@ router.post('/classes/:class_type/action', (req, res) => {
     } else if (req.body.class_option == 'delete') {
         const classSchema = CRUD.getClassSchema(req.params.class_type);
 
+        // Get all classes based on class type (schema)
         classSchema.find({}).then((allClasses) => {
 
             res.render('./cms/overview', {
@@ -240,7 +264,8 @@ router.post('/classes/:class_type/action', (req, res) => {
     }
 });
 
-router.post('/classes/:class_type/add', (req, res) => {
+// Adding class to correct collection based on type
+router.post('/classes/:class_type/add', ensureAuthenticated, (req, res) => {
 
     const classSchema = CRUD.getClassSchema(req.params.class_type);
     let courseType;
@@ -254,12 +279,14 @@ router.post('/classes/:class_type/add', (req, res) => {
         classType = 'normal';
     }
 
+    // Get all courses based on class/course type and selected year
     schemas.Course.find({
         'type': courseType,
         'in_year': req.body.in_year
     }).then((allCourses) => {
         let courseIds = [];
 
+        // In case a course has accompanying courses, add those courses to the class object as well
         allCourses.forEach((course) => {
             if (course.type == 'project') {
                 courseIds = course.accompanying_courses;
@@ -280,6 +307,7 @@ router.post('/classes/:class_type/add', (req, res) => {
         }).then((classData) => {
 
             if (classType == 'normal') {
+                // If 'main class' add id to school year
                 schemas.SchoolYear.findOne({
                     'linkRef': classData.in_year
                 }).then((foundYear) => {
@@ -288,12 +316,14 @@ router.post('/classes/:class_type/add', (req, res) => {
                 });
             }
 
+            // Update course objects based on which ones were added to class object
             schemas.Course.find({
                 '_id': {
                     $in: courseIds
                 }
             }).then((foundCourses) => {
                 foundCourses.forEach((course) => {
+                    // Add to rigth class field
                     if (course.type != 'normal') {
                         course.classes.elective.push(classData._id);
                         course.save();
@@ -309,7 +339,8 @@ router.post('/classes/:class_type/add', (req, res) => {
     });
 });
 
-router.post('/classes/:class_type/delete', (req, res) => {
+// Deleting class based on its type
+router.post('/classes/:class_type/delete', ensureAuthenticated, (req, res) => {
     const classesToDelete = req.body.classesToDelete;
     const classSchema = CRUD.getClassSchema(req.params.class_type);
 
@@ -323,6 +354,7 @@ router.post('/classes/:class_type/delete', (req, res) => {
 
     console.log(classesToDelete);
 
+    // Perform delete CRUD based on type
     if (Array.isArray(classesToDelete)) {
 
         classSchema.find({
@@ -353,8 +385,8 @@ router.post('/classes/:class_type/delete', (req, res) => {
     }
 });
 
-
-router.get('/:type/:item/done', (req, res) => {
+// Confirmation page
+router.get('/:type/:item/done', ensureAuthenticated, (req, res) => {
     res.render('./cms/confirmation', {
         bannerTitle: 'CMS',
         bannerSubtitle: `Bevestiging`,
