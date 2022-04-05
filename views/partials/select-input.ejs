@@ -1,0 +1,31 @@
+<% if (multipleSelects) { %>
+
+    <% selectData.forEach(element => { %>
+     
+        <fieldset>
+            <legend><%= element.legendTitle %></legend>
+            <div class="select-container">
+                <select class="input input--normal input--select" name="<%= element.selectName %>" id="<%= element.selectName %>">
+                    <% element.data.forEach(item => { %>
+                    <option value="<%= item.linkRef %>"><%= item.title %></option>
+                    <% }) %>
+                </select>
+            </div>
+        </fieldset>
+
+    <% }) %>
+
+<% } else { %>
+
+    <fieldset>
+        <legend><%= legendTitle %></legend>
+        <div class="select-container">
+            <select class="input input--normal input--select" name="<%= selectName %>" id="<%= selectName %>">
+                <% selectData.forEach(item => { %>
+                    <option value="<%= item.linkRef %>"><%= item.title %></option>
+                <% }) %>
+            </select>
+        </div>
+    </fieldset>
+
+<% } %>

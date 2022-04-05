@@ -1,0 +1,17 @@
+<%- include ('./partials/head.ejs') -%>
+
+<body class="">
+    <%- include ('./partials/title-banner.ejs') -%>
+
+    <main>
+        <form action="/skills/<%= formAction %>" method="post" id="form">
+
+            <%- include ('./partials/select-input.ejs') -%>
+
+            <div class="btn--container">
+                <a class="btn--small btn--small-arrow" href="/"><img src="../public/images/icons/arrow-icon.svg" alt="Back icon"></a>
+                <button type="submit">Opslaan</button>
+            </div>
+        </form>
+    </main>
+</body>

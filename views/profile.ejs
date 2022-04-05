@@ -1,70 +1,23 @@
 <%- include ('./partials/head.ejs') -%>
-<body>
-<main>
-<h1> Cmd-online </h1>
 
-<h2> het profiel van (naam)</h2>
+<body class="">
+    <%- include ('./partials/title-banner.ejs') -%>
 
-<form action="/register" method="post" id="form">
-    <fieldset>
-        <legend> In welk leerjaar zit je</legend>
-        <select name="leerjaar" id="leerjaar">
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-</select>
+    <main>
+        <form action="/profile/<%= formAction %>" method="post" id="form">
 
-<legend> In welke klas zit je</legend>
-<select name="Klas" id="Klas">
-    <option value="201">201</option>
-    <option value="202">202</option>
-    <option value="203">203</option>
-    <option value="204">204</option>
-    <option value="205">205</option>
-    <option value="206">206</option>
-    <option value="207">207</option>
-    <option value="208">208</option>
-    <option value="209">209</option>
-    <option value="210">210</option>
-    <option value="211">211</option>
-    <option value="212">212</option>
-    </select>
+            <%- include ('./partials/select-input.ejs') -%>
 
-<legend> In welk BLok zit je</legend>
-<select name="blok" id="blok">
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3 (stage)">3 (stage)</option>
-    <option value="4 (stage)">4 (stage)</option>
-    <option value="3 (Keuze-blok)">3 (Keuze-blok)</option>
-    <option value="4 (Keuze-blok)">4 (Keuze-blok)</option>
-    </select>
+            <% if (addExtra) { %>
+                <button type="submit" name="button_action" value="add-extra">Voeg klas toe</button>
+            <% } %>
 
-    <legend> Welk blok heb je gekozen</legend>
-<select name="blok-keuze" id="blok-keuze">
-    <option value="tech">tech</option>
-    <option value="visual">visual</option>
-    <option value="interaction"> interaction</option>
-    <option value="design across borders">design across borders</option>
-    </select>
+            <div class="btn--container">
+                <a class="btn--small btn--small-arrow" href="#"><img src="../public/images/icons/arrow-icon.svg" alt="Back icon"></a>
+                
+                <button type="submit" name="button_action" value="next-question">Volgende vraag</button>
+            </div>
+        </form>
 
-    <legend> Welk keuze klas zit je</legend>
-    <select name="blok-keuze" id="blok-keuze">
-        <option value="tech-1">tech-1</option>
-        <option value="tech-2">tech-2</option>
-        <option value="tech-3">tech-3</option>
-        </select>
-
-
-        <legend>herkansing of keuzeblok </legend>
-        <label for="text"> Zet hier je herkansing en of keuzeblok/vak neer. </label>
-        <input type="text" id="Extravak" name="Extravak">
-        </select>
-    </fieldset>
-    <button type="submit">Verstuur</button>
-</form>
-
-</main>
+    </main>
 </body>
-

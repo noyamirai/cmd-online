@@ -12,7 +12,7 @@ fieldset {
     width: 100%;
 }
 
-.form--popup fieldset {
+.form__radio-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -27,7 +27,7 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
     }
 
     /* radio button containers */
-    .form--popup fieldset div {
+    .form__radio-container div {
         position: relative;
         width: 33.33%;
 
@@ -37,7 +37,7 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
         background-color: var(--white-color);
     }
 
-        .form--popup fieldset div > label {
+        .form__radio-container div > label {
             display: flex;
             align-items: center;
             flex-direction: column;
@@ -51,9 +51,9 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
             transition: all 100ms ease-in-out;
         }
 
-            .form--popup fieldset div > label > span:first-of-type { font-weight: 700; }
+            .form__radio-container div > label > span:first-of-type { font-weight: 700; }
 
-            .form--popup fieldset div > label > span:last-of-type {
+            .form__radio-container div > label > span:last-of-type {
                 font-size: 14px;
                 font-size: 1.4rem;
                 font-weight: 400;
@@ -63,7 +63,16 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
                 margin-top: -4px;
             }
 
-    .form--popup fieldset div + div { 
+        .form__radio-container div > .input--custom:checked + label {
+            background-color: var(--secondary-color);
+        }
+
+        .form__radio-container div > .input--custom:checked + label,
+        .form__radio-container div > .input--custom:checked + label > span:last-of-type {
+            color: var(--white-color);
+        }
+
+    .form__radio-container div + div { 
         margin: 0 0 0 8px;
         padding: 0;
     }
@@ -86,13 +95,16 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
 
     .input {
         padding: 14px;
+        font-size: 14px; font-size: 1.4rem;
         border: var(--border-settings);
         border-radius: var(--border-radius);
     }
 
         .input--normal { width: 100%; }
-        label + .input--normal { margin-top: 12px; }
+        label + .input--normal, label + .select-container { margin-top: 12px; }
         .input--normal + label { margin-top: var(--default-padding); }
+
+        .select-container + button { margin-top: 12px; }
 
         .input--custom {
             position: absolute;
@@ -101,6 +113,33 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
             top: 0;
             right: 0;
             z-index: 5;
+        }
+
+        .select-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+            .input--select {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+            }
+
+        .select-container::before {
+            content: "";
+            position: absolute;
+
+            top: 50%;
+            right: 16px;
+
+            transform: rotate(90deg) translate(-50%);
+
+            width: 12px;
+            height: 17px;
+
+            background-color: var(--white-color);
+            background-image: url(../images/icons/arrow-icon.svg);
+            background-repeat: no-repeat;
         }
 
 /* =============================================================================
@@ -201,18 +240,33 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
             text-decoration: underline;
         }
 
-        .form--popup .input--custom:checked + label {
-            background-color: var(--secondary-color);
-        }
-
-        .form--popup .input--custom:checked + label, .form--popup .input--custom:checked + label > span:last-of-type {
-            color: var(--white-color);
-        }
-
 .form--popup form.form-active {
     transform: translateY(0);
 }
 
+/* =============================================================================
+  #FORM SETTINGS
+============================================================================= */
+.form--settings {
+    padding: 50px var(--default-padding) 68px var(--default-padding)!important;
+}
+
+    .form--settings fieldset {
+        flex-direction: column;
+    }
+
+        fieldset > button {
+            position: relative;
+            display: block;
+            top: auto;
+            left: auto;
+            right: auto;
+            bottom: auto;
+        }
+
+        fieldset > button + button {
+            margin-top: var(--default-padding);
+        }
 /* =============================================================================
   #TOGGLE BUTTON (RADIO)
 ============================================================================= */

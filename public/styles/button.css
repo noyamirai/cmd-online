@@ -30,6 +30,16 @@ button, .btn {
     transition: all 150ms ease-in-out;
 }
 
+button:disabled {
+    background-color: #dcdcdc;
+    color: #c2c2c2;
+    cursor: default;
+}
+
+button:disabled:hover {
+    transform: none;
+}
+
 button:hover, .btn:hover, .btn--small:hover { transform: scale(1.02); }
 
     /* Back button */
@@ -39,8 +49,8 @@ button:hover, .btn:hover, .btn--small:hover { transform: scale(1.02); }
         bottom: var(--default-padding);
         left: var(--default-padding);
 
-        display: flex;
-        width: 50px;
+        display: flex!important;
+        width: 50px!important;
         height: 50px;
 
         border: var(--border-settings);
@@ -132,3 +142,32 @@ button:hover, .btn:hover, .btn--small:hover { transform: scale(1.02); }
         width: 100%;
         text-align: center;
     }
+/* .logout {
+    display: block;
+    position: fixed;
+
+    bottom: var(--default-padding);
+    left: var(--default-padding);
+    right: var(--default-padding);
+
+    display: inline-block;
+    padding: 14px;
+
+    width: 100%;
+    min-height: 50px;
+
+    color: var(--white-color);
+    font-size: 16px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-decoration: none;
+    text-align: center;
+
+    cursor: pointer;
+
+    background-color: var(--secondary-color);
+    border-radius: var(--border-radius);
+    border: none;
+
+    transition: all 150ms ease-in-out;
+} */
