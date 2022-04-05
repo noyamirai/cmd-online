@@ -31,6 +31,7 @@ passmail=your gmail password
 ~~~
 
 The password for `SecretSESSION` can be anything you want. As of now, we do not have a base JSON file with dummy data you could import into your database, but we're working on it :wink:. That's why we have a dev database. To gain access to this database, please get in touch with the creator.
+
 ---
 Don't forget to chage your gmail acount to make sure it has asses to 
 [gmail less secure apps](https://stackoverflow.com/questions/19877246/nodemailer-with-gmail-and-nodejs).
