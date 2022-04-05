@@ -22,6 +22,7 @@ const handleGesture = () => {
     }
 };
 
+// Error handling: check if there are enough students
 const checkIfTeamGenerator = () => {
     if (formEl.getElementsByTagName('input').length) {
         for (let item of formEl.getElementsByTagName('input')) {

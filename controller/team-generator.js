@@ -1,4 +1,11 @@
 /* eslint-disable no-inner-declarations */
+/**
+ *   generate
+ *   * Generates teams based on CMD skills
+ *
+ *   @param students: which students need to be split into teams? [(ObjectId)]
+ *   @param teamSize: how big should the teams be? (Number)
+ **/
 const generate = async (students, teamSize) => {
 
     let allTeams = [];

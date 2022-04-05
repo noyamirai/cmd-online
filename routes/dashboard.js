@@ -11,6 +11,8 @@ const CRUD = require(`../controller/crud-operations`);
 
 router.get('/', ensureAuthenticated, (req, res) => {
     if (req.user.type == 'student') {
+
+        // Get student including their classes and teams
         schemas.Student.findOne({
             'user': req.user.id
         }).lean().populate({
@@ -22,13 +24,14 @@ router.get('/', ensureAuthenticated, (req, res) => {
             }
         }).exec((err, result) => {
             if (err) Promise.reject(err);
-
+            
             if (result.cmd_skills.best == null) {
                 res.render('index', {
                     userData: result,
                     userSkill: null,
                 });
             } else {
+                // Only get skill when user has one defined
                 CRUD.findDocByQuery(schemas.cmdSkill, '_id', result.cmd_skills.best).then((skill) => {
                     res.render('index', {
                         userData: result,
@@ -38,6 +41,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
             }
         });
 
+    // Different 'dashboard' for teachers
     } else if (req.user.type == 'teacher') {
         res.redirect(`${req.user.username}/courses`);
     }

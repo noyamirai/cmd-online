@@ -23,8 +23,19 @@ const mailpass = process.env.passmail;
 
 
 //RENDER PAGES
-router.get('/login', (req, res) => { res.render('login'); });
-router.get('/register', (req, res) => res.render('register'));
+router.get('/login', (req, res) => { 
+    res.render('login', {
+        bannerTitle: 'Inloggen',
+        bannerSubtitle: 'CMD Online'              
+    });
+});
+
+router.get('/register', (req, res) =>  {
+    res.render('register', {
+        bannerTitle: 'Registreren',
+        bannerSubtitle: 'CMD Online'   
+    });
+});
 
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -138,7 +149,11 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                                 }
                                 console.log('message send: %s', info.messageID);
                                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                                res.render('login', { msg: 'email had been sent' });
+                                res.render('login', { 
+                                    msg: 'email had been sent',
+                                    bannerTitle: 'Inloggen',
+                                    bannerSubtitle: 'CMD Online'
+                                });
                                 res.redirect('/users/login');
                             });
                         }

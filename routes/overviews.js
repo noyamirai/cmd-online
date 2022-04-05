@@ -12,61 +12,59 @@ const acronymGen = require(`../public/js/acronym-generator`);
 
 const team = require(`../controller/team-generator`);
 
-// Course overview
+// Course overview: getting all courses from user object
 router.get(`/courses`, ensureAuthenticated, (req, res) => {
-    CRUD.findDocByQuery(schemas.User, `username`, req.params.username).then((userData) => {
+    if (req.user.type == 'student') {
 
-        if (userData.type == 'student') {
+        schemas.Student.findOne({
+            'user': req.user.id
+        }).lean().populate(`user courses`).exec(function(err, studentData) {
+            if (err) Promise.reject(err);
 
-            schemas.Student.findOne({
-                'user': userData.id
-            }).lean().populate(`user courses`).exec(function(err, studentData) {
-                if (err) Promise.reject(err);
+            const courseData = studentData.courses;
 
-                const courseData = studentData.courses;
-
-                courseData.forEach(doc => {
-                    doc.acronym = acronymGen.createAcronym(doc.title);
-                });
-
-                res.render(`courses-overview`, {
-                    userData: studentData,
-                    courseData: courseData,
-                    prevURL: '/'
-                });
+            courseData.forEach(doc => {
+                doc.acronym = acronymGen.createAcronym(doc.title);
             });
 
-        } else if (userData.type == 'teacher') {
+            res.render(`courses-overview`, {
+                userData: studentData,
+                courseData: courseData,
+                prevURL: '/'
+            });
+        });
 
-            schemas.Teacher.findOne({
-                'user': userData.id
-            }).lean().populate('user').exec((err, teacherData) => {
-                if (err) Promise.reject(err);
+    } else if (req.user.type == 'teacher') {
 
-                if (teacherData.courses != null) {
-                    schemas.TeacherCourse.find({
-                        'userId': teacherData._id
-                    }).lean().populate(`course`).exec(function(err, courseData) {
-                        if (err) Promise.reject(err);
+        schemas.Teacher.findOne({
+            'user': req.user.id
+        }).lean().populate('user').exec((err, teacherData) => {
+            if (err) Promise.reject(err);
 
-                        courseData.forEach(doc => {
-                            doc.acronym = acronymGen.createAcronym(doc.course.title);
-                        });
+            // Teacher's courses are linked to TeacherCourse collection
+            if (teacherData.courses != null) {
+                schemas.TeacherCourse.find({
+                    'userId': teacherData._id
+                }).lean().populate(`course`).exec((err, courseData) => {
+                    if (err) Promise.reject(err);
 
-                        res.render(`courses-overview`, {
-                            userData: teacherData,
-                            courseData: courseData
-                        });
+                    courseData.forEach(doc => {
+                        doc.acronym = acronymGen.createAcronym(doc.course.title);
                     });
-                } else {
+
                     res.render(`courses-overview`, {
                         userData: teacherData,
-                        courseData: null
+                        courseData: courseData
                     });
-                }
-            });
-        }
-    });
+                });
+            } else {
+                res.render(`courses-overview`, {
+                    userData: teacherData,
+                    courseData: null
+                });
+            }
+        });
+    }
 });
 
 //Class details directly after clicking on a course (only students will navigate here)
@@ -267,6 +265,7 @@ router.get(`/:course/:class/team-form`, ensureAuthenticated, (req, res) => {
     });
 });
 
+// Team generation
 router.post('/:course/:class/teams/create', (req, res) => {
     const teamSize = req.body.teamSize;
 
@@ -306,12 +305,13 @@ router.post('/:course/:class/teams/create', (req, res) => {
                     allStudentIds.push(student._id);
                 });
 
+                // Removes all teams from relevant collections in order to prevent duplicates when generating new teams
                 CRUD.resetTeams(classData.teams, classSchema, classData.linkRef, allStudentIds).then(() => {
                     console.log('DONE! Start generating new teams');
 
                     team.generate(allStudentObjects, teamSize).then((generatedTeams) => {
                         generatedTeams.forEach((team) => {
-
+                            // Add each team to Team collection
                             CRUD.createDoc(schemas.Team, {
                                 name: team.name,
                                 number: team.number,
@@ -330,6 +330,7 @@ router.post('/:course/:class/teams/create', (req, res) => {
                                     CRUD.addIdReferenceToDoc(schemas.Student, object.student._id, 'teams', doc._id);
                                 });
 
+                                // Get all teams and their details
                                 schemas.Team.findById(doc.id).lean().populate({
                                     path: `students.student`,
                                     select: `user`,
@@ -359,7 +360,7 @@ router.post('/:course/:class/teams/create', (req, res) => {
                 });
 
             } else {
-                // TODO: CHECK IF WORKS
+                // When there are not enough students
                 let errors = [];
                 errors.push({
                     msg: 'Not enough students :('
@@ -436,6 +437,7 @@ router.get(`/:course/:class/teams`, ensureAuthenticated, (req, res) => {
     });
 });
 
+// Team overview based on selected team
 router.get('/:course/:class/teams/:team_number/overview', (req, res) => {
     let prevURL;
 

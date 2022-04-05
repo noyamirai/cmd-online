@@ -1,11 +1,12 @@
 <%- include ('./partials/head') -%>
 
 <body>
-    <header></header>
+    <%- include ('./partials/title-banner') -%>
+
     <main class="form--overview">
         <form action='/users/register' method='POST' enctype='multipart/form-data'>
             <fieldset>
-                <legend>Registreren</legend>
+                <legend>Welkom!</legend>
                 <%- include ('./partials/messages')-%>
 
                 <div>
