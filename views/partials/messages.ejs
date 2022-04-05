@@ -1,5 +1,9 @@
 <% if(typeof errors != 'undefined') {%> 
     <% errors.forEach((error) =>{  %> 
-        <%=  error.msg %> 
+        <p class="error"><%=  error.msg %></p>
         <% }) %> 
+<%  }%> 
+
+<% if(error != ' ') {%> 
+        <%=  error %> 
 <%  }%> 

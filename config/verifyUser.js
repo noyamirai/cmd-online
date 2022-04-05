@@ -1,11 +1,9 @@
 const localStrategy = require('passport-local').Strategy;
 const argon2 = require('argon2');
-const {
-    User
-} = require('../models/schemas');
+const {User} = require('../models/schemas');
 
 
-module.exports = function(passport) {
+module.exports = function (passport) {
 
     passport.use(
         new localStrategy({
