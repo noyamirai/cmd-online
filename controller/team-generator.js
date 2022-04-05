@@ -50,8 +50,9 @@ const generate = async (students, teamSize) => {
             let student = result[0];
             updatedStudentArray = result[1];
 
-            // console.log(`adding: ${student.user.name.first} with skill: ${student.cmd_skills.best}`);
+            // console.log(`adding: ${student.user.name} with skill: ${student.cmd_skills.best}`);
             studentsInTeam.push({
+                name: student.user.name,
                 student: student._id,
                 cmd_skill: student.cmd_skills.best
             });
@@ -72,7 +73,7 @@ const generate = async (students, teamSize) => {
                 // console.log(`team has members!`);
                 // teamMembers.forEach(member => {
                 //     console.log(`member: ${member.name} with skill: ${member.cmd_skill}`);
-                // })
+                // });
                 // console.log(`new potential student: ${student.user.name.first} with skill: ${student.cmd_skills.best}`);
 
                 /**
@@ -177,6 +178,7 @@ const generate = async (students, teamSize) => {
     if (remainders == 1) {
         updatedStudentArray.forEach((student) => {
             allTeams[amountOfTeams - 1].students.push({
+                name: student.user.name,
                 student: student._id,
                 cmd_skill: student.cmd_skills.best
             });
@@ -186,6 +188,7 @@ const generate = async (students, teamSize) => {
 
         updatedStudentArray.forEach((student) => {
             newStudentsInTeam.push({
+                name: student.user.name,
                 student: student._id,
                 cmd_skill: student.cmd_skills.best
             });

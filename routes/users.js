@@ -1,41 +1,38 @@
+/*eslint no-undef: "error"*/
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 
+
 const { User } = require('../models/schemas');
 const multer = require('multer');
-// const fs = require('fs');
 const { Student } = require('../models/schemas');
+const { Teacher } = require('../models/schemas');
 const argon2 = require('argon2');
 const passport = require('passport');
 
+// const logout_btn = document.getElementById('logout');
 const CRUD = require(`../controller/crud-operations`);
+const nodemailer = require('nodemailer');
+// const { getMaxListeners } = require('../../Test/test/models/user');
+// eslint-disable-next-line no-undef
+const mailuser = process.env.usermail;
+// eslint-disable-next-line no-undef
+const mailpass = process.env.passmail;
+
+
+
 
 //RENDER PAGES
 router.get('/login', (req, res) => { res.render('login'); });
 router.get('/register', (req, res) => res.render('register'));
-
-//MULTER
-// let storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, '../public/uploads');
-//     },
-//     filename: (req, file, cb) => {
-//         // cb(null, file.fieldname + '-' + Date.now());
-//         let ext = ''; // set default extension (if any)
-//         if (file.originalname.split(".").length>1) // checking if there is an extension or not.
-//             ext = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
-//         cb(null, Date.now() + ext);
-//     }
-// });
-
-// let upload = multer({ storage: storage });
 
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'public');
     },
     filename: (req, file, cb) => {
-        const ext = file.mimetype.split("/")[1];
+        const ext = file.mimetype.split('/')[1];
         cb(null, `uploads/${file.fieldname}-${Date.now()}.${ext}`);
     },
 });
@@ -47,10 +44,12 @@ const upload = multer({
 //REGISTER HANDLER
 router.post('/register', upload.single('profile_pic'), (req, res) => {
     let { name, username, email, password, password2, type } = req.body;
-    let profile_pic;
-    if (req.files && req.files.length) {
-        profile_pic  = req.file.filename;
+
+    let profile_pic ;
+    if (profile_pic != undefined) {
+        let profile_pic = req.file.filename;
     }
+    let errors = [];
 
     let errors = [];
     
@@ -86,7 +85,7 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
         User.findOne({ email: email })
             .then(async user => {
                 if (user) {
-                    // ACCOUNT ALREADY EXISTS
+                    //ACCOUNT ALREADY EXISTS
                     errors.push({ msg: 'This email is already in use' });
                     res.render('./register', {
                         errors,
@@ -103,17 +102,117 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
 
                     // SET STRING PASSWORD TO HASHED PASSWORD
                     password = hash;
-
+                    if (profile_pic != undefined) {
+                        CRUD.createDoc(User, {
+                            username: username,
+                            email: email,
+                            password: password,
+                            name: name,
+                            type: type,
+                            profile_pic: profile_pic,
+                            is_admin: false
+                        }).then((userObject) => {
+                            CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: null, courses: null });
+                            async function main() {
+                                // Generate test SMTP service account from ethereal.email
+                                // Only needed if you don't have a real mail account for testing
+                                // create reusable transporter object using the default SMTP transport
+                                let transporter = nodemailer.createTransport({
+                                    service: 'gmail',
+                                    auth: {
+                                        user: mailuser, // generated ethereal user
+                                        pass: mailpass, // generated ethereal password
+                                    },
+                                    tls: {
+                                        rejectUnautorized: false
+                                    },
+                                });
+    
+    
+                                let mailoptions = {
+                                    from: 'Cmd-Online',
+                                    to: email,
+                                    subject: 'Cmd-Online',
+                                    text: 'Regegisteert',
+                                    html: '<b> Uw registratie bij de cmd-online aplicatie is gelukt <b>',
+    
+                                };
+                                transporter.sendMail(mailoptions, (error, info) => {
+                                    if (error) {
+                                        return console.log(error),
+                                        res.json({
+                                            error: error,
+                                            message: 'er gaat hier iets fout',
+                                        });
+                                    }
+                                    console.log('message send: %s', info.messageID);
+                                    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+                                    res.render('login', { msg: 'email had been sent' });
+                                    res.redirect('/users/login');
+                                });
+                            }
+                            main().catch(console.error);
+                            if (type == 'student') {
+                                CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: { normal: null, elective: null }, courses: null });
+                            } else {
+                                CRUD.createDoc(Teacher, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: { normal: null, elective: null }, courses: null });
+                            }
+                            res.redirect('/users/login');
+                        });
+                    }                
                     CRUD.createDoc(User, {
                         username: username,
                         email: email,
                         password: password,
                         name: name,
                         type: type,
-                        profile_pic: profile_pic,
                         is_admin: false
                     }).then((userObject) => {
                         CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: null, courses: null });
+                        async function main() {
+                            // Generate test SMTP service account from ethereal.email
+                            // Only needed if you don't have a real mail account for testing
+                            // create reusable transporter object using the default SMTP transport
+                            let transporter = nodemailer.createTransport({
+                                service: 'gmail',
+                                auth: {
+                                    user: mailuser, // generated ethereal user
+                                    pass: mailpass, // generated ethereal password
+                                },
+                                tls: {
+                                    rejectUnautorized: false
+                                },
+                            });
+
+
+                            let mailoptions = {
+                                from: 'Cmd-Online',
+                                to: email,
+                                subject: 'Cmd-Online',
+                                text: 'Regegisteert',
+                                html: '<b> Uw registratie bij de cmd-online aplicatie is gelukt <b>',
+
+                            };
+                            transporter.sendMail(mailoptions, (error, info) => {
+                                if (error) {
+                                    return console.log(error),
+                                    res.json({
+                                        error: error,
+                                        message: 'er gaat hier iets fout',
+                                    });
+                                }
+                                console.log('message send: %s', info.messageID);
+                                console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+                                res.render('login', { msg: 'email had been sent' });
+                                res.redirect('/users/login');
+                            });
+                        }
+                        main().catch(console.error);
+                        if (type == 'student') {
+                            CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: { normal: null, elective: null }, courses: null });
+                        } else {
+                            CRUD.createDoc(Teacher, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: { normal: null, elective: null }, courses: null });
+                        }
                         res.redirect('/users/login');
                     });
                 }
@@ -132,4 +231,9 @@ router.post('/login', (req, res, next) => {
     errors.push({ msg: 'Username or password was incorrect!' });
 });
 
+//LOGOUT HANDLER
+router.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/users/login');
+});
 module.exports = router;

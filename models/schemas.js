@@ -112,7 +112,14 @@ const teamSchema = new mongoose.Schema({
         }
     }],
     class: {
-        type: mongoose.Schema.Types.ObjectId, ref: `Class`
+        normal: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `Class`
+        },
+        elective: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `ElectiveClass`
+        }
     },
     course: {
         type: mongoose.Schema.Types.ObjectId,
@@ -207,10 +214,10 @@ const userStudent = new mongoose.Schema({
         ref: `Team`
     }],
     classes: {
-        normal: [{
+        normal: {
             type: mongoose.Schema.Types.ObjectId,
             ref: `Class`
-        }],
+        },
         elective: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: `ElectiveClass`
@@ -233,10 +240,16 @@ const userTeacher = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: `User`
     },
-    classes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: `Class`
-    }],
+    classes: {
+        normal: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `Class`
+        },
+        elective: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: `ElectiveClass`
+        }]
+    },
     courses: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: `Course`
