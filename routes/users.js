@@ -58,9 +58,8 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
 
     let profile_pic ;
     if (profile_pic != undefined) {
-        let profile_pic = req.file.filename;
+        profile_pic = req.file.filename;
     }
-    let errors = [];
 
     let errors = [];
     
