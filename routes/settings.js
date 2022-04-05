@@ -14,6 +14,8 @@ router.post('/', ensureAuthenticated, (req, res) => {
         res.redirect('/profile/teacher');
     } else if (req.body.settings_type == 'cmd-skills') {
         res.redirect('/skills');
+    } else if (req.body.settings_type == 'cms') {
+        res.redirect('/maintenance');
     }
 
 });

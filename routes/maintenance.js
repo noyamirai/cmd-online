@@ -7,8 +7,12 @@ const schemas = require('../models/schemas');
 const CRUD = require(`../controller/crud-operations`);
 const paramCase = require('param-case');
 
+const {
+    ensureAuthenticated
+} = require('../config/authenticate');
+
 // CMS index
-router.get('/', (req, res) => {
+router.get('/', ensureAuthenticated, (req, res) => {
     res.render('./cms/index', {
         bannerTitle: 'CMS',
         bannerSubtitle: 'Overzicht',
@@ -17,7 +21,7 @@ router.get('/', (req, res) => {
 });
 
 // Show available CRUD options based on which button was clicked on index
-router.post('/topic', (req, res) => {
+router.post('/topic', ensureAuthenticated, (req, res) => {
     if (req.body.cms_option == 'Klassen') {
 
         res.render('./cms/index', {
@@ -44,7 +48,7 @@ router.post('/topic', (req, res) => {
 });
 
 // CRUD operations for courses
-router.post('/courses', (req, res) => {
+router.post('/courses', ensureAuthenticated, (req, res) => {
 
     // Based on selected CRUD option (add/delete), perform operations
     if (req.body.course_option == 'add') {
@@ -105,7 +109,7 @@ router.post('/courses', (req, res) => {
 });
 
 // Adding course to database
-router.post('/courses/add', (req, res) => {
+router.post('/courses/add', ensureAuthenticated, (req, res) => {
     let inBloks = [];
     inBloks.push(req.body.in_blok_1);
 
@@ -158,7 +162,7 @@ router.post('/courses/add', (req, res) => {
 });
 
 // Deleting a course
-router.post('/courses/delete', (req, res) => {
+router.post('/courses/delete', ensureAuthenticated, (req, res) => {
     const coursesToDelete = req.body.coursesToDelete;
     console.log(coursesToDelete);
 
@@ -191,7 +195,7 @@ router.post('/courses/delete', (req, res) => {
 });
 
 // Show available CRUD options based on which class type was selected
-router.post('/classes', (req, res) => {
+router.post('/classes', ensureAuthenticated, (req, res) => {
     let bannerTitle;
 
     if (req.body.class_type == 'normal') {
@@ -212,7 +216,7 @@ router.post('/classes', (req, res) => {
 });
 
 // Navigate to correct form based on class type and which cms option was selected
-router.post('/classes/:class_type/action', (req, res) => {
+router.post('/classes/:class_type/action', ensureAuthenticated, (req, res) => {
     let type;
 
     if (req.params.class_type != 'normal') {
@@ -261,7 +265,7 @@ router.post('/classes/:class_type/action', (req, res) => {
 });
 
 // Adding class to correct collection based on type
-router.post('/classes/:class_type/add', (req, res) => {
+router.post('/classes/:class_type/add', ensureAuthenticated, (req, res) => {
 
     const classSchema = CRUD.getClassSchema(req.params.class_type);
     let courseType;
@@ -336,7 +340,7 @@ router.post('/classes/:class_type/add', (req, res) => {
 });
 
 // Deleting class based on its type
-router.post('/classes/:class_type/delete', (req, res) => {
+router.post('/classes/:class_type/delete', ensureAuthenticated, (req, res) => {
     const classesToDelete = req.body.classesToDelete;
     const classSchema = CRUD.getClassSchema(req.params.class_type);
 
@@ -382,7 +386,7 @@ router.post('/classes/:class_type/delete', (req, res) => {
 });
 
 // Confirmation page
-router.get('/:type/:item/done', (req, res) => {
+router.get('/:type/:item/done', ensureAuthenticated, (req, res) => {
     res.render('./cms/confirmation', {
         bannerTitle: 'CMS',
         bannerSubtitle: `Bevestiging`,

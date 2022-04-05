@@ -77,7 +77,9 @@
 
                 <button type="submit" value="profile-setup" name="settings_type">Vak toevoegen</button>
                 <button disabled type="submit" value="account-details" name="settings_type">Account details wijzigen</button>
-
+                <% if (userData.user.is_admin) { %>
+                    <button type="submit" value="cms" name="settings_type">CMS</button>
+                <% } %>
             </fieldset>
 
             <div>
