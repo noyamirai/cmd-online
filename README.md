@@ -6,15 +6,21 @@ CMD Online, previously known as Project Team Creator, is a browser based matchin
 As stated before CMD Online offers a matching feature that lets teachers generate teams for their classes based on the CMD skills of their students. Teachers no longer have to spend time and energy on creating teams and worrying whether or not skill levels of students will match. In addition, students no longer have to worry about their upcoming project team, knowing their team will be fair and balanced!
 
 CMD Online has recently received an upgrade, it now also offers the following **new** features: 
- 
-- Create account
-- Login
-- Profile setup
-- CMD skills setup
+
+| Features                | Developer in charge             | Status |
+|-------------------------|---------------------------------|--------|
+| (NEW) Create account    | Aidan Omwando                   | DONE   |
+| (NEW) Login             | Aidan Omwando                   | DONE   |
+| (NEW) Profile setup     | Tejo van der Burg & Maijla Ikiz | DONE   |
+| (NEW) CMD Skills setup  | Juliette Groot & Maijla Ikiz    | DONE   |
+| Team generator          | Maijla Ikiz                     | DONE   |
+| (NEW) CMS               | Maijla Ikiz                     | DONE   |
+| Mongoose                | Maijla Ikiz                     | DONE   |
+| (NEW) Error handling    | Juliette Groot                  | DONE   |
+| (NEW) Node Mailer       | Tejo van der Burg               | DONE   |
+| (NEW) Asset compression | Aidan Omwando                   | DONE   |
 
 ![Team creator forms](./public/images/readme/team_creator-preview.jpg)
-
-(Even though the web application has mostly been build from a teacher's point of view, in the future I would like this app to become sort of like a community app for the entirety of CMD.)
 
 ## :zap: Quickstart
  If you want to start working with on PTC, and you have cloned this repo to your desktop, go to its root directory and run `npm install` to install its dependencies.
