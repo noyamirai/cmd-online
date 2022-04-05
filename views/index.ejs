@@ -5,7 +5,7 @@
     <header>
         <figure>
             <picture class="box-shadow">
-                <img src="../public/<%= userData.user.profile_pic %> " alt="Profiel foto van <%= userData.user.name %> ">
+                <img src="/public/<%= userData.user.profile_pic %> " alt="Profiel foto van <%= userData.user.name %> ">
             </picture>
 
             <figcaption>
@@ -13,7 +13,7 @@
                 <p><%= userData.user.name %> </p>
 
                 <% if (userData.user.type == "teacher") { %>
-                <span><img src="../public/images/icons/check-icon.svg" alt="Checkmark icon"></span>
+                <span><img src="/public/images/icons/check-icon.svg" alt="Checkmark icon"></span>
                 <% } %>
 
             </figcaption>
@@ -73,7 +73,7 @@
                             <p>Profiel setup</p>
                         </div>
 
-                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                        <img class="icon" src="/public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
                     </a>
                 </li>
                 <li>
@@ -83,7 +83,7 @@
                             <p>CMD Skills</p>
                         </div>
 
-                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                        <img class="icon" src="/public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
                     </a>
                 </li>
 
@@ -95,7 +95,7 @@
                             <p>Profiel setup</p>
                         </div>
 
-                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                        <img class="icon" src="/public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
                     </a>
                 </li>
 
@@ -108,7 +108,7 @@
                             <p>CMD Skills</p>
                         </div>
 
-                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                        <img class="icon" src="/public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
                     </a>
                 </li>
 
@@ -119,7 +119,7 @@
                             <p><%= userData.courses.length %> vakken</p>
                         </div>
 
-                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                        <img class="icon" src="/public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
                     </a>
                 </li>
                 <li>
@@ -129,7 +129,7 @@
                             <p><%= userData.classes.normal.title %></p>
                         </div>
 
-                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                        <img class="icon" src="/public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
                     </a>
                 </li>
 
@@ -141,7 +141,7 @@
                             <p><%= userData.courses.length %> vakken</p>
                         </div>
 
-                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                        <img class="icon" src="/public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
                     </a>
                 </li>
                 <li>
@@ -151,7 +151,7 @@
                             <p><%= userData.classes.normal.title %></p>
                         </div>
 
-                        <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                        <img class="icon" src="/public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
                     </a>
                 </li>
                 <% } %>
@@ -181,11 +181,11 @@
         </form>
 
         <div class="btn--container">
-            <a class="btn--small btn--small-arrow form-trigger" href="/profile"><img src="../public/images/icons/settings-icon.svg" alt="Settings icon"></a>
+            <a class="btn--small btn--small-arrow form-trigger" href="/profile"><img src="/public/images/icons/settings-icon.svg" alt="Settings icon"></a>
             <a class="btn" href="/users/logout">Log Out</a>
         </div>
     </main>
 
-    <script src="../public/js/color-generator.js"></script>
-    <script async src="../public/js/form-script.js"></script>
+    <script src="/public/js/color-generator.js"></script>
+    <script async src="/public/js/form-script.js"></script>
 </body>

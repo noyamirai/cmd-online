@@ -22,7 +22,7 @@
                         <p><%= item.classes.length %> klassen</p>
                     </div>
 
-                    <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                    <img class="icon" src="/public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
                 </a>
             </li>
             <% }) %>
@@ -40,7 +40,7 @@
                         <h3><%= item.title %></h3>
                     </div>
 
-                    <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                    <img class="icon" src="/public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
                 </a>
             </li>
             <% }) %>
@@ -57,7 +57,7 @@
                         <p>Profiel setup</p>
                     </div>
 
-                    <img class="icon" src="../public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
+                    <img class="icon" src="/public/images/icons/arrow-icon.svg" alt="Accordion arrow icon">
                 </a>
             </li>
         </ul>
@@ -66,7 +66,7 @@
 
         <% if (userData.user.type == 'student') { %>
         <div class="btn--container">
-            <a class="btn--small btn--small-arrow" href="<%= prevURL %>"><img src="../../public/images/icons/arrow-icon.svg" alt="Back icon"></a>
+            <a class="btn--small btn--small-arrow" href="<%= prevURL %>"><img src="/public/images/icons/arrow-icon.svg" alt="Back icon"></a>
         </div>
 
         <% } else { %>
@@ -88,7 +88,7 @@
         </form>
 
         <div class="btn--container">
-            <a class="btn--small btn--small-arrow form-trigger" href="/profile"><img src="../public/images/icons/settings-icon.svg" alt="Settings icon"></a>
+            <a class="btn--small btn--small-arrow form-trigger" href="/profile"><img src="/public/images/icons/settings-icon.svg" alt="Settings icon"></a>
             <% if (userData.user.type == 'teacher') { %>
                 <a class="btn" href="/users/logout">Log Out</a>
             <% } %>
@@ -98,8 +98,8 @@
     </main>
 </body>
 
-<script src="../public/js/color-generator.js"></script>
+<script src="/public/js/color-generator.js"></script>
 
 <% if (userData.user.type == 'teacher') { %>
-     <script async src="../public/js/form-script.js"></script>
+     <script async src="/public/js/form-script.js"></script>
 <% } %>
