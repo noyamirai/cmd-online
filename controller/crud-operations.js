@@ -75,6 +75,7 @@ const findDocByQuery = async (schema, attribute, equalTo) => {
  **/
 const addIdReferenceToDoc = async (schemaToFind, docIds, referenceSchemas, referenceIds) => {
 
+
     // one doc to be updated with single id
     if (!Array.isArray(docIds) && !Array.isArray(referenceIds)) {
         await findDocByQuery(schemaToFind, `_id`, docIds).then((doc) => {
@@ -313,7 +314,7 @@ const resetTeams = async (teamsToDelete, classTypeSchema, classLinkRef, studentI
         '_id': {
             $in: teamsToDelete
         }
-    }).then('All teams removed from teams collection');
+    }).then(console.log('All teams removed from teams collection'));
 
     classTypeSchema.findOneAndUpdate({
         'linkRef': classLinkRef
@@ -347,7 +348,194 @@ const getClassSchema = (courseType) => {
     }
 };
 
+/**
+ *   deleteCourse
+ *   * Removes courses from relevant collections
+ *
+ *   @param courseToDelete: which course has to be deleted? (ObjectId)
+ *   @param courseType: what type of course is it? (normal or not)
+ **/
+const deleteCourses = async (courseToDelete, courseType) => {
+    let classTypeSchema = getClassSchema(courseType);
 
+    const toBeUpdated = [
+        schemas.Teacher,
+        schemas.Student,
+        schemas.SchoolBloks,
+        schemas.SchoolYear,
+        classTypeSchema
+    ];
+
+    schemas.Course.deleteMany({
+        '_id': courseToDelete
+    }).then(console.log(`All courses deleted from course collection`));
+
+    schemas.TeacherCourse.deleteMany({
+        'course': courseToDelete
+    }).then(console.log(`All courses deleted from teacher course collection`));
+
+    toBeUpdated.forEach((schema) => {
+        schema.updateMany({
+            'courses': courseToDelete
+        }, {
+            $pull: {
+                'courses': courseToDelete
+            }
+        }, (err, affected) => {
+            if (err) {
+                console.log(err);
+            }
+            console.log(`affected`, affected);
+        });
+    });
+
+    console.log('Course deleted from other relevant collections');
+
+    schemas.Team.find({
+        'course': courseToDelete
+    }).then((teamObjects) => {
+
+        if (teamObjects.length) {
+            console.log('Teams linked to course');
+
+            let teamIds = [];
+
+            teamObjects.forEach((team) => {
+                teamIds.push(team.id);
+            });
+
+            schemas.Team.deleteMany({
+                'course': courseToDelete
+            }).then(() => {
+                console.log(`Deleted all teams with connection to course`);
+
+                schemas.Student.updateMany({
+                    'teams': {
+                        $in: teamIds
+                    }
+                }, {
+                    $pullAll: {
+                        'teams': teamIds
+                    }
+                }).then(console.log('Teams with connection to course deleted from student object'));
+
+                classTypeSchema.updateMany({
+                    'teams': {
+                        $in: teamIds
+                    }
+                }, {
+                    $pullAll: {
+                        'teams': teamIds
+                    }
+                }).then(console.log('Teams with connection to course deleted from class object'));
+            });
+
+        } else {
+            console.log('No teams linked to course');
+        }
+    });
+};
+
+/**
+ *   deleteClasses
+ *   * Removes classes from relevant collections
+ *
+ *   @param classesToDelete: which class has to be deleted? (ObjectId)
+ *   @param classType: what type of class is it? (normal or not)
+ **/
+const deleteClasses = async (classToDelete, classType) => {
+    let classTypeSchema = getClassSchema(classType);
+
+    let query;
+    let singleQuery;
+
+    if (classType != 'normal') {
+        query = 'classes.elective';
+        singleQuery = 'class.elective';
+    } else {
+        query = 'classes.normal';
+        singleQuery = 'class.normal';
+    }
+
+    const toBeUpdatedClassObject = [
+        schemas.Course,
+        schemas.Student
+    ];
+
+    const toBeUpdatedClassArray = [
+        schemas.SchoolYear,
+        schemas.Teacher
+    ];
+
+    classTypeSchema.deleteMany({
+        '_id': classToDelete
+    }).then(console.log(`All classes deleted from class collection`));
+
+    toBeUpdatedClassObject.forEach((schema) => {
+        schema.updateMany({
+            [query]: classToDelete
+        }, {
+            $pull: {
+                [query]: classToDelete
+            }
+        }, (err, affected) => {
+            if (err) {
+                console.log(err);
+            }
+            console.log(`affected`, affected);
+        });
+    });
+
+    toBeUpdatedClassArray.forEach((schema) => {
+        schema.updateMany({
+            'classes': classToDelete
+        }, {
+            $pull: {
+                'classes': classToDelete
+            }
+        }, (err, affected) => {
+            if (err) {
+                console.log(err);
+            }
+            console.log(`affected`, affected);
+        });
+    });
+
+    schemas.Team.find({
+        [singleQuery]: classToDelete
+    }).then((teamObjects) => {
+
+        if (teamObjects.length) {
+            console.log('Teams linked to class');
+
+            let teamIds = [];
+
+            teamObjects.forEach((team) => {
+                teamIds.push(team.id);
+            });
+
+            schemas.Team.deleteMany({
+                [singleQuery]: classToDelete
+            }).then(() => {
+                console.log(`Deleted all teams with connection to class`);
+
+                schemas.Student.updateMany({
+                    'teams': {
+                        $in: teamIds
+                    }
+                }, {
+                    $pullAll: {
+                        'teams': teamIds
+                    }
+                }).then(console.log('Teams with connection to class deleted from student object'));
+
+            });
+
+        } else {
+            console.log('No teams linked to class');
+        }
+    });
+};
 
 module.exports = {
     createDoc,
@@ -358,5 +546,7 @@ module.exports = {
     addStudentToClassesAndCourses,
     addTeacherToClassesAndCourses,
     resetTeams,
-    getClassSchema
+    getClassSchema,
+    deleteCourses,
+    deleteClasses
 };

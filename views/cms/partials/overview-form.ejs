@@ -1,0 +1,34 @@
+<form method="post" action="/maintenance/<%= formAction %>">
+
+    <% if (course) { %>
+
+        <% courseData.forEach(course => { %>
+
+            <fieldset class="form__checkbox-container">
+                <input class="input input--custom" type="checkbox" id="<%= course.linkRef %>" name="coursesToDelete" value="<%= course.linkRef %>">
+                <label for="<%= course.linkRef %>"><%= course.title %><span><img src="/public/images/icons/check-icon.svg" alt="Check icon"></span></label>
+            </fieldset>
+     
+        <% }) %>
+
+    <% } else { %>
+
+         <% classData.forEach(classObject => { %>
+
+            <fieldset class="form__checkbox-container">
+                <input class="input input--custom" type="checkbox" id="<%= classObject.linkRef %>" name="classesToDelete" value="<%= classObject.linkRef %>">
+                <label for="<%= classObject.linkRef %>"><%= classObject.title %><span><img src="/public/images/icons/check-icon.svg" alt="Check icon"></span></label>
+            </fieldset>
+     
+        <% }) %>
+     
+     
+    <% } %>
+
+    <div class="btn--container">
+        <a class="btn--small btn--small-arrow" href="/maintenance"><img src="/public/images/icons/arrow-icon.svg" alt="Back icon"></a>
+        <button type="submit">Selectie verwijderen</button>
+    </div>
+
+
+</form>
