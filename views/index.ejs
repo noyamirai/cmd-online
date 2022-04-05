@@ -170,7 +170,7 @@
                 <% } %>
                 <button disabled type="submit" value="account-details" name="settings_type">Account details wijzigen</button>
 
-                <% if (userData.user.is_admin) { %>
+                <% if (userData.user.is_admin == 'true') { %>
                     <button type="submit" value="cms" name="settings_type">CMS</button>
                 <% } %>
             </fieldset>
