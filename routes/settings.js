@@ -16,6 +16,8 @@ router.post('/', ensureAuthenticated, (req, res) => {
         res.redirect('/skills');
     } else if (req.body.settings_type == 'cms') {
         res.redirect('/maintenance');
+    } else if (req.body.settings_type == 'account-details') {
+        res.redirect('/account');
     }
 
 });
