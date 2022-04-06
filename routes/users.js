@@ -125,7 +125,6 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                         profile_pic: profile_pic,
                         is_admin: false
                     }).then((userObject) => {
-                        CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: null, courses: null });
                         async function main() {
                             // Generate test SMTP service account from ethereal.email
                             // Only needed if you don't have a real mail account for testing
@@ -160,11 +159,7 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                                 }
                                 console.log('message send: %s', info.messageID);
                                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                                res.render('login', {
-                                    msg: 'email had been sent',
-                                    bannerTitle: 'Inloggen',
-                                    bannerSubtitle: 'CMD Online'
-                                });
+                                
                             });
                         }
                         main().catch(console.error);
