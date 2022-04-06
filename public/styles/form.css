@@ -431,6 +431,10 @@ fieldset + fieldset { margin-top: var(--default-big-padding); }
                 background-color: var(--secondary-color);
             }
 
+            .toggle-container input[type="radio"]:checked + label > span:first-of-type {
+                color: var(--white-color);
+            }
+
             .toggle-container > div + div {
                 margin-left: 0;
             }

@@ -4,6 +4,7 @@ const toggleYesBtn = document.querySelector(`#toggle-yes`);
 const toggleNoBtn = document.querySelector(`#toggle-no`);
 
 toggleContainer.classList.add(`toggle`);
+toggleYesBtn.classList.add('toggle--active');
 
 toggleYesBtn.addEventListener(`click`, event => {
     if (event.target && event.target.matches(`input[type='radio']`)) {
