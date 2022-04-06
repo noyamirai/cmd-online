@@ -3,7 +3,7 @@ const concat = require('gulp-concat');
 const cleanCSS = require('gulp-clean-css');
 const nodemon = require('gulp-nodemon');
 
-gulp.task('default', (done) => {
+gulp.task('dev', (done) => {
 
     let stream = nodemon({
         script: 'server.js',
@@ -22,6 +22,19 @@ gulp.task('default', (done) => {
 
     done();
 });
+
+gulp.task('default', (done) => {
+
+    gulp.src(['./public/styles/reset.css', './public/styles/**.css'])
+        .pipe(concat('stylesheet.min.css'))
+        .pipe(cleanCSS({
+            compatibility: 'ie8'
+        }))
+        .pipe(gulp.dest('./public/dist'));
+
+    done();
+});
+
 
 gulp.task('concatCSS', () => {
     return gulp.src(['./public/styles/reset.css', './public/styles/**.css'])
