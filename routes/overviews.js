@@ -311,6 +311,7 @@ router.post('/:course/:class/teams/create', (req, res) => {
 
                     team.generate(allStudentObjects, teamSize).then((generatedTeams) => {
                         generatedTeams.forEach((team) => {
+                            console.log(team);
                             // Add each team to Team collection
                             CRUD.createDoc(schemas.Team, {
                                 name: team.name,

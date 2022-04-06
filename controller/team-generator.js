@@ -30,7 +30,7 @@ const generate = async (students, teamSize) => {
             number: teamCounter
         };
         allTeams.push(teamObject);
-
+        console.log(teamObject);
         // console.log(`TEAM ${teamCounter}`);
 
         /**
@@ -182,10 +182,12 @@ const generate = async (students, teamSize) => {
      * * If only 1 student remaining, add into last team. If more than one, create new team w remainders
      * TODO: add this into it's own function
      */
+
     if (remainders == 1) {
         updatedStudentArray.forEach((student) => {
             allTeams[amountOfTeams - 1].students.push({
                 name: student.user.name,
+                number: amountOfTeams + 1,
                 student: student._id,
                 cmd_skill: student.cmd_skills.best
             });
@@ -196,13 +198,15 @@ const generate = async (students, teamSize) => {
         updatedStudentArray.forEach((student) => {
             newStudentsInTeam.push({
                 name: student.user.name,
+                number: amountOfTeams + 1,
                 student: student._id,
                 cmd_skill: student.cmd_skills.best
             });
         });
 
         allTeams.push({
-            name: `team-${teamCounter}`,
+            name: `team-${amountOfTeams + 1}`,
+            number: amountOfTeams + 1,
             students: newStudentsInTeam
         });
     }
