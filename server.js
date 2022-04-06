@@ -34,7 +34,7 @@ app.use(session({
 })
 );
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // PASSPORT MIDDLEWARE
@@ -58,6 +58,7 @@ app.use('/:username', require('./routes/overviews'));
 app.use('/settings', require('./routes/settings'));
 app.use('/maintenance', require('./routes/maintenance'));
 app.use('/skills', require('./routes/skills'));
+app.use('/account', require('./routes/account-details'));
 
 app.get(`*`, (req, res) => {
     res.status(404).send(`Page not found!`);

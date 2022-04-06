@@ -21,22 +21,21 @@ const mailuser = process.env.usermail;
 const mailpass = process.env.passmail;
 
 
-
-
 //RENDER PAGES
-router.get('/login', (req, res) => { 
+router.get('/login', (req, res) => {
     res.render('login', {
         bannerTitle: 'Inloggen',
-        bannerSubtitle: 'CMD Online'              
+        bannerSubtitle: 'CMD Online'
     });
 });
 
-router.get('/register', (req, res) =>  {
+router.get('/register', (req, res) => {
     res.render('register', {
         bannerTitle: 'Registreren',
-        bannerSubtitle: 'CMD Online'   
+        bannerSubtitle: 'CMD Online'
     });
 });
+
 
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -55,14 +54,16 @@ const upload = multer({
 //REGISTER HANDLER
 router.post('/register', upload.single('profile_pic'), (req, res) => {
     let { name, username, email, password, password2, type } = req.body;
-
-    let profile_pic ;
-    if (profile_pic != undefined) {
+    let profile_pic;
+    if (!req.file) {
+        console.log('IS THIS WORKING?????');
+        profile_pic = 'uploads/default-profile_pic.png';
+    } else {
         profile_pic = req.file.filename;
     }
 
     let errors = [];
-    
+
     //CHECK FIELDS
     if (!name || !username || !email || !password || !password2 || !type) {
         errors.push({ msg: 'Please fill in all fields' });
@@ -115,75 +116,13 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
 
                     // SET STRING PASSWORD TO HASHED PASSWORD
                     password = hash;
-                    if (profile_pic != undefined) {
-                        CRUD.createDoc(User, {
-                            username: username,
-                            email: email,
-                            password: password,
-                            name: name,
-                            type: type,
-                            profile_pic: profile_pic,
-                            is_admin: false
-                        }).then((userObject) => {
-                            CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: null, courses: null });
-                            async function main() {
-                                // Generate test SMTP service account from ethereal.email
-                                // Only needed if you don't have a real mail account for testing
-                                // create reusable transporter object using the default SMTP transport
-                                let transporter = nodemailer.createTransport({
-                                    service: 'gmail',
-                                    auth: {
-                                        user: mailuser, // generated ethereal user
-                                        pass: mailpass, // generated ethereal password
-                                    },
-                                    tls: {
-                                        rejectUnautorized: false
-                                    },
-                                });
-    
-    
-                                let mailoptions = {
-                                    from: 'Cmd-Online',
-                                    to: email,
-                                    subject: 'Cmd-Online',
-                                    text: 'Regegisteert',
-                                    html: '<b> Uw registratie bij de cmd-online aplicatie is gelukt <b>',
-    
-                                };
-                                transporter.sendMail(mailoptions, (error, info) => {
-                                    if (error) {
-                                        return console.log(error),
-                                        res.json({
-                                            error: error,
-                                            message: 'er gaat hier iets fout',
-                                        });
-                                    }
-                                    console.log('message send: %s', info.messageID);
-                                    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                                    res.render('login', { 
-                                        msg: 'email had been sent',
-                                        bannerTitle: 'Inloggen',
-                                        bannerSubtitle: 'CMD Online' 
-                                    });
-                                    res.redirect('/users/login');
-                                });
-                            }
-                            main().catch(console.error);
-                            if (type == 'student') {
-                                CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: { normal: null, elective: null }, courses: null });
-                            } else {
-                                CRUD.createDoc(Teacher, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: { normal: null, elective: null }, courses: null });
-                            }
-                            res.redirect('/users/login');
-                        });
-                    }                
                     CRUD.createDoc(User, {
                         username: username,
                         email: email,
                         password: password,
                         name: name,
                         type: type,
-                        profile_pic: 'uploads/default-profile_pic.png',
+                        profile_pic: profile_pic,
                         is_admin: false
                     }).then((userObject) => {
                         CRUD.createDoc(Student, { user: userObject.id, cmd_skills: { best: null, want_to_learn: [null] }, classes: null, courses: null });
@@ -221,12 +160,11 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
                                 }
                                 console.log('message send: %s', info.messageID);
                                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                                res.render('login', { 
+                                res.render('login', {
                                     msg: 'email had been sent',
                                     bannerTitle: 'Inloggen',
                                     bannerSubtitle: 'CMD Online'
                                 });
-                                res.redirect('/users/login');
                             });
                         }
                         main().catch(console.error);
@@ -244,7 +182,7 @@ router.post('/register', upload.single('profile_pic'), (req, res) => {
 
 //LOGIN HANDLER
 router.post('/login', (req, res, next) => {
-    let {username, password} = req.body;
+    let { username, password } = req.body;
     let errors = [];
 
     if (!username || !password) {

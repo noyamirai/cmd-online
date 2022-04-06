@@ -1,0 +1,37 @@
+<%- include ('./partials/head') -%>
+
+<body>
+    <%- include ('./partials/title-banner') -%>
+
+    <main class="form--overview">
+        <form action='/account/update' method='POST'>
+            <fieldset>
+                <legend>Account details</legend>
+                <%- include ('./partials/messages')-%>
+
+                <div>
+                    <label for="name">Huidige naam</label>
+                    <input type='name' class="input input--normal" id='name' name='name' class='form-control' placeholder='' value='<%= name %>' />
+                </div>
+                
+                <div>
+                    <label for="username">Huidige gebruikersnaam </label>
+                    <input type='username' class="input input--normal" id='username' name='username' class='form-control' placeholder='' value='<%= username %>' />
+                </div>
+                <div>
+                    <label for="password">Nieuw wachtwoord </label>
+                    <input type='password' class="input input--normal" id='password' name='password' class='form-control' placeholder='******' value='<%= password %>'/>
+                </div>
+            </fieldset>
+            <!-- <fieldset>
+                <legend>Profiel foto</legend>
+                <label for='profile_pic'>Upload afbeelding</label>
+                <input type='file' name='profile_pic' id='profile_pic' value=" ">
+            </fieldset> -->
+
+            <button type='submit'>Opslaan</button>
+        </form>
+    </main>
+</body>
+
+<script async src="../public/js/toggle-script.js"></script>
