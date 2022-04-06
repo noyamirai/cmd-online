@@ -139,7 +139,8 @@ router.get('/class/:class', ensureAuthenticated, (req, res) => {
             bannerTitle: classData.title,
             bannerSubtitle: `${classData.students.length} studenten`,
             classTeams: classData.teams,
-            className: ''
+            className: '',
+            classLinkRef: classData.linkRef
         });
     });
 });
@@ -233,6 +234,7 @@ router.get(`/:course/:class`, ensureAuthenticated, (req, res) => {
                 formURL: formURL,
                 isPopup: true,
                 studentData: classData.students,
+                classLinkRef: classData.linkRef,
                 userData: req.user,
                 bannerTitle: classData.title,
                 bannerSubtitle: `${classData.students.length} studenten`,

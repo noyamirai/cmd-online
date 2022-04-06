@@ -17,7 +17,7 @@
         <div class="btn--container">
             <a class="btn--small btn--small-arrow" href="<%= prevURL %>"><img src="/public/images/icons/arrow-icon.svg" alt="Back icon"></a>
             <% if (userData.type == 'teacher' && !classTeams.length) { %>
-                <a class="btn form-trigger" href="team-form">Teams aanmaken</a>
+                <a class="btn form-trigger" href="<%= classLinkRef %>/team-form">Teams aanmaken</a>
             <% } %>
         </div>
 
