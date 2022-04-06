@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 require('dotenv').config();
 const express = require('express');
 const router = express.Router();
@@ -15,8 +16,6 @@ router.get('/', ensureAuthenticated, (req, res) => {
         profile_pic: req.user.profile_pic
     });
 });
-
-
 
 router.post('/update', async function (req, res) {
     // let password = req.body.password;
