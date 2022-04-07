@@ -320,6 +320,7 @@ router.post('/teacher/next', ensureAuthenticated, (req, res) => {
         savedTeacherInfo.course_classes = [];
     }
 
+    // If teacher wants to add another class that they teach for said course
     if (req.body.button_action == 'add-extra') {
 
         if (req.body.course_type != 'normal') {
@@ -357,6 +358,8 @@ router.post('/teacher/next', ensureAuthenticated, (req, res) => {
             });
 
         });
+    
+    // Save data
     } else {
         if (req.body.course_type != 'normal') {
             CRUD.findDocByQuery(schemas.ElectiveClass, 'linkRef', req.body.course_classes).then((result) => {
