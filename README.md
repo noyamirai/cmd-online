@@ -20,7 +20,7 @@ CMD Online has recently received an upgrade, it now also offers the following **
 | Team generator              | Maijla Ikiz                        | :white_check_mark: |
 | **(NEW)** CMS               | Maijla Ikiz                        | :white_check_mark: |
 | Mongoose                    | Maijla Ikiz                        | :white_check_mark: |
-| **(NEW)** Error handling    | Juliette Groot                     | :white_check_mark: |
+| **(NEW)** Error handling    | Juliette Groot & Aidan Omwando     | :white_check_mark: |
 | **(NEW)** Node Mailer       | Tejo van der Burg                  | :white_check_mark: |
 | **(NEW)** Asset compression | Aidan Omwando                      | :white_check_mark: |
 
