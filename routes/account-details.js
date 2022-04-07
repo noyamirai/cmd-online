@@ -50,6 +50,8 @@ router.post('/update', async function(req, res) {
         }
     });
 
+    res.redirect('/');
+
     let errors = [];
     // let password = req.body.password;
 
