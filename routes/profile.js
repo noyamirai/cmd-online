@@ -140,7 +140,7 @@ router.post('/elective', ensureAuthenticated, (req, res) => {
                         result.classes = null;
                         result.courses = null;
 
-                        CRUD.addUserToClassesAndCourses(schemas.Student, savedInfo, result.user).then((student) => {
+                        CRUD.addStudentToClassesAndCourses(schemas.Student, savedInfo, result.user).then((student) => {
 
                             CRUD.addIdReferenceToDoc(schemas.Course, student.courseData, 'students', student.user.id);
                             CRUD.addIdReferenceToDoc(schemas.Class, savedInfo.main_class, 'students', student.user.id);
@@ -154,7 +154,7 @@ router.post('/elective', ensureAuthenticated, (req, res) => {
                         result.courses = null;
                         result.courses = null;
 
-                        CRUD.addUserToClassesAndCourses(schemas.Teacher, savedInfo, result.user).then((teacher) => {
+                        CRUD.addStudentToClassesAndCourses(schemas.Teacher, savedInfo, result.user).then((teacher) => {
 
                             CRUD.addIdReferenceToDoc(schemas.Course, teacher.courseData, 'teachers', teacher.user.id);
                             CRUD.addIdReferenceToDoc(schemas.Class, savedInfo.main_class, 'teachers', teacher.user.id);

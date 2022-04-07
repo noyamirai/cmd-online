@@ -51,33 +51,33 @@ router.post('/update', async function(req, res) {
     });
 
     let errors = [];
-    let password = req.body.password;
+    // let password = req.body.password;
 
-    if (password.length < 6) {
-        errors.push({
-            msg: 'Your password needs to be at least 8 characters long'
-        });
-    } else {
+    // if (password.length < 6) {
+    //     errors.push({
+    //         msg: 'Your password needs to be at least 8 characters long'
+    //     });
+    // } else {
 
-        const hash = await argon2.hash(password, {
-            hashLength: 10
-        });
-        password = hash;
+    //     const hash = await argon2.hash(password, {
+    //         hashLength: 10
+    //     });
+    //     password = hash;
 
-        User.findOneAndUpdate({
-            password: req.user.password
-        }, {
-            password: password
-        }, {
-            new: true
-        }, (err, data) => {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log('password succesfully updated');
-                res.redirect('/');
-            }
-        });
-    }
+    //     User.findOneAndUpdate({
+    //         password: req.user.password
+    //     }, {
+    //         password: password
+    //     }, {
+    //         new: true
+    //     }, (err, data) => {
+    //         if (err) {
+    //             console.log(err);
+    //         } else {
+    //             console.log('password succesfully updated');
+    //             res.redirect('/');
+    //         }
+    //     });
+    // }
 });
 module.exports = router;
